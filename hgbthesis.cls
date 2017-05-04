@@ -57,15 +57,15 @@
 	\renewcommand{\@betreuerName}{#1}
 }
 
-\newcommand{\@nummer}{\@MissingArg{Arbeit Nummer??}}
-\newcommand{\nummer}[1]{%
-	\renewcommand{\@nummer}{#1}
-}
+%\newcommand{\@nummer}{\@MissingArg{Arbeit Nummer??}}
+%\newcommand{\nummer}[1]{%
+%	\renewcommand{\@nummer}{#1}
+%}
 
-\newcommand{\@gegenstand}{\@MissingArg{Gegenstand??}}
-\newcommand{\gegenstand}[1]{%
-	\renewcommand{\@gegenstand}{#1}
-}
+%\newcommand{\@gegenstand}{\@MissingArg{Gegenstand??}}
+%\newcommand{\gegenstand}[1]{%
+%	\renewcommand{\@gegenstand}{#1}
+%}
 
 \newcommand{\@semester}{\@MissingArg{Semester??}}
 \newcommand{\semester}[1]{%
@@ -147,7 +147,7 @@
     \vskip 40mm%
     {\Large B\,A\,C\,H\,E\,L\,O\,R\,A\,R\,B\,E\,I\,T}%
     \vskip 8mm%
-    {\large\sf Nr.~\@nummer}
+    %{\large\sf Nr.~\@nummer}
     \vskip 8mm%
     {\large eingereicht am} \vskip 1mm {Fachhochschul-Bachelorstudiengang}%
     \vskip 4mm%
@@ -224,155 +224,158 @@
 \end{titlepage}%
 }
 
-\newcommand{\@prtitel}{%
-\begin{titlepage}%
-\rule{0mm}{1mm}
-\vspace*{20mm}
-%\noindent Left side \hfill right side\\
-\begin{center}%
-  \setlength{\unitlength}{1cm}
-  \begin{picture}(12,4)
-  %\thinlines\put(0,0){\framebox(12,4){}}
-  \put(0,1.8){\parbox{12cm}{\centering\LARGE\bf%
-    \setlength{\baselineskip}{20pt}%
-    Endbericht zum Berufspraktikum}}
-  \end{picture}
-    \vskip 10mm%
-    {\large\sc\@author}
-    \vskip 40mm%
-    {\Large B\,A\,C\,H\,E\,L\,O\,R\,A\,R\,B\,E\,I\,T}%
-    \vskip 8mm%
-    {\large\sf Nr.~\@nummer}
-    \vskip 8mm%
-    {\large eingereicht am} \vskip 1mm {Fachhochschul-Bachelorstudiengang}%
-    \vskip 4mm%
-    {\large\sc\@studiengang}%
-    \vskip 4mm%
-    {\large in \@studienort}%
-    \vskip 16mm%
-    {\large im \monthname[\value{@abgabemonat}] \arabic{@abgabejahr}}%
-\end{center}\par
-  \vfil\null
-\end{titlepage}%
-}
+%\newcommand{\@prtitel}{%
+%\begin{titlepage}%
+%\rule{0mm}{1mm}
+%\vspace*{20mm}
+%%\noindent Left side \hfill right side\\
+%\begin{center}%
+%  \setlength{\unitlength}{1cm}
+%  \begin{picture}(12,4)
+%  %\thinlines\put(0,0){\framebox(12,4){}}
+%  \put(0,1.8){\parbox{12cm}{\centering\LARGE\bf%
+%    \setlength{\baselineskip}{20pt}%
+%    Endbericht zum Berufspraktikum}}
+%  \end{picture}
+%    \vskip 10mm%
+%    {\large\sc\@author}
+%    \vskip 40mm%
+%    {\Large B\,A\,C\,H\,E\,L\,O\,R\,A\,R\,B\,E\,I\,T}%
+%    \vskip 8mm%
+%    {\large\sf Nr.~\@nummer}
+%    \vskip 8mm%
+%    {\large eingereicht am} \vskip 1mm {Fachhochschul-Bachelorstudiengang}%
+%    \vskip 4mm%
+%    {\large\sc\@studiengang}%
+%    \vskip 4mm%
+%    {\large in \@studienort}%
+%    \vskip 16mm%
+%    {\large im \monthname[\value{@abgabemonat}] \arabic{@abgabejahr}}%
+%\end{center}\par
+%  \vfil\null
+%\end{titlepage}%
+%}
 
 %------------------ Copyright-Seite -------------------
 
-\newcommand{\strictlicense}{%
-\ifthenelse{\equal{\hgb@MainLanguage}{german}}%
-	{\license{Alle Rechte vorbehalten}}%
-	{\license{All Rights Reserved}}
-}
-
-\newcommand{\@ccLicenseAt}{%
-Diese Arbeit wird unter den Bedingungen der \textsl{Creative Commons Lizenz} 
-\emph{Namens\-nennung--NichtKommerziell--Keine\-Bearbeitung Österreich} 
-(CC BY-NC-ND) veröffentlicht --
-siehe \url{http://creativecommons.org/licenses/by-nc-nd/3.0/at/}.}
-
-\newcommand{\@ccLicenseEn}{%
-This work is published under the conditions of the 
-\textsl{Creative Commons License Attribution--Non\-Commercial--No\-Derivatives} 
-(CC BY-NC-ND)---see
-\url{http://creativecommons.org/licenses/by-nc-nd/3.0/}.}
-
-\newcommand{\cclicense}{%
-\ifthenelse{\equal{\hgb@MainLanguage}{german}}%
-{\license{\@ccLicenseAt}} % german CC license text
-{\license{\@ccLicenseEn}} % english CC license text (default)
-}
-	
-%\strictlicense
-\cclicense	% Creative Commons License (default)
-
-\newcommand{\@makelicense}{ 
-  \sbox\@tempboxa{\@license}%
-  \ifdim \wd\@tempboxa >\hsize
-    \begin{sloppypar}\noindent\@license\end{sloppypar}
-  \else
-    \global \@minipagefalse
-    \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
-  \fi
-} 
-
-\newcommand{\@copyrightseite}{%
-\newpage
-\setcounter{page}{2}
-\thispagestyle{plain}
-\rule{0mm}{1mm}
-\vspace*{75mm}
-\begin{center}
-\copyright\ Copyright\ \arabic{@abgabejahr}\ \@author
-\end{center}
-\vspace{8mm}
-\@makelicense
+%\newcommand{\strictlicense}{%
+%\ifthenelse{\equal{\hgb@MainLanguage}{german}}%
+%	{\license{Alle Rechte vorbehalten}}%
+%	{\license{All Rights Reserved}}
+%}
+%
+%\newcommand{\@ccLicenseAt}{%
+%Diese Arbeit wird unter den Bedingungen der \textsl{Creative Commons Lizenz} 
+%\emph{Namens\-nennung--NichtKommerziell--Keine\-Bearbeitung Österreich} 
+%(CC BY-NC-ND) veröffentlicht --
+%siehe \url{http://creativecommons.org/licenses/by-nc-nd/3.0/at/}.}
+%
+%\newcommand{\@ccLicenseEn}{%
+%This work is published under the conditions of the 
+%\textsl{Creative Commons License Attribution--Non\-Commercial--No\-Derivatives} 
+%(CC BY-NC-ND)---see
+%\url{http://creativecommons.org/licenses/by-nc-nd/3.0/}.}
+%
+%\newcommand{\cclicense}{%
+%\ifthenelse{\equal{\hgb@MainLanguage}{german}}%
+%{\license{\@ccLicenseAt}} % german CC license text
+%{\license{\@ccLicenseEn}} % english CC license text (default)
+%}
+%	
+%%\strictlicense
+%\cclicense	% Creative Commons License (default)
+%
+%\newcommand{\@makelicense}{ 
+%  \sbox\@tempboxa{\@license}%
+%  \ifdim \wd\@tempboxa >\hsize
+%    \begin{sloppypar}\noindent\@license\end{sloppypar}
+%  \else
+%    \global \@minipagefalse
+%    \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+%  \fi
+%} 
+%
+%\newcommand{\@copyrightseite}{%
+%\newpage
+%\setcounter{page}{2}
+%\thispagestyle{plain}
+%\rule{0mm}{1mm}
+%\vspace*{75mm}
 %\begin{center}
-%\includegraphics[width=2.0cm]{images/by-nc-nd-eu}
+%\copyright\ Copyright\ \arabic{@abgabejahr}\ \@author
 %\end{center}
-}
-
-%------------------ Firmen-Seite -------------------
-\newcommand{\@firmenseite}{%
-\newpage
-\setcounter{page}{2}
-\thispagestyle{plain}
-\rule{0mm}{1mm}
-\begin{center}
-\vspace{25mm} 
-{Praktikumsstelle:}
-\\
-\vspace{3mm}
-{\Large\sf\@firma\\ \mbox{}}
-\\
-{\sf \@firmenTel}
-\\
-{\sf \@firmenUrl}
-\\
-\vspace{45mm} 
-{Kontaktperson:}
-\\
-\vspace{3mm} 
-{\Large\sf\@betreuerName\\ \mbox{}}
-\end{center}
-}
-
-%------------------ Betreuer-Seite -------------------
-
-\newcommand{\@babetreuerseite}{%
-\newpage
-\setcounter{page}{2}
-\thispagestyle{plain}
-\rule{0mm}{1mm}
-\begin{center}
+%\vspace{8mm}
+%\@makelicense
+%%\begin{center}
+%%\includegraphics[width=2.0cm]{images/by-nc-nd-eu}
+%%\end{center}
+%}
 %
-\vspace{40mm} 
-{Diese Arbeit entstand im Rahmen des Gegenstands}\\
-\vspace{6mm} 
-{\Large\sf \@gegenstand\\ \mbox{}}\\
-\medskip
-im\\
-\bigskip
-{\@semester}\\
+%%------------------ Firmen-Seite -------------------
+%\newcommand{\@firmenseite}{%
+%\newpage
+%\setcounter{page}{2}
+%\thispagestyle{plain}
+%\rule{0mm}{1mm}
+%\begin{center}
+%\vspace{25mm} 
+%{Praktikumsstelle:}
+%\\
+%\vspace{3mm}
+%{\Large\sf\@firma\\ \mbox{}}
+%\\
+%{\sf \@firmenTel}
+%\\
+%{\sf \@firmenUrl}
+%\\
+%\vspace{45mm} 
+%{Kontaktperson:}
+%\\
+%\vspace{3mm} 
+%{\Large\sf\@betreuerName\\ \mbox{}}
+%\end{center}
+%}
 %
-\vspace{45mm} 
-%{Betreuer:}\\
-{\@betreuerBez:}\\
-\vspace{3mm} 
-{\Large\sf \@betreuerName\\ \mbox{}}
-\end{center}
-}
+%%------------------ Betreuer-Seite -------------------
+%
+%\newcommand{\@babetreuerseite}{%
+%\newpage
+%\setcounter{page}{2}
+%\thispagestyle{plain}
+%\rule{0mm}{1mm}
+%\begin{center}
+%%
+%\vspace{40mm} 
+%{Diese Arbeit entstand im Rahmen des Gegenstands}\\
+%\vspace{6mm} 
+%{\Large\sf \@gegenstand\\ \mbox{}}\\
+%\medskip
+%im\\
+%\bigskip
+%{\@semester}\\
+%%
+%\vspace{45mm} 
+%%{Betreuer:}\\
+%{\@betreuerBez:}\\
+%\vspace{3mm} 
+%{\Large\sf \@betreuerName\\ \mbox{}}
+%\end{center}
+%}
 
 %% -------------- Erklärung / Declaration ---------
 
 \newcommand{\@erklaerungsseiteDe}{%
 \begin{german}
-\chapter{Erklärung}
+\chapter{Redlichkeitserklärung}
 \noindent
-%Standardfassung der FH-OÖ ab 04.04.2012:
-Ich erkläre eidesstattlich, dass ich die vorliegende Arbeit selbstständig und ohne fremde Hilfe verfasst, 
-andere als die angegebenen Quellen nicht benutzt und die den benutzten Quellen entnommenen Stellen als 
-solche gekennzeichnet habe. Die Arbeit wurde bisher in gleicher oder ähnlicher Form keiner anderen 
-Prüfungsbehörde vorgelegt.
+%HSLU Version, genommen von PREN2
+Die Verfasser bestätigen mit ihrer Unterschrift, dass die vorliegende Arbeit selbstständig, ohne fremde Hilfe und ohne Benutzung anderer als den angegebenen Hilfsmitteln angefertigt wurde.
+
+\noindent
+Die aus fremden Quellen (einschliesslich elektronischer Quellen) direkt oder indirekt übernommenen Gedanken sind als solche kenntlich gemacht.
+
+\noindent
+Die Arbeit ist in gleicher oder ähnlicher Form noch nicht vorgelegt worden.
 \par
 \vspace{10mm}
 \noindent

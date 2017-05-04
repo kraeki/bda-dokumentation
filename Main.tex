@@ -1,0 +1,58 @@
+\documentclass[bachelor,german]{hgbthesis}
+% Zulässige Class Options: 
+%   Typ der Arbeit: diplom, master (default), bachelor, praktikum 
+%   Hauptsprache: german (default), english
+%%------------------------------------------------------------
+
+\graphicspath{{images/}}    % wo liegen die Bilder? 
+\bibliography{literatur}  	% Angabe der BibTeX-Datei, % utf8-change
+
+%%%  Acronym and Glossary
+\usepackage[utf8]{inputenc}
+\usepackage[acronym, toc]{glossaries}
+\makenoidxglossaries
+\input{acronym_glossary.tex}
+
+%%%----------------------------------------------------------
+\begin{document}
+%%%----------------------------------------------------------
+
+% Einträge für ALLE Arbeiten:
+\title{lokkit - Einsatz von Blockchain und IoT}
+\author{D.\ Hirzel\ und A.\ Schmid}
+\studiengang{Informatik}
+\studienort{Rotkreuz}
+\abgabedatum{2017}{06}{09}	% {YYYY}{MM}{DD}
+%\strictlicense  % erzeugt restriktive Lizenzformel
+
+%%%----------------------------------------------------------
+\frontmatter
+\maketitle
+\tableofcontents
+%%%----------------------------------------------------------		
+
+% \include{chapters/02_Selbststaendigkeitserklaerung} wird durch \maketitle bereits gemacht.
+\include{chapters/03_Abstract}
+\include{chapters/05_Abkuerzungen_und_Definitionen}
+
+%%%----------------------------------------------------------
+\mainmatter         % Hauptteil (ab hier arab. Seitenzahlen)
+%%%----------------------------------------------------------
+
+\include{chapters/06_Aufgabenstellung}
+\include{chapters/07_Loesungsentwicklung}
+\include{chapters/08_Schlussfolgerungen_Ausblick_Lessons_Learned}
+\include{chapters/09_Quellen_Tabellen_Abbildungsverzeichnisse}
+%%%----------------------------------------------------------
+%%%Anhang
+\appendix
+\include{appendix/anhang_a}	% Inhalt der CD-ROM/DVD
+
+%%%----------------------------------------------------------
+\MakeBibliography
+%%%----------------------------------------------------------
+
+%%%Messbox zur Druckkontrolle
+\include{messbox}
+
+\end{document}
