@@ -51,8 +51,15 @@ Folgende Interaktionen sind möglich.
 \subsection{Fallbeispiele}
 
 \subsubsection{Normal-Fall}
-Der Benutzer A reserviert das Schliessfach von tR1 bis tR2 zum Zeitpunkt t0. Das Deposit und die Mietkosten werden ihm somit abgezogen.
-Zum Zeitpunt tR1 wird Benutzer A zum \emph{Current Renter} und besitzt dadurch privilegierten Zugriff. Er kann jetzt das Schliessfach öffnen (Unlock) und schliessen (Lock). Nach einer gewissen Zeit noch vor Ablauf der Reservation, entschliesst sich Benutzer A das Schliessfach wieder abzugeben (Unclaim), da er es nicht mehr benötigt. Die Reservation wird somit auf diesen Zeitpunkt gekürzt und Benutzer A erhählt sein Deposit und die Mietkosten für die ungenutzte Zeit zurück. Die priviligierten Rechte werden umgehend wieder an den Owner abgegeben.
+In Abbildung Abb.~\ref{fig:Case-Normal} reserviert Benutzer A das Schliessfach von $t_{R1}$ bis $t_{R2}$ zum Zeitpunkt $t_0$. Das Deposit und die Mietkosten werden ihm somit abgezogen.
+Zum Zeitpunt $t_{R1}$ wird Benutzer A zum \emph{Current Renter} und besitzt dadurch privilegierten Zugriff. Er kann jetzt das Schliessfach öffnen (Unlock) und schliessen (Lock). Nach einer gewissen Zeit noch vor Ablauf der Reservation, entschliesst sich Benutzer A das Schliessfach wieder abzugeben (Unclaim), da er es nicht mehr benötigt. Die Reservation wird somit auf diesen Zeitpunkt gekürzt und Benutzer A erhählt sein Deposit und die Mietkosten für die ungenutzte Zeit zurück. Die priviligierten Rechte werden umgehend wieder an den Owner abgegeben.
+
+\begin{figure}
+\centering
+\includegraphics[width=.95\textwidth]{Case-Normal}
+\caption{Normal-Fall}
+\label{fig:Case-Normal}
+\end{figure}
 
 \subsubsection{Reservationsende ohne Betätigung der Rückgabe}
 Wie im Normal-Fall beschrieben, ist Benutzer A momentaner Renter (current renter) des Schliessfaches. Anstelle jedoch das Schliessfach wieder zurückzugeben lässt er die Reservationszeit auslaufen. Zum Zeitpunkt tR2 werden ihm die Rechte entzogen er erhält keine Rückerstattung des Deposits. Es liegt also in Benutzer A seinem Interesse, alle eingeschlossenen Gegestände vor Ablauf der Reservation aus dem Schließfach zu nehmen und dieses Zurückzugeben (Unclaim).
