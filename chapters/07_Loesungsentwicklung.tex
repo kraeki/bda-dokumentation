@@ -9,9 +9,9 @@ Ein Objekt kann grundsätzlich alles sein: Ein elektrisches Fahrrad, eine Ferien
 
 \begin{figure}
 \centering
-\includegraphics[width=.95\textwidth]{Case-Normal}
-\caption{Normal-Fall}
-\label{fig:Case-Normal}
+\includegraphics[width=.95\textwidth]{Mobile_Konzept}
+\caption{Das Mobile-Konzept, welches wir nicht so umsetzen konnten}
+\label{fig:Mobile_Konzept}
 \end{figure}
 
 \vspace{1em}
@@ -189,9 +189,20 @@ Alle bisherigen Versionen des Ethereum Protokolls (Olympic, Frontier und Homeste
 Auf der \acrfull{EVM} werden mehrere Programmiersprachen angeboten, um Smart Contracts zu verfassen. \#TODO. Solidity ist die neuste Sprache und soll alle bisherigen ablösen\footnote{}.
 \paragraph{Whisper}
 \label{para:Whisper}
-Whisper, auch analog zu der öffentlichen API \emph{shh} genannt, ist ein Kommunikationsprotokoll für \acrfull{DAPPs}. Nachrichten, die über das Whisper Protokoll verschickt werden, benutzen ebenfalls Ethereum Nodes, lösen aber keine Transaktionen auf der BLockchain aus. Sie werden mit \emph{topics} versehen, die es vereinfachen, diese Nachrichten zu filtern. Wie auch die Transaktionen werden die Whisper Messages an alle Teilnehmer gesendet (broadcast). Jede Nachricht kann mit einer \acrfull{ttl} versehen werden, die angibt, wie lange die Nachricht verfügbar sein soll. Wenn diese Zeitspanne abläuft wird die Nachricht von den Ethereum Nodes nicht mehr weitergeleitet und steht auf den Nodes, die die Nachricht bereits erhalten haben, nicht mehr zur Verfügung. So bietet das Whisper Protokoll eine einfache, leichtgewichtige Möglichkeit zur Echtzeit-Kommunikation für \acrshort{DAPPs}
-
-\#TODO:rewrite: Beim senden kann ein Absender und Empfänger angegeben werden. Diese dienen dazu Inhalte an Whisper Identities zu senden (\#TODO ist der inhalt für den Empfänger verschlüsselt?).
+Whisper, auch analog zu der öffentlichen API \emph{shh} genannt, ist ein Kommunikationsprotokoll für \acrfull{DAPPs}. Nachrichten, die über das Whisper Protokoll verschickt werden, benutzen zur Übermittlung ebenfalls Ethereum Nodes, auf welchen das \emph{shh} Protokoll aktiviert wurde. Diese Nachrichten lösen keine Transaktionen auf der Blockchain aus. Wie auch die Transaktionen werden die Whisper Messages an alle Teilnehmer gesendet (broadcast), können jedoch mit \emph{topics} versehen werden, die es vereinfachen, erhaltene Nachrichten zu filtern.  Jede Nachricht kann mit einer \acrfull{ttl} versehen werden, die angibt, wie lange die Nachricht verfügbar sein soll. Wenn diese Zeitspanne abläuft wird die Nachricht von den Ethereum Nodes nicht mehr weitergeleitet und steht auf den Nodes, die die Nachricht bereits erhalten haben, nicht mehr zur Verfügung. So bietet das Whisper Protokoll eine einfache, leichtgewichtige Möglichkeit zur Echtzeit-Kommunikation für \acrshort{DAPPs}.
+\\Um das Whisper Protokoll auf einer Ethereum node zu aktivieren, muss geth mit dem \emph{-shh} Argument gestartet werden. Dies ermöglicht der jedoch Node erst, erhaltene Whisper Nachrichten von anderen Nodes weiterzuleiten. Damit die Whisper API über web3 zugänglich wird, ist zusätzlich der Eintrag \emph{shh}, in der mittels \emph{--rpcapi} angegebenen Liste der aktiven APIs, notwendig.
+\begin{lstlisting}[language=bash,caption=Beispiel für die Aktivierung des shh Protokolls auf der Ethereum Node]
+geth --shh
+\end{lstlisting}
+\begin{lstlisting}[language=bash,caption={Beispiel für die Aktivierung der web3, eth und shh API}]
+geth --rpcapi "web3,eth,shh"
+\end{lstlisting}
+\begin{lstlisting}[language=bash,caption={Beispiel für die Aktivierung des shh Protokolls und der web3, eth und shh API}]
+geth --rpcapi "web3,eth,shh"
+\end{lstlisting}
+\subparagraph{Whisper Identity}
+\label{supara:Whisper_Identity}
+Um Whisper Nachrichten zu senden oder zu empfangen, kann eine Whisper Identity erstellt werden. Diese Identity wird während der Laufzeit des Programs gespeichert und beim beenden von bspw. \emph{geth attach} wieder gelöscht. Wird bei einer Nachricht ein Empfänger, in Form einer Whisper Identity, angegeben, wird die Nachricht verschlüsselt, sodass nur dieser die Nachricht entschlüsseln kann\footnote{http://web3js.readthedocs.io/en/1.0/web3-shh.html#post}. Der Absender einer Nachricht, wie auch das Erstellen einer Whisper Identity an sich, ist optional. Das heisst, es können anonyme Nachrichten über Whisper verschickt werden, die keinerlei Rückschluss auf deren Ursprung machen lassen.
 
 \subsubsection{Hyperledger}
 Hyperledger ist ein Unterfangen mehrerer internationaler Firmen (\#TODOLinux Foundation, IBM, Intel etc), das zum Ziel hat, wichtige Funktionalität im Bereich von Blockchains zu erforschen und definieren, um schlussendlich einen industrieweiten offenen Standard für verteilte Ledgertechnologien zu erschaffen\footnote{https://wiki.hyperledger.org/community/welcomesheet}.
@@ -288,6 +299,7 @@ Die Smart Contracts, die mit Solidity implementiert wurden, werden nachfolgend e
 Erwähnen der shortcomings, da unsere Contracts eine nicht vordefinierte Anzahl Iterationen haben. Dies kann aufgrund des Block-Gas limits zu stalling führen. Auch lese-Operationen, die aus anderen Smart-Contracts aufgerufen werden können diesen zum stallen bringen. -> http://solidity.readthedocs.io/en/develop/security-considerations.html\#gas-limit-and-loops
 
 \subsubsection{Rentable}
+\label{subsec:Rentable}
 Damit alle Smart Contracts der Schliessfächer unabhängig von einander in der Blockchain liegen, wurde der Entwurf so gewählt, dass für jedes Schliessfach ein separater digitaler Vertrag erstellt werden muss. Da die in der Blockchain liegende Funktionalität nur das Mieten, und die damit verbundene Monetären Transaktionen, beinhaltet, wurde darauf Wert gelegt, die Funktionalität sofern sinnvoll zu abstrahieren. Dies ermöglicht es Autoren weitere Dienste zu erstellen, die auf dem Konzept zu vermietender Objekte basiert.
 \paragraph{Weitergehende Überlegungen}
 Um neue oder geänderte Funktionalität in Smart Contracts zur Verfügung zu stellen, muss die Datenhaltung von der Businesslogik entkoppelt werden. Grund dafür ist, dass wenn ein neuer Smart Contract als Interaktionsmöglichkeit in der Bockchain steht, Daten, die durch Transaktionen in der Blockchain entstanden sind, nicht einfach übernommen werden können, wie beispielsweise Reservationen. Diese Daten könnten prinzipiell durch den Besitzer des Objekts migriert werden. Das würde aber bedeuten, dass in der Blockchain der Besitzer im Namen seiner Mieter Reservationen tätigt, was seinerseits wiederum eine Sicherheitslücke und mögliches Missbrauchspotential seitens des Besitzers bedeutet.
@@ -302,36 +314,66 @@ Für jede Interaktion mit einem mietbaren Objekt muss dessen Adresse bekannt sei
 Durch Verwendung einer lokalen node im light-mode auf einem Smart Phone könnte die Funktionalität des Discovery Service obsolet gemacht werden.
 
 \subsection{Real-Time Kommunikationsschnittstelle}
+\label{subsec:Real_Time_Kommunikationsschnittstelle}
 Um mit mietbaren Objekten (vgl. \ref{subsec:lokkit_Smart_Contracts}) während des gemieteten Zeitraums in Echtzeit zu interagieren, wurde das Whisper Protokoll (vgl. \ref{para:Whisper}) verwendet. Whisper erlaubt nur die Übermittlung von einfachen testbasierten Nachrichten. In dieser Schnittstelle definiert wurde eine Nachricht im JSON Format\footnote{http://json.org/}, die eine strukturierte Möglichkeit zur Datenüberittlung ermöglicht.
 Die Nachricht selbst besteht aus einem einzelnen JSON Objekt. Dieses Objekt besitzt zwei Attribute: \emph{digest} (vgl. \ref{para:Digest}) und \emph{message} (vgl. \ref{para:Message}).
 
-\begin{lstlisting}[language=json,caption=Beispiel einer Real-Time Nachricht via Whisper Protokoll]
+\begin{lstlisting}[language=json,caption={Beispiel einer Real-Time Nachricht via Whisper Protokoll}]
 {
-  digest: "0xf88a8a19e428f25f6489aae44c09f2e142297a4053a8aaef5a97c4c2b246c89477a2fc16365a0ec05a466e23b403ac1370eedc5e90032ca007d742edfad83eb11b",
+  digest: "0xf88a8a19e428f25f6489aae44c09f2e142297a4053a8aaef5a97c4c2b246c89477"
+    + "a2fc16365a0ec05a466e23b403ac1370eedc5e90032ca007d742edfad83eb11b",
   message: {
     command: "open",
     rentableAddress: "0x4cbee4df58c717f47a5e6e8d305a450fcdbe1e24",
-    whisperIdentity: "0x04eee314d1b1a4e9f264055274d7411200ada940d6c6c698d53bf40b41ff0f527775a8dfd11867fe64d389ab7cb9809f8df08f561a2498fdd9c9d5c6556913f598"
+    whisperIdentity: "0x04eee314d1b1a4e9f264055274d7411200ada940d6c6c698d53bf40b41ff0f5277"
+    + "75a8dfd11867fe64d389ab7cb9809f8df08f561a2498fdd9c9d5c6556913f598"
   }
 }
 \end{lstlisting}
 
 \paragraph{Message}
 \label{para:Message}
-Das Message Objekt innerhalb der Nachricht enthält drei Attribute: command, rentableAddress und whisperIdentity.
+Das Message Objekt innerhalb der Nachricht enthält drei Attribute: command, rentableAddress und whisperIdentity. Dies ist die primäre Mitteilung, die an ein IoT Gerät gemacht werden möchte.
+\subparagraph{Command}
+\label{subpara:Command}
+Dieses Command verkörpert den Befehl, der ausgeführt werden soll. Abhängig von der jeweiligen Implementation des IoT Geräts kann dieses Command etwas anderes beinhalten. Standardmässig werden \emph{open} und \emph{close} für Schliessfächer geschickt.
+\subparagraph{Rentable Address}
+Obwohl die Adresse bereits in den topics der Nachricht vorhanden ist, wird sie in der Message erneut angegeben. Grund dafür ist, dass die topics nur der Filterung der Nachrichten dienen. Das Message Objekt wurde kryptographisch signiert und somit kann festgestellt werden, dass die Nachricht auch wie gesendet zugestellt wird.
+\subparagraph{Whisper Identity}
+Obwohl die Whisper Identity optional für Whisper ist (vgl. \ref{supara:Whisper_Identity}), wird sie vorausgesetzt, um die Real-Time Kommunikation von lokkit zu benutzen. Die Whisper Identity des Absenders einer Nachricht ist öffentlich zugänglich und kann von jeder Nachricht abgefragt werden, sofern ein Absender gesetzt wurde.
 
 \paragraph{Digest}
 \label{para:Digest}
-Whisper ermöglicht es, einer Nachricht einen Sender und Empfänger in Form von \emph{Whisper Identities} anzugeben. Da diese Whisper Identities aber nicht an Adressen in der Blockchain gebunden sind, sondern kurzlebige Objekte sind, wurde eine weitere Sicherheitsmassnahme implementiert, um den korrekten Absender einer Nachricht zu validieren.
-Zusätzlich zu der in Whisper vorhandenen Möglichkeit Sender und Empfänger einer Nachricht anzugeben, wurde eine in der web3 enthaltene Funktion \empf{web3.eth.sign(...)}\footnote{} verwendet, um die übermittelte Nachricht zu signieren. Damit diese Funktion einen brauchbaren Wert zurückliefert, muss Private Key des angegebenen Accounts auf der lokalen Node vorhanden sein und dieser Account muss über die Funktion web3.personal.unlockAccount(...) entsperrt sein. Sind diese Vorbedingungen erfüllt, liefert \empf{web3.eth.sign(...)} einen 
+Whisper Nahrichten kann ein Sender und ein Empfänger in Form von \emph{Whisper Identities} angegeben werden. Da diese Whisper Identities aber nicht an Adressen in der Blockchain gebunden, sondern kurzlebige Objekte sind, wurde eine weitere Sicherheitsmassnahme implementiert, um den korrekten Absender einer Nachricht zu validieren.
+Zusätzlich zu der in Whisper vorhandenen Möglichkeit Sender und Empfänger einer Nachricht anzugeben, wurde eine in der web3 enthaltene Funktion \empf{web3.eth.sign(...)}\footnote{} verwendet, um die übermittelte Nachricht zu signieren. Damit diese Funktion einen Wert zurückliefert, muss der Private Key des angegebenen Accounts auf der lokalen Node vorhanden sein und dieser Account muss über die Funktion web3.personal.unlockAccount(...) entsperrt sein. Sind diese Vorbedingungen erfüllt, liefert \empf{web3.eth.sign(...)} eine 130-Stellige HEX-Zahl zurück. Später kann die  der Funktion \emph{web3.personal.ecRecover} zu
 
 Wichtig bei web3.eth.sign(...) ist, dass die über Whisper erhaltenen JSON Objekte jeweils die Attribute in alphabetisch sortierter Reihenfolge beinhalten und über die javascript Funktion JSON.stringify serialisiert werden, bevor sie den kryptographischen Funtionen übergeben werden. Grund dafür ist, dass besagte sign Funktion eine Zeichenkette als Arugment nimmt und nicht ein Objekt. Die Verwendung von JSON.stringify versichert, dass der eingabewert stets gleich strukturiert ist\footnote{convention over configuration?}
 \\Wenn web3.personal.ecRecover(...)
 
+\paragraph{Replay Attack}
+Sollte die Whisper Identity nicht Teil der signierten Message sein, könnte ein Angreifer eine Replay Attacke ausführen, indem dieselbe Nachricht erneut versendet wird. Als Alternative zur Einbettung der Whisper Identity im signierten Message Objekt könnte zur Verhinderung dieser Attacke die empfangende Whisper Identity im Smart Contract Rentable angegeben werden. Die Erstellung eines Absenders würde somit obsolet und Whisper würde die Verschlüsselung übernehmen, da ein Empfänger der Nachricht angegeben wird. Da die Whisper Identities einen Neustart der Applikation nicht überdauern, müsste nach jedem Neustart des Doorman eine Transaktion ausgelöst werden, die die empfangende Whisper Identity in dem jeweiligen Smart Contracts setzt. Diese Lösung wurde abgelehnt, da der Doorman Transaktionen auslösen, und somit eine Möglichkeit zur Bezahlung auf jedem Endgerät vorhanden sein muss.
 
 \subsection{Doorman}
-Die Komponente Doorman ist eine mögliche Implementation in Python 2.7, die es ermöglicht, ein IoT Gerät an die erwähnten Smart Contracts (vgl. \ref{subsec:lokkit_Smart_Contracts}) und das Whisper Protokoll (vgl. \ref{para:Whisper}) anzubinden. 
-Die Implementation sieht eine 
+\label{subsec:Doorman}
+Doorman ist eine mögliche Implementation in Python 2.7, die es ermöglicht, ein IoT Gerät an die erwähnten Smart Contracts (vgl. \ref{subsec:lokkit_Smart_Contracts}) und das Whisper Protokoll (vgl. \ref{para:Whisper}) inkl. der definierten Schnittstelle (vgl. \ref{subsec:Real_Time_Kommunikationsschnittstelle}) anzubinden.
+Doorman verbindet sich mit einer angegebenen Ethereum Node, lädt die Informationen zum angegebenen Smart Contract und wartet auf Mitteilungen (vgl. \ref{subsec:Konfiguration}). Wenn eine Nachricht erhalten und der Absender erfolgreich verifiziert wurde, wird der angegebene Befehl in der Shell ausgeführt. Als einziges Argument erhält dr Befehl den Inhalt des command Feldes der erhaltenen Mitteilung enthält (vgl. \ref{subpara:Command}).
+\subsubsection{Konfiguration}
+\label{subsec:Konfiguration}
+Die Konfiguration des Doorman wird mittels einer yml Datei\footnote{https://fdik.org/yml/} gemacht. Die Datei besitzt ein root mit namen \emph{doorman} und Attribute für die Ethereum Node, verwendete Rentable Smart Contract Adresse und auszuführendes Script wenn eine Nachricht erhalten wurde.
+\begin{lstlisting}[language=yml,caption={Beispielkonfiguration für Doorman}]
+doorman:
+    node_url: 127.0.0.1:8545
+    rentable_address: "0xf16801293f34fc16470729f4ac91185595aa6e10"
+    script: open_close_device.bat
+\end{lstlisting}
+
+\paragraph{node_url}
+Die Url der Ethereum Node, zu der verbunden werden soll. Diese Node muss das shh Protokoll und auch die shh API aktiviert haben (vgl. \ref{para:Whisper}). sie ist im Format <address>:<port> anzugeben. Informationen zu protokoll wie http:// sind auszulassen.
+\paragraph{rentable_address}
+Die Adresse des Smart Contracts vom typ Rentable (vgl. \ref{subsec:Rentable}), auf dessen Nachrichten gehört werden soll. Hierbei ist es wichtig zu beachten, dass die korrekte Rentable Adresse angegeben wird.
+\paragraph{script}
+Das script, das ausgeführt werden soll ist eine Anweisung 
+
 
 \subsubsection{Wieso Python? Wieso Python 2.7?}
 \subsubsection{Mechanismus}
