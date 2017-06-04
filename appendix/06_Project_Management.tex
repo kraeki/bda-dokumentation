@@ -1,0 +1,195 @@
+\chapter{Projektmanagement}
+
+\section{Dokumentinfos}
+versionsupdate für Risikobeurteilung etc.
+
+\section{Projektorganisation}
+ziele, team (rollen, zuständigkeiten), 
+\subsection{Projektziele}
+Das Ziel dieses Projektes ist es, bestehende Blockchain Technologien zu recherchieren und zu analysieren und basierend auf dieser Vorarbeit einen Demonstrator zu konzipieren und zu implementieren, der die Blockchain Technologie mit IoT Geräten verbindet. Dieser entwickelte Demonstrator wird der Hochschule Luzern als Aktiva übergeben und soll als solcher weiterverwendet werden können. Die konkrete Aufgabenstellung für den Demonstrator wurde ebenfalls im Rahmen dieses Projektes vom Projektteam entwickelt.
+
+\subsection{Rollen \& Zuständigkeiten}
+\subsubsection{Projektteam}
+Domi \& Andi
+
+\subsubsection{Hochschule Luzern \& Experte}
+Weingärtner, Hüsler, Experte
+
+\section{Projektführung}
+Im diesem Projekte wurden die vier klassischen Phasen aus SoDa\footnote{Software Development agile, hslu 2017} grundsätzlich befolgt, jedoch wird in diesem Projektmanagementplan eine andere Terminologie für die Phasen verwendet, um die explorative Methodologie dieses Projektes zu betonen.
+
+\subsection{Projektplanung}
+\#todo: plan inkl. meilensteine einfügen (aus mid term präsi, evtl updaten)
+
+\paragraph{Initialisierung 24. März}
+(Aufgabenstellung definiert) Bis am 24. März war die Recherche und Ausarbeitung einer konkreten Aufgabenstellung geplant, die anschliessend implementiert wird. Ein Grobkonzept (\#TODO: müssen wir hier ein ein dokument haben oder genügt ein Kapitel ''Grobkonzept'' im Bericht?) sollte vorliegen.
+
+Diese Aufgabenstellung wurde am 13. März dem Auftraggeber mitgeteilt und am 14. März besprochen und angenommen (\#todo: siehe email vom 14.3)
+
+\#todo: kommentare des Auftraggebers: siehe Notizen
+
+\#todo: verweis auf requirements für prototyp
+
+\paragraph{Zwischenpräsentation 26. April}
+(Prototyp lauffähig) Während er Prototypphase sollte ein definierter Prototyp implementiert werden, der an der Zwischenpräsentation am 26. April vorgeführt werden kann. Dies diente zum einen der raschen Entwicklung einer demonstrierbaren Funktionalität an den Auftraggeber und zum anderen dem Sammeln von konkreten Erfahrungen für das Projektteam im Bereich der Blockchain Technologien. Diese Erfahrungen konnten in der darauf folgenden Phase gewinnbringend eingesetzt und zur Verbesserung der bestehenden Funktionalität verwendet werden.
+
+Der Prototyp mit komplettem Systemdurchstich konnte demonstriert werden. Durch eine Webapp und lokal laufender Ethereum Node wurde demonstriert, dass die Kommunikation zwischen den Geräten funktioniert und auch die Echtzeitkommunikation mit dem Whisper v2 (\#todo: referenz zu whisper v5 update) Protokoll lauffähig ist.
+
+\paragraph{Formelle Abgabe 9. Juni}
+(Dokumentation abgabefertig \& Demonstrator lauffähig) Das Ende des Projektes war der 9. Juni 2017. An diesem Datum sollte der Demonstrator lauffähig, alle Funktionalität dokumentiert und die formellen Testfälle ausgeführt und entsprechend festgehalten sein. 
+
+\#todo: Was hat alles funktioniert, was nicht?
+
+\paragraph{Abschlusspräsentation 26. Juni}
+Demonstrator "gehärtet" für Abschlusspräsentation und Demonstration (Verbesserungen bei Benutzerfreundlichkeit, Stabilität o.Ä.)
+Funktional ist der Demonstrator und jegliche Dokumentation dessen abgeschlossen. Arbeiten, die am Demonstrator nach der Abgabe der Dokumentation gemacht wurden, beschränken sich nur auf den vorführbaren Wert für die Abschlusspräsentation und die Demonstration am 7. Juli.
+
+\#todo: Hier werden wir allfällige weitere Änderungen referenzieren und als v1.1 an der Abschlusspräsi abgeben. Auch Geänderte Dokumente werden als v1.1 abgegeben.
+
+\subsubsection{Recherchephase \emph{Initialisierungsphase}}
+Im Rahmen des Kick-Off Meetings am 24. Februar übergab der Auftraggeber dem Projektteam den Projektauftrag für einen Demonstrator. Daraufhin wurde ein Rahmenplan erstellt und Meilensteine definiert. In der Recherchephase sollten bestehende Blockchain und IoT Technologien analysiert werden und darauf basierend ein Konzept für einen Demonstrator mit dem Auftraggeber besprochen und definiert werden.
+
+\subsubsection{Prototypphase \emph{Konzeptionsphase}}
+Das Ziel dieser Phase war es, einen Prototyp zu erstellen, der aufzeigt, dass die Aufgabenstellung so umgesetzt werden kann, wie sie im Konzept definiert wurde. Dabei ist zu beachten, dass das Blockchain Thema im Vordergrund stand. Bei der Umsetzung des Prototyps wurde nach dem explorativen Prinzip gearbeitet, wobei in Intervallen von einer Woche im Projektteam die momentane Situation analysiert und weitere Schritte festgelegt wurden. Hierbei griff das Projektteam sich verändernde Abhängigkeiten (siehe geth 1.6.1\^, status-im, web3 (whisper 5)) auf und versuchte ein limitiertes Set an Anforderungen für den Prototypen zu implementieren, um für die Realisierungsphase eine adäquate zusätzliche Menge Anforderungen definieren zu können.
+
+Am Ende dieser Phase fand die Midterm Präsentation statt, bei der dem Auftraggeber die bisherigen Erfolge, namentlich der Prototyp, vorgeführt wurde. Diese Präsentation diente auch der Besprechung weiterer Anforderungen für die Realisierungsphase, in der der Demonstrator, inklusive der IoT Aspekte, vollumfänglich implementiert werden soll.
+
+\subsubsection{Realisierungsphase}
+Durch die Vorarbeit in den Recherche- und Prototyp- Phasen konnte für die Realisierungsphase eine Menge von Anforderungen definiert werden, die es zu implementieren gilt. Die Vorgehensweise in dieser Phase lehnt sich an das iterativ-inkrementelle Modell von SoDa an, verzichtet jedoch auf explizite Sprints und pflegt keine unterschiedlichen Product- und Sprintbacklogs. Wie auch in der Prototypphase wurden wöchentlich die Arbeiten besprochen und ad-hoc neue Prioritäten für die nächste Woche, basierend auf den noch offenen Anforderungen, definiert. Dies war möglich, da alle Anforderungen bereits in der Recherchephase definiert wurden. Technisch detaillierte User Stories zu definieren war nicht angebracht, da das know-how zur genügenden Fomrulierung solcher grösstenteils während der Realisierung erarbeitet werden musste. Auch die Grösse des Teams und die limitierte Zeitspanne rechtfertigt diese abgespeckte Interpretation von SoDa.
+
+\subsubsection{Projektabschluss}
+In der Projektabschlussphase wurden letzte Integrationstests ausgeführt, um die volle Funktionsfähigkeit des Demonstrators sicherzustellen und allfällige Abweichungen von der Konzeption zu dokumentieren. Weiter wurden die formalen Dokumente vervollständigt und abgeschlossen.
+
+\subsection{Projektkontrolle}
+Der Fortschritt wurde per eMail und in der Midterm Präsentation vom Projektteam an den Auftraggeber kommuniziert.
+
+IST vs SOLL zustand und Massnahmen. (fakultativ)
+bspw. bei Rückstand im Projektplan o.Ä.
+
+
+\subsection{Verantwortlichkeiten}
+Dominik Hirzel
+\begin{itemize}
+    \item Blockchain
+    \item Smart Contracts
+    \item Android App
+    \item Dokumentation
+\end{itemize}
+
+\\Andreas Schmid
+\begin{itemize}
+    \item IoT
+    \item Webapp
+    \item Doorman
+\end{itemize}
+
+
+\section{Risikomanagement}
+Das Risikomanagement wurde basierend auf der gängigen, und auch in SoDa definierten, Matrixmethode. Die horizontale Achse der Matrix entspricht der Auftretenswahrscheinlichkeit des Risikos, die vertikale Achse spiegelt die Schwere der Auswirkung wieder. Eine höhere Zahl bedeutet hierbei häufiger und schlimmer. Befindet sich die Wahrscheinlichkeit oder die Auswirkung eines Risikos im roten Bereich (vgl. \ref{tbl:Risikomatrix_Leer}), muss mindestens eine Mitigationsmassnahe getroffen werden, um die entsprechende Eigenschaft in den gelben Bereich zu verschieben. Bestenfalls würden Risiken durch besagte Massnahmen eliminiert werden.
+
+\begin{table}[]
+\centering
+\caption{Risikomatrix Leer}
+\label{tbl:Risikomatrix_Leer}
+\begin{tabular}{@{}ccccccc@{}}
+                             & 5 & \cellcolor[HTML]{DF8181} & \cellcolor[HTML]{DF8181} & \cellcolor[HTML]{DF8181} & \cellcolor[HTML]{DF8181} & \cellcolor[HTML]{DF8181} \\
+                             & 4 & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{DF8181} & \cellcolor[HTML]{DF8181} \\
+                             & 3 & \cellcolor[HTML]{92D050} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{DF8181} \\
+                             & 2 & \cellcolor[HTML]{92D050} & \cellcolor[HTML]{92D050} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{DF8181} \\
+\multirow{-5}{*}{\rotatebox[origin=c]{90}{Auswirkung}} & 1 & \cellcolor[HTML]{92D050} & \cellcolor[HTML]{92D050} & \cellcolor[HTML]{92D050} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{DF8181} \\
+                             &   & 1                        & 2                        & 3                        & 4                        & 5                        \\
+                             &   & \multicolumn{5}{c}{Wahrscheinlichkeit}                                                                                              
+\end{tabular}
+\end{table}
+
+\subsection{Übersicht}
+Risiken werden für jede Phase als Übersicht vollumfänglich tabellarisch festgehalten. D.h., dass nicht nur neue Risiken erfasst sondern auch bestehende Risiken neu evaluiert (oder gestrichen) werden. Hierbei wird bewusst gewisse Redundanz zu Gunsten der Vollständigkeit auf einen Blick in Kauf genommen. Die Risiken werden mit einer Nummer versehen und ein Name zur einfacheren Identifikation definiert. Eine ausführliche Beschreibung der Risiken, eine Begründung für die Kategorisierung und allfällige Mitigationsmassnahmen werden anschliessend pro Risiko gelistet. Die Risiken werden in der Matrix vor und nach der Mitigationsmassnhamen dargestellt. Dabei ist die ausgegraute Nummer die Kategorisierung des Risikos vor und die voll schwarze Nummer dieselbe nach den Mitigationsmassnahmen. \#todo: wie schreibt man diesen satz besser? :/
+
+\subsection{Risiken Recherchephase}
+Während der Recherchephase waren die hauptsächlichen Risiken, dass die laufende Entwicklung an geth die zu implementierende Funktionalität für den Demonstrator einschränken kann.
+
+\begin{table}[]
+\centering
+\begin{tabular}{lllll}
+Nr & Risiko                                                  & A & W & Status \\
+1  & geth unterstützt nicht alle Funktionalität              & 4          & 3                  & Neu    \\
+2  & geth hat releaseverhindernde Fehler/Kompatibilität      & 5          & 2                  & Neu    \\
+3  & Höhere Belastung des Projektteams durch Berufstätigkeit & 2          & 2                  & Neu    \\
+4  & Temporärer Ausfall von github                           & 1          & 1                  & Neu    \\
+5  & Temporärer Ausfall von sharelatex                       & 3          & 1                  & Neu   
+\end{tabular}
+\end{table}
+
+\begin{table}[]
+\centering
+\caption{Risikomatrix Leer}
+\label{tbl:Risikomatrix_Recherche}
+\begin{tabular}{@{}ccccccc@{}}
+                             & 5 & \cellcolor[HTML]{DF8181} & \cellcolor[HTML]{DF8181} & \cellcolor[HTML]{DF8181} & \cellcolor[HTML]{DF8181} & \cellcolor[HTML]{DF8181} \\
+                             & 4 & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{DF8181} & \cellcolor[HTML]{DF8181} \\
+                             & 3 & \cellcolor[HTML]{92D050} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{DF8181} \\
+                             & 2 & \cellcolor[HTML]{92D050} & \cellcolor[HTML]{92D050} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{DF8181} \\
+\multirow{-5}{*}{\rotatebox[origin=c]{90}{Auswirkung}} & 1 & \cellcolor[HTML]{92D050} & \cellcolor[HTML]{92D050} & \cellcolor[HTML]{92D050} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{DF8181} \\
+                             &   & 1                        & 2                        & 3                        & 4                        & 5                        \\
+                             &   & \multicolumn{5}{c}{Wahrscheinlichkeit}                                                                                              
+\end{tabular}
+\end{table}
+
+\paragraph{1}
+\#todo: ??? mit 2 mergen?
+
+\paragraph{2}
+Sollte angedachte Funktionalität noch nicht in geth implementiert sein...
+
+\paragraph{3}
+Da alle Beteiligten des Projektteams neben diesem Projekt auch einer regulären Berufstätigkeit nachgehen, bei der sie eine zentrale Rolle in Entwicklungsteams einnehmen. Durch diese Beschäftigung ist es denkbar, dass der Arbeitgeber während der Projektzeit zusätzliche Anwesenheit verlangt.
+\subparagraph{Mitigation}
+Alle Beteiligten des Projektteams führen eine transparente Beziehung zu ihrem Arbeitgeber bezüglich ihrem Studium. Die Arbeitgeber unterstützen die Beteiligten des Projektteams in ihrem Studium. \#todo: umschreiben. Durch frühzeitige Kommunikation mit dem Arbeitgeber bezüglich fixen Terminen oder Projektabschlussphase (Intensivwoche) wird diesem Risiko entgegengewirkt. Auch Durch Belegung von wenigen weiteren Fächern wird die Belastung ausserhalb dieses Projektes gering gehalten.
+
+\paragraph{5}
+
+
+\subsection{Risiken Prototypphase}
+Prototypphase...
+
+\begin{table}[]
+\centering
+\caption{Risiken Recherchephase}
+\label{}
+\begin{tabular}{lllll}
+Nr & Risiko                                                  & A & W & Status \\
+1  & geth unterstützt nicht alle Funktionalität              & 4          & 3                  & Neu    \\
+2  & geth hat releaseverhindernde Fehler/Kompatibilität      & 5          & 2                  & Neu    \\
+3  & Höhere Belastung des Projektteams durch Berufstätigkeit & 2          & 2                  & Neu    \\
+4  & Temporärer Ausfall von github                           & 1          & 1                  & Neu    \\
+5  & Temporärer Ausfall von sharelatex                       & 3          & 1                  & Neu   
+\end{tabular}
+\end{table}
+
+\begin{table}[]
+\centering
+\caption{Risikomatrix Leer}
+\label{tbl:Risikomatrix_Recherche}
+\begin{tabular}{@{}ccccccc@{}}
+                             & 5 & \cellcolor[HTML]{DF8181} & \cellcolor[HTML]{DF8181} & \cellcolor[HTML]{DF8181} & \cellcolor[HTML]{DF8181} & \cellcolor[HTML]{DF8181} \\
+                             & 4 & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{DF8181} & \cellcolor[HTML]{DF8181} \\
+                             & 3 & \cellcolor[HTML]{92D050} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{DF8181} \\
+                             & 2 & \cellcolor[HTML]{92D050} & \cellcolor[HTML]{92D050} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{DF8181} \\
+\multirow{-5}{*}{\rotatebox[origin=c]{90}{Auswirkung}} & 1 & \cellcolor[HTML]{92D050} & \cellcolor[HTML]{92D050} & \cellcolor[HTML]{92D050} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{DF8181} \\
+                             &   & 1                        & 2                        & 3                        & 4                        & 5                        \\
+                             &   & \multicolumn{5}{c}{Wahrscheinlichkeit}                                                                                              
+\end{tabular}
+\end{table}
+
+\subsection{Risiken Realisierungsphase}
+\subsection{Risiken Projektabschlussphase}
+
+
+\section{Projektunterstützung}
+\subsection{Tools}
+
+\subsection{Konfigurationsmanagement}
+Zusammenspiel der Versionen der Komponenten. --> Da nur eine Version veröffentlich wird, ist dies warscheinlich alles V1.0.0.
+
+
+\section{Testkonzept}

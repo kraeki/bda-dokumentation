@@ -4,30 +4,10 @@
 %   Hauptsprache: german (default), english
 %%------------------------------------------------------------
 
+\include{usepackage} % packages importieren
+
 \graphicspath{{images/}}    % wo liegen die Bilder? 
 \bibliography{literatur}  	% Angabe der BibTeX-Datei, % utf8-change
-
-%%%  Acronym and Glossary
-\usepackage[utf8]{inputenc}
-\usepackage[acronym, toc]{glossaries}
-\usepackage{listings}
-%% listings configuration
-\lstdefinelanguage{JavaScript}{
-  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
-  keywordstyle=\color{blue}\bfseries,
-  ndkeywords={class, export, boolean, throw, implements, import, this},
-  ndkeywordstyle=\color{darkgray}\bfseries,
-  identifierstyle=\color{black},
-  sensitive=false,
-  comment=[l]{//},
-  morecomment=[s]{/*}{*/},
-  commentstyle=\color{purple}\ttfamily,
-  stringstyle=\color{red}\ttfamily,
-  morestring=[b]',
-  morestring=[b]"
-}
-%% end listings configuration
-
 \makenoidxglossaries
 \input{acronym_glossary.tex}
 
@@ -37,10 +17,12 @@
 
 % Einträge für ALLE Arbeiten:
 \title{lokkit - Einsatz von Blockchain und IoT}
-\author{D.\ Hirzel\ und A.\ Schmid}
+\author{D.\ Hirzel und A.\ Schmid}
 \studiengang{Informatik}
 \studienort{Rotkreuz}
-\abgabedatum{2017}{06}{09}	% {YYYY}{MM}{DD}
+%\schulname{Lucerne University of Applied Sciences and Arts}
+\schulname{Hochschule Luzern}
+\abgabedatum{2017}{06}{09}
 %\strictlicense  % erzeugt restriktive Lizenzformel
 
 %%%----------------------------------------------------------
@@ -64,13 +46,18 @@
 %%%----------------------------------------------------------
 %%%Anhang
 \appendix
-\include{appendix/anhang_a}	% Inhalt der CD-ROM/DVD
+\include{appendix/01_CD_Content}
+\include{appendix/02_Open_Source}
+\include{appendix/03_Alte_Konzepte}
+\include{appendix/04_Systemspezifikation}
+\include{appendix/05_Installation_Deployment}
+\include{appendix/06_Project_Management}
 
 %%%----------------------------------------------------------
 \MakeBibliography
 %%%----------------------------------------------------------
 
 %%%Messbox zur Druckkontrolle
-\include{messbox}
+%\include{messbox}
 
 \end{document}

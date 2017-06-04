@@ -1,0 +1,54 @@
+%%% PACKAGES
+\usepackage[utf8]{inputenc}
+
+\usepackage[acronym, toc]{glossaries} % Acronym and Glossary
+
+\usepackage{listings} % für inline code definitionen
+\definecolor{codestringstylecolor}{rgb}{0.8,0.4,0}
+\newcommand\codestringstyle{\color{codestringstylecolor}\ttfamily}
+\newcommand\codekeywordstyle{\color{blue}\bfseries}
+\lstdefinelanguage{JavaScript}{ % JavaScript definition für listings package
+    keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+    keywordstyle=\codekeywordstyle,
+    ndkeywords={class, export, boolean, throw, implements, import, this},
+    ndkeywordstyle=\color{darkgray}\bfseries,
+    identifierstyle=\color{black},
+    sensitive=false,
+    comment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    commentstyle=\color{purple}\ttfamily,
+    stringstyle=\codestringstyle,
+    morestring=[b]',
+    morestring=[b]"
+}
+\lstdefinelanguage{json}{ % JSON definition für listings package
+  stringstyle=\codestringstyle,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinelanguage{yml}{ % YML definition für listings package
+  keywords={true,false,null,y,n},
+  keywordstyle=\codekeywordstyle,
+  %basicstyle=\color{black}\bfseries, this makes the font bigger.
+  sensitive=false,
+  comment=[l]{\#},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\codestringstyle,
+  moredelim=[l][\color{orange}]{\&},
+  moredelim=[l][\color{magenta}]{*},
+  moredelim=**[il][\color{red}\mdseries{:}\color{blue}\mdseries]{:},
+  morestring=[b]',
+  morestring=[b]",
+  literate =    {---}{{\llap{\color{cyan}\mdseries-{-}-}}}3
+                {>}{{\textcolor{red}\textgreater}}1     
+                {|}{{\textcolor{red}\textbar}}1 
+                {\ -\ }{{\mdseries\ -\ }}3,
+}
+
+\usepackage{amsmath} % Formeldarstellung
+
+\usepackage{booktabs} % Tabellen
+\usepackage{multirow} % Tabellen
+\usepackage[table,xcdraw]{xcolor} % Tabellen

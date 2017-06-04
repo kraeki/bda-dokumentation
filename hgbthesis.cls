@@ -45,6 +45,11 @@
 	\renewcommand{\@studienort}{#1}
 }
 
+\newcommand{\@schulname}{\@MissingArg{Schulname??}}
+\newcommand{\schulname}[1]{%
+	\renewcommand{\@schulname}{#1}
+}
+
 \newcommand{\@betreuerBez}{????}
 \newcommand{\@betreuerName}{\@MissingArg{Betreuer??}}
 
@@ -132,11 +137,13 @@
 \newcommand{\@batitel}{%
 \begin{titlepage}%
 \rule{0mm}{1mm}
-\vspace*{20mm}
+%\vspace*{20mm}
+\vspace*{-2cm}
 %\noindent Left side \hfill right side\\
 \begin{center}%
+  \centering\includegraphics[width=0.9\textwidth]{images/lokkit_logo.pdf}
   \setlength{\unitlength}{1cm}
-  \begin{picture}(12,4)
+  \begin{picture}(12,3)
   %\thinlines\put(0,0){\framebox(12,4){}}
   \put(0,1.8){\parbox{12cm}{\centering\LARGE\bf%
     \setlength{\baselineskip}{20pt}%
@@ -149,9 +156,12 @@
     \vskip 8mm%
     %{\large\sf Nr.~\@nummer}
     \vskip 8mm%
-    {\large eingereicht am} \vskip 1mm {Fachhochschul-Bachelorstudiengang}%
+    %{\large eingereicht am} \vskip 1mm {Fachhochschul-Bachelorstudiengang}%
+    {\large eingereicht am Bachelorstudiengang}
     \vskip 4mm%
     {\large\sc\@studiengang}%
+    \vskip 4mm%
+    {\large der \@schulname}%
     \vskip 4mm%
     {\large in \@studienort}%
     \vskip 16mm%
@@ -379,11 +389,12 @@ Die Arbeit ist in gleicher oder ähnlicher Form noch nicht vorgelegt worden.
 \par
 \vspace{10mm}
 \noindent
-\@studienort, am \formatdate{\value{@abgabetag}}{\value{@abgabemonat}}{\value{@abgabejahr}}
+\@studienort, der \formatdate{\value{@abgabetag}}{\value{@abgabemonat}}{\value{@abgabejahr}}
 \par
-\vspace{12mm}
+\vspace{18mm}
 \noindent
-\@author
+%\@author
+Dominik Hirzel\hspace{50mm}Andreas Schmid %\# Names not taken from Author field but hard-coded.
 \end{german}
 }
 
@@ -431,7 +442,7 @@ acknowledged. I further declare that this or similar work has not been submitted
 
 \renewcommand{\@batitelseiten}{
 \@batitel
-\@babetreuerseite
+%\@babetreuerseite \#existiert nicht @hslu
 \@erklaerungsseite
 }
 

@@ -1,0 +1,39 @@
+\chapter{Alte Ideen}
+
+\section{Überarbeitete Ideen}
+
+\subsection{Real-Time Kommunikationsschnittstelle Whisper v2}
+Um mit mietbaren Objekten (vgl. \ref{subsec:lokkit_Smart_Contracts}) während des gemieteten Zeitraums in Echtzeit zu interagieren, wurde das Whisper Protokoll (vgl. \ref{para:Whisper}) verwendet. Whisper erlaubt nur die Übermittlung von einfachen testbasierten Nachrichten. In dieser Schnittstelle definiert wurde eine Nachricht im JSON Format\footnote{http://json.org/}, die eine strukturierte Möglichkeit zur Datenüberittlung ermöglicht.
+Die Nachricht selbst besteht aus einem einzelnen JSON Objekt. Dieses Objekt besitzt zwei Attribute: \emph{digest} (vgl. \ref{para:Digest}) und \emph{message} (vgl. \ref{para:Message}).
+
+\begin{lstlisting}[language=json,caption={Beispiel einer Real-Time Nachricht via Whisper Protokoll}]
+{
+  digest: "0xf88a8a19e428f25f6489aae44c09f2e142297a4053a8aaef5a97c4c2b246c89477"
+    + "a2fc16365a0ec05a466e23b403ac1370eedc5e90032ca007d742edfad83eb11b",
+  message: {
+    command: "open",
+    rentableAddress: "0x4cbee4df58c717f47a5e6e8d305a450fcdbe1e24",
+    whisperIdentity: "0x04eee314d1b1a4e9f264055274d7411200ada940d6c6c698d53bf40b41ff0f5277"
+    + "75a8dfd11867fe64d389ab7cb9809f8df08f561a2498fdd9c9d5c6556913f598"
+  }
+}
+\end{lstlisting}
+
+\paragraph{Message}
+Das Message Objekt innerhalb der Nachricht enthält drei Attribute: command, rentableAddress und whisperIdentity. Dies ist die primäre Mitteilung, die an ein IoT Gerät gemacht werden möchte.
+\subparagraph{Command}
+Dieses Command verkörpert den Befehl, der ausgeführt werden soll. Abhängig von der jeweiligen Implementation des IoT Geräts kann dieses Command etwas anderes beinhalten. Standardmässig werden \emph{open} und \emph{close} für Schliessfächer geschickt.
+\subparagraph{Rentable Address}
+Obwohl die Adresse bereits in den topics der Nachricht vorhanden ist, wird sie in der Message erneut angegeben. Grund dafür ist, dass die topics nur der Filterung der Nachrichten dienen. Das Message Objekt wurde kryptographisch signiert und somit kann festgestellt werden, dass die Nachricht auch wie gesendet zugestellt wird.
+\subparagraph{Whisper Identity}
+Obwohl die Whisper Identity optional für Whisper ist (vgl. \ref{supara:Whisper_Identity}), wird sie vorausgesetzt, um die Real-Time Kommunikation von lokkit zu benutzen. Die Whisper Identity des Absenders einer Nachricht ist öffentlich zugänglich und kann von jeder Nachricht abgefragt werden, sofern ein Absender gesetzt wurde.
+
+\paragraph{Digest}
+Whisper Nahrichten kann ein Sender und ein Empfänger in Form von \emph{Whisper Identities} angegeben werden. Da diese Whisper Identities aber nicht an Adressen in der Blockchain gebunden, sondern kurzlebige Objekte sind, wurde eine weitere Sicherheitsmassnahme implementiert, um den korrekten Absender einer Nachricht zu validieren.
+Zusätzlich zu der in Whisper vorhandenen Möglichkeit Sender und Empfänger einer Nachricht anzugeben, wurde eine in der web3 enthaltene Funktion \emph{web3.eth.sign(...)}\footnote{} verwendet, um die übermittelte Nachricht zu signieren. Damit diese Funktion einen Wert zurückliefert, muss der Private Key des angegebenen Accounts auf der lokalen Node vorhanden sein und dieser Account muss über die Funktion web3.personal.unlockAccount(...) entsperrt sein. Sind diese Vorbedingungen erfüllt, liefert \emph{web3.eth.sign(...)} eine 130-Stellige HEX-Zahl zurück. Später kann die  der Funktion \emph{web3.personal.ecRecover} zu
+
+Wichtig bei web3.eth.sign(...) ist, dass die über Whisper erhaltenen JSON Objekte jeweils die Attribute in alphabetisch sortierter Reihenfolge beinhalten und über die javascript Funktion JSON.stringify serialisiert werden, bevor sie den kryptographischen Funtionen übergeben werden. Grund dafür ist, dass besagte sign Funktion eine Zeichenkette als Arugment nimmt und nicht ein Objekt. Die Verwendung von JSON.stringify versichert, dass der eingabewert stets gleich strukturiert ist\footnote{convention over configuration?}
+\\Wenn web3.personal.ecRecover(...)
+
+\paragraph{Replay Attack}
+Sollte die Whisper Identity nicht Teil der signierten Message sein, könnte ein Angreifer eine Replay Attacke ausführen, indem dieselbe Nachricht erneut versendet wird. Als Alternative zur Einbettung der Whisper Identity im signierten Message Objekt könnte zur Verhinderung dieser Attacke die empfangende Whisper Identity im Smart Contract Rentable angegeben werden. Die Erstellung eines Absenders würde somit obsolet und Whisper würde die Verschlüsselung übernehmen, da ein Empfänger der Nachricht angegeben wird. Da die Whisper Identities einen Neustart der Applikation nicht überdauern, müsste nach jedem Neustart des Doorman eine Transaktion ausgelöst werden, die die empfangende Whisper Identity in dem jeweiligen Smart Contracts setzt. Diese Lösung wurde abgelehnt, da der Doorman Transaktionen auslösen, und somit eine Möglichkeit zur Bezahlung auf jedem Endgerät vorhanden sein muss.

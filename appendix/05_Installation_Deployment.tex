@@ -1,0 +1,34 @@
+\chapter{Installation \& Deployment}
+\label{cha:Installation_Deployment}
+
+\section{Geth}
+\subsection{Installation}
+\subsection{Generell}
+https://geth.ethereum.org/downloads/
+
+\subsection{Ubuntu}
+sudo apt-get install software-properties-common
+sudo add-apt-repository -y ppa:ethereum/ethereum
+sudo apt-get update
+sudo apt-get install ethereum
+
+\section{Contracts}
+truffle deploy
+\subsection{Neue Instanz erstellen}
+web3.personal.unlockAccount(web3.eth.accounts[0], "")
+Rentable.new("hoi", "da", 0, 0);
+
+\section{Webapp}
+npm run rpccorsdomain *
+\subsection{ssl}
+
+\section{Doorman}
+pip install doorman.velo
+
+\section{Android App}
+lokkit.io/app
+\subsection{Berechtigungen}
+\subsubsection{Camera}
+Für barcode scanner (webview im app)
+\subsubsection{Storage}
+Für localstorage (webview im app)

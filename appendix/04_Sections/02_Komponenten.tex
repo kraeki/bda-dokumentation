@@ -1,0 +1,55 @@
+\section{Komponenten}
+\label{sec:Komponenten}
+Folgend werden alle im Lokkit System vorhandenen Komponenten, deren Abhängigkeiten und vorgenommene Konfiguration erklärt.
+
+\subsection{Geth}
+\begin{itemize}
+    \item Konfiguration von Geth
+    \item Funktionsweise blockchain KURZ
+\end{itemize}
+
+\subsection{Contracts}
+Die Datenhaltung und Businesslogik des lokkit Systems liegt auf der Blockchain in Form von Smart Contracts.
+\subsubsection{Rentable}
+Eine Instanz dieses Contracts spiegelt ein mietbares Objekt wieder.
+\paragraph{Erstellung}
+Um eine Instanz eines Rentables zu erstellen, muss eine Transaktion an den Konstruktor gestellt werden. Dies hat die Form:
+\begin{lstlisting}[language=javascript,caption={Beispiel für Rentable Erstellung},label={lst:Rentable_Erstellung}]
+var locker = rentableContract.new("description of the thing",
+1,
+"some location",
+{
+    from:web3.eth.accounts[0],
+    data: rentableCompiled["<stdin>:Rentable"].code,
+    gas:4700000,
+    gasPrce: 100000000000
+});
+\end{lstlisting}
+
+\paragraph{Funktionen}
+\paragraph{Events}
+
+\label{sys_subsubsec:Rentable}
+\subsubsection{RentableDiscovery}
+\subsubsection{Faucet}
+
+\subsection{Webapp (DAPP)}
+Die Webapp (auch DAPP) für Lokkit stellt eine Gerätunabhängige Benutzeroberfläche für die Interaktion mit dem Lokkit System zur Verfügung. Es wird mindestens ein Account, mit genügend Ether, vorausgesetzt, um mit den Rentable Objekten interagieren zu können.
+\subsubsection{NodeJS}
+\subsubsection{VueJS}
+\subsubsection{Ethereum Node}
+Die Vorbedingung zur Verwendung der Webapp ist eine laufende und korrekt konfigurierte Ethereum Node auf demselben Gerät, die die jsonrpc Schnittstellen \emph{eth}, \emph{shh}, \emph{personal} auf dem Port 8545 zur Verfügung stellt.
+
+
+\subsection{Doorman}
+
+\subsection{Android App}
+Die Interaktionsmöglichkeiten zum Lokkit System auf mobilen Geräten beschränkt sich momentan auf Androidgeräte (\#TODO: api version?).
+\subsubsection{statusgo-android}
+Diese Subkomponente des Android Apps implementiert das Ethereum Protokoll und weitere Funktionalität von status.im\footnote{http://status.im}. Sie wurde 
+\subsubsection{Lokkit Service}
+\subsubsection{Lokkit Activity}
+
+\subsection{Controllers}
+\subsubsection{Nuki}
+\subsubsection{Schloss Marke Eigenbau}
