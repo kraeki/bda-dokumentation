@@ -3,28 +3,77 @@
 \begin{itemize}
     \item \textbf{Grob beschreiben, was erreicht werden soll. Wünsche von Auftraggeber}
     \item \textbf{Eigene Idee und Wünsche erklären. Brainstorming für Ideen auflisten (evtl. Anhang)}
-    \item \textbf{lokkit. Konkrete Aufgabenstellung mit use cases, szenarien, business überlegungen (für Hüsler, bspw. möglichen Missbrauch und "kriminelle Energie" erläutern) und requirements. KEINE technischen details, diese folgen im Kapitel Implementation \ref{sec:Implementation}[title=hoi]}
+    \item \textbf{lokkit. Konkrete Aufgabenstellung mit use cases, szenarien, business überlegungen (für Hüsler, bspw. möglichen Missbrauch und "kriminelle Energie" erläutern) und requirements. KEINE technischen details, diese folgen im Kapitel Implementation} \ref{sec:Implementation}
     \item \textbf{Erkären warum Wunsch von Auftraggeber erfüllt}
 \end{itemize}
 
-Im diesem Kapitel wird die Aufgabenstellung aufgezeigt, die im Rahmen dieser Arbeit ebefalls erstellt wurde. Einzig die Schlagworte \emph{Blockchain}, \emph{\acrfull{IoT}} und den Bau eines Demonstrators waren vom Auftraggeber vorgegeben worde.
+Hier folgt die Aufgabenstellung, die ebenfalls im Rahmen dieser Projektarbeit erarbeitet wurde. Einzig die Schlagworte \emph{Blockchain}, \emph{\acrfull{IoT}} und der Bau eines Demonstrators waren vom Auftraggeber im Kick-Off Meeting vorgegeben worden. Im Rahmen dieser Bachelorarbeit sollte ein System definiert, konzipiert und entwickelt werden, das den Blockchain und IoT Aspekt verbindet und einen praktischen Anwendungszweck demonstriert. Der entwickelte Demonstrator sollte nach Abschluss dieses Projektes noch weiter vom Auftraggeber als solcher verwendet werden können.
 
-Die \emph{Blockchain}-Technologie ist zurzeit stark im Trend. Sie benutzt verteilte und dezentrale Rechennetzwerke und bietet dadurch bessere Sicherheit und geringere  Kosten im Vergleich zu traditionellen Methoden.
-
-Neue Blockchains unterstützen neben Crypto-Währungen auch sogenannte \emph{Smart Contracts}, die es dem Benutzer erlauben, Programme für die Blockchain zu implementieren. Diese Art von Programm nennt man auch \emph{\acrfull{DAPP}}.
-
-Auch das Thema \acrshort{IoT} ist in aller Munde und wächst in den kommenden Jahren stark an. Gartner schätzt Zuwachs von 20.4 Milliarden neuen Geräten bis 2020. Dies bringt neue Anforderungen an die Sicherheit mit - ein Aspekt, der eventuell durch die Blockchain-Technologie erfüllt werden kann.\cite{gartner.com_iot}
-
-Im Rahmen dieser Bachelorarbeit wird ein System konzipiert und entwickelt, das den IoT und Blockchain Aspekt verbindet und einen praktischen Anwendungszweck demonstriert.
+\section{Ziele}
+\label{sec:Ziele}
+Der zentrale Aspekt dieses Projektes war der Wissenserwerb im Bereich Blockchain und die konkrete Anwendung dieses neu erworbenen Wissens durch die Konzeption und Implementation in einem IoT Demonstrator. Dieser sollte durch sorgfältige und gründliche Implementation dem Auftraggeber in einem verwendbaren Zustand übergeben werden können.
 
 \begin{itemize}
-    \item \textbf{ Wieso sind Blockchain und IoT wichtig? Gartner Hype Cycler}
-    \item \textbf{ Wieso schlaegt die Schule dieses Thema vor? }
+    \item \textbf{ Was sind die Ziele die durch diese Arbeit erreicht werden sollen? }
     \item \textbf{ Was soll mit dem Demonstrator erreicht werden? }
+    \item \textbf{ Was ist das Ziel des Demonstrators? }
+    \item Demonstrieren der Vorteile der Blockchain
+    \item \dots
 \end{itemize}
 
+\section{Konkrete Aufgabenstellung}
+\label{sec:Konkrete_Aufgabenstellung}
+\emph{Da die Aufgabenstellung in dieser Bachelorarbeit ebenfalls erarbeitet werden musste, ist diese konkrete Aufgabenstellung ein Produkt der Recherchephase (vgl. \ref{pm_subsubsec:Recherchephase}). Bei fehlendem Wissen um Blockchain, Ethereum oder dieser Aufgabenstellung wird empfohlen, die einleitenden Kapitel \ref{sec:Arbeitsmethodik} und \ref{sec:Recherche} vorzugreifen.}
+
+Es soll ein System entwickelt werden, um Schliessfächer zu (ver-)mieten. Dabei sollen die Verträge in Form von Smart Contracts (vgl. \ref{subsec:Smart_Contracts}) in einer privaten Ethereum Blockchain (vgl. \ref{}) definiert werden. Ein Benutzer soll über eine grafische Benutzeroberfläche ein freies Schliessfach reservieren können. Während der Benutzer der aktuelle Mieter eines Faches ist, kann er das Schloss per Knopfdruck ver- und entriegeln.
+
 \section{Anforderungen an den Demonstrator}
-\label{sec:Anforderungen an den Demonstrator}
+\label{sec:Anforderungen_Demonstrator}
+
+\subsection{Smart Contracts}
+Datenhaltung und Businesslogik mittels Smart Contracts.
+
+X. Der Smart Contract soll Kosten für die Dauer des Mietvertrags definieren, die durch die Überweisung von Ether beglichen werden.
+
+X. Der Benutzer soll ein Depot für die Mietdauer an den Smart Contract entrichten, das dem Besitzer eines Schliessfaches als Sicherheit dient, falls das Schliessfach nicht freigegeben wird.
+
+\subsection{Webapp}
+Die Interaktion von Benutzern mit Smart Contracts in der Blockchain wird durch eine Webapp umgesetzt. Folgende Anforderungen beziehen sich auf zu entwickelnde Webapp.\cite[Wiki/DAPP-Developer-Resources, Wiki/Useful-Dapp-Patterns]{github.com/ethereum}
+
+X. Die Webapp soll eine Liste von verfügbaren Schliessfächer anzeigen.
+
+X. Die Webapp soll das einfache Hinzufügen von Schliessfächern zu der Liste der verfügbaren Schliessfächern ermöglichen.
+
+X. Die Webapp soll das Mieten von Schliessfächern mit einer ansprechenden grafischen Benutzeroberfläche ermöglichen.
+
+X. Die Webapp soll dem Benutzer in allen Fällen Rückmeldung über ausgeführte Funktionen geben.
+
+\subsection{Mobile App}
+Folgende Requirements beschränken sich auf die Mobile App für Android (später: Android App).
+
+X. Die Mobile App soll eine Ethereum Node starten, die mit dem definierten privaten Netzwerk verbindet.
+
+X. Die Mobile App soll die Erstellung von einem Benutzerkonto auf der lokalen Ethereum Node ermöglichen.
+
+X. Die Mobile App soll 
+
+\subsection{IoT Controller}
+Damit die Schliessfächer angesprochen werden können, müssen auf den IoT Geräten Controller implementiert werden, die die Hardware ansteuern. Folgende Anforderungen gelten für alle Controller unterschiedlicher Hardware.
+
+X. Der Controller soll auf Anfragen das Schliessfach öffnen oder schliessen.
+
+\subsection{Übergreifend}
+Diese Anforderungen sind funktionsübergreifend gültig und müssen von allen betroffenen Komponenten berücksichtigt werden.
+
+X. Ver- und Entriegeln eines Schliessfachs darf nur vom durch einen Smart Contract berechtigten Benutzer erfolgen.
+
+X. Alle Implementationen mit grafischer Benutzeroberfläche sollen in einem einheitlichen Erscheinungsbild erstellt werden.
+
+\subsection{Scope}
+X. Das Hinzufügen von neuen mietbaren Objekten ist nicht Teil dieser Arbeit. Sollten
+
+Der Demonstrator wird mit vorkonfigurierten Smart Contracts 
+
 \begin{itemize}
     \item Der Demonstrator soll auf dem Schulareal ausgestellt werden können. 
     \item Der Demonstrator soll keine Abhängigkeiten nach Aussen haben (kein Internet benötigen)
@@ -32,28 +81,8 @@ Im Rahmen dieser Bachelorarbeit wird ein System konzipiert und entwickelt, das d
     \item Der Aufbau des Demonstrators sowie die Inbetriebnahme muss dokumentiert sein.
 \end{itemize}
 
-\section{Konkrete Aufgabenstellung}
-\label{sec:Konkrete Aufgabenstellung}
-Es soll ein System entwickelt werden, um Schließfächer an Personen zu vermieten. Jedes Schließfach muss elektronisch ver- und entriegelt werden können.
-
-Der Benutzer soll über eine Oberfläche ein freies Schließfach reservieren können. Sobald der Benutzer der aktuelle Mieter eines Faches ist, kann er das Schloss per Knopfdruck öffnen und schliessen.
-
-Im Fokus steht die Umsetzung mit einer geeigneten Blockchain.
-
-\section{Ziele}
-\label{sec:Ziele}
-\begin{itemize}
-    \item \textbf{ Was sind die Ziele die durch diese Arbeit erreicht werden sollen? }
-    \item \textbf{ Was ist das Ziel des Demonstrators? }
-\end{itemize}
-
-\begin{itemize}
-    \item Demonstrieren der Vorteile der Blockchain
-    \item \dots
-\end{itemize}
-
+Der Demonstrator 
 
 \section{Erwartete Resultate}
 \label{sec:Erwartete_Resultate}
-
 Ein lauffähiger Prototyp des Schliessfachvermietsystems.

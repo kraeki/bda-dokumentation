@@ -1,5 +1,5 @@
 \section{Recherche}
-\label{sec:Blockchain}
+\label{sec:Recherche}
 \begin{itemize}
     \item \textbf{Informationssuche zu Beginn}
     \item \textbf{Was mit Blockchain alles gemacht werden kann}
@@ -47,6 +47,7 @@ geth --rpcapi "web3,eth,shh"
 \end{lstlisting}
 
 \subsubsection{Hyperledger}
+\#todo: in den anhang verschieben
 Hyperledger ist ein Unterfangen mehrerer internationaler Firmen (\#TODOLinux Foundation, IBM, Intel etc), das zum Ziel hat, wichtige Funktionalität im Bereich von Blockchains zu erforschen und zu definieren, um schlussendlich einen industrieweiten offenen Standard für verteilte Ledgertechnologien zu erschaffen.\cite{wiki.hyperledger.org/welcome}
 
 Zum Zeitpunkt des Starts dieses Projekts waren die Projekte 
@@ -54,15 +55,16 @@ Zum Zeitpunkt des Starts dieses Projekts waren die Projekte
 \paragraph{Chaintool}
 \paragraph{Burrow}
 
-\subsection{Ethereum Testchain}
-Die Ethereum Implementatoin stellt hart-kodiert zwei öffentliche Chain zur Verfügung. Zum einen die produktiv verwendete Chain \emph{Homestead}, auf der mit physischer Währung Ether gehandelt wird\cite[{Kapitel Ether}]{ethereum-homestead.readthedocs.io} und die auch von mehreren Firmen produktiv verwendet wird. Zum anderen die Chain \emph{Ropsten}, die als aktuelle Testchain dient. Obwohl das Mining ebenfalls mit erheblicher Rechenleistung verbunden ist, kann Ether auf der Testchain nicht gegen \emph{echte} Währung eingetauscht werden.
+\subsection{Öffentliche Ethereum Testchain}
+\label{subsec:oeffentliche_testchain}
+Die Ethereum Implementation stellt hart-kodiert zwei öffentliche Netzwerke zur Verfügung. Zum einen die produktiv verwendete Chain \emph{Homestead}, auf der mit physischer Währung Ether gehandelt wird\cite[{Kapitel Ether}]{ethereum-homestead.readthedocs.io}. Zum anderen das \emph{Ropsten} Netzwerk, das als aktuelle Testchain dient. Obwohl das Mining auf der Testchain ebenfalls mit erheblicher Rechenleistung verbunden ist, kann Ether auf der Testchain nicht gegen \emph{echte} Währung eingetauscht werden.
 
 \paragraph{Faucet Request}
 \label{para:Faucet_Request}
 Auf allen Testchains können sogenannte \emph{Faucet Requests} gemacht werden, wodurch Ether erhalten werden kann. Dieser Ether wird von Entwicklern, die aktiv Mining betreiben, zur Verfügung gestellt und kann dann von weiteren Entwicklern verlangt werden. Meist ist ein Limit auf der Menge Ether pro Minute oder Adresse verhängt, das missbräuchliche Nutzung dieses Dienstes verhindern soll. Ziel dieser Faucets ist es, Entwicklern eine Möglichkeit zu geben, die öffentliche Testchain zu verwendet, ohne dabei selbst Mining betreiben zu müssen.\cite{blog.b9lab.com/faucet,ethereum.stackexchange.com/faucets}
 
 \subsection{Private Chain mit Ethereum}
-Es ist möglich, unter Verwendung von Mobile Apps von Drittanbietern, die \emph{Ropsten} Testchain anzusprechen\cite[Features]{status.im}. Durch Wunsch des Auftraggebers wurde eine Anbindung an die öffentliche \emph{Ropsten} Testchain ausgeschlossen, da die ständige Verfügbarkeit des Internets auf den IoT devices oder die Disponibilität von Ether nicht gewährleistet sein kann. Folglich wurde eine private Blockchain auf der zur Verfügung gestellten Infrastruktur installiert (vgl. \#todo). Um eine private Blockchain aufzusetzen wird ein Genesis Block benötigt und es müssen bestehende Nodes bekannt sein, die als peers hinzugefügt werden können.
+Durch Wunsch des Auftraggebers wurde eine Anbindung an die öffentliche \emph{Ropsten} Testchain (vgl. \ref{subsec:oeffentliche_testchain}) ausgeschlossen, da die ständige Verfügbarkeit des Internets auf den IoT devices oder die Disponibilität von Ether nicht gewährleistet sein kann. Folglich wurde eine private Blockchain auf der zur Verfügung gestellten Infrastruktur installiert (vgl. \ref{sys_sec:Demonstrator_Aufbau}). Um eine private Blockchain aufzusetzen wird ein Genesis Block benötigt und es müssen bestehende Nodes bekannt sein, die als peers hinzugefügt werden können.
 
 \paragraph{Genesis Block}
 In einer Blockchain wird der erste Block Genesis Block genannt. Hier werden initiale Kontostände (oft für die Entwickler oder Contributer) angelegt und unterschiedliche Konfigurationen bezüglich.
@@ -92,7 +94,7 @@ Um ein Attribut auszulesen oder eine Funktion mit konstantem Rückgabewert auszu
 Wenn eine Funktion auf der Instanz aufgerufen wird, die eine Änderung in der Blockchain bewirkt, muss eine Transaktion ausgelöst werden. Der Sender der Transaktion muss dabei für die Kosten für gas und allfällige weitere Kosten (\#VGL. Bezahlbare Funktionen) aufkommen. Der Sender kann nicht nur ein Account sein, sondern auch ein weiterer Smart Contract, an dessen Adresse genügend Ether liegt, um die Transaktionskosten zu begleichen.
 
 \paragraph{Bezahlbare Funktionen}
-Einige Funktionen von Smart Contracts benötigen Ether, den man dem Aufruf hinzugibt. Dabei ist zu beachten, dass die gas Kosten und explizit gesendeter Ether nicht dasselbe sind. Wenn beispielsweise eine Dienstleistung oder Sache über einen Smart Contract verkauft werden soll, muss eine Menge Ether als Zahlungsmittel überweisen werden. Die Menge Ether ist im Smart Contract festgelegt und kann durch Inspektion des Programmcodes eingesehen werden. Sollte der Kunde zu wenig Ether schicken, kann der Smart Contract definieren, dass die Transaktion nicht erfolgreich ist und der Kunde sein Geld zurückerhält. Dazu kann die Transaktion selbst als nichtig erklärt werden und es muss nicht auf das Withdrawal Muster zuückgegriffen werden (vgl. Withdrawal Muster)
+Einige Funktionen von Smart Contracts benötigen Ether, den man dem Aufruf hinzugibt. Dabei ist zu beachten, dass die gas Kosten und explizit gesendeter Ether nicht dasselbe sind. Wenn beispielsweise eine Dienstleistung oder Sache über einen Smart Contract verkauft werden soll, muss eine Menge Ether als Zahlungsmittel überweisen werden. Die Menge Ether ist im Smart Contract festgelegt und kann durch Inspektion des Programmcodes eingesehen werden. Sollte der Kunde zu wenig Ether schicken, kann der Smart Contract definieren, dass die Transaktion nicht erfolgreich ist und der Kunde sein Geld zurückerhält. Dazu kann die Transaktion selbst als nichtig erklärt werden und es muss nicht auf das Withdrawal Muster zuückgegriffen werden.\cite{solidity.readthedocs.io}
 
 \subsubsection{Solidity}
 Solidity ist eine Programmiersprache zur Erstellung von Smart Contracts auf der \acrfull{EVM}, die syntaktisch stark an JavaScript angelehnt ist. Sie kann auch auf anderen Blockchain Platoformen verwendet werden.\cite{cryptocoinnews.com/smart-contract-bitcoin,github.com/hyperledger/burrow}
