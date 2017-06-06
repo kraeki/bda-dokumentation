@@ -1,6 +1,6 @@
 \chapter{Alte Ideen}
 
-\section{Überarbeitete Ideen}
+\section{Überarbeitet}
 
 \subsection{Real-Time Kommunikationsschnittstelle Whisper v2}
 Um mit mietbaren Objekten (vgl. \ref{subsec:lokkit_Smart_Contracts}) während des gemieteten Zeitraums in Echtzeit zu interagieren, wurde das Whisper Protokoll (vgl. \ref{para:Whisper}) verwendet. Whisper erlaubt nur die Übermittlung von einfachen testbasierten Nachrichten. In dieser Schnittstelle definiert wurde eine Nachricht im JSON Format\footnote{http://json.org/}, die eine strukturierte Möglichkeit zur Datenüberittlung ermöglicht.
@@ -26,14 +26,35 @@ Dieses Command verkörpert den Befehl, der ausgeführt werden soll. Abhängig vo
 \subparagraph{Rentable Address}
 Obwohl die Adresse bereits in den topics der Nachricht vorhanden ist, wird sie in der Message erneut angegeben. Grund dafür ist, dass die topics nur der Filterung der Nachrichten dienen. Das Message Objekt wurde kryptographisch signiert und somit kann festgestellt werden, dass die Nachricht auch wie gesendet zugestellt wird.
 \subparagraph{Whisper Identity}
-Obwohl die Whisper Identity optional für Whisper ist (vgl. \ref{supara:Whisper_Identity}), wird sie vorausgesetzt, um die Real-Time Kommunikation von lokkit zu benutzen. Die Whisper Identity des Absenders einer Nachricht ist öffentlich zugänglich und kann von jeder Nachricht abgefragt werden, sofern ein Absender gesetzt wurde.
+Obwohl die Whisper Identity optional für Whisper ist (vgl. \ref{old_supara:Whisper_Identity}), wird sie vorausgesetzt, um die Real-Time Kommunikation von lokkit zu benutzen. Die Whisper Identity des Absenders einer Nachricht ist öffentlich zugänglich und kann von jeder Nachricht abgefragt werden, sofern ein Absender gesetzt wurde.
 
 \paragraph{Digest}
 Whisper Nahrichten kann ein Sender und ein Empfänger in Form von \emph{Whisper Identities} angegeben werden. Da diese Whisper Identities aber nicht an Adressen in der Blockchain gebunden, sondern kurzlebige Objekte sind, wurde eine weitere Sicherheitsmassnahme implementiert, um den korrekten Absender einer Nachricht zu validieren.
-Zusätzlich zu der in Whisper vorhandenen Möglichkeit Sender und Empfänger einer Nachricht anzugeben, wurde eine in der web3 enthaltene Funktion \emph{web3.eth.sign(...)}\footnote{} verwendet, um die übermittelte Nachricht zu signieren. Damit diese Funktion einen Wert zurückliefert, muss der Private Key des angegebenen Accounts auf der lokalen Node vorhanden sein und dieser Account muss über die Funktion web3.personal.unlockAccount(...) entsperrt sein. Sind diese Vorbedingungen erfüllt, liefert \emph{web3.eth.sign(...)} eine 130-Stellige HEX-Zahl zurück. Später kann die  der Funktion \emph{web3.personal.ecRecover} zu
+Zusätzlich zu der in Whisper vorhandenen Möglichkeit Sender und Empfänger einer Nachricht anzugeben, wurde eine in der web3 enthaltene Funktion \emph{web3.eth.sign(...)} verwendet, um die übermittelte Nachricht zu signieren. Damit diese Funktion einen Wert zurückliefert, muss der Private Key des angegebenen Accounts auf der lokalen Node vorhanden sein und dieser Account muss über die Funktion web3.personal.unlockAccount(...) entsperrt sein. Sind diese Vorbedingungen erfüllt, liefert \emph{web3.eth.sign(...)} eine 130-Stellige HEX-Zahl zurück.
 
-Wichtig bei web3.eth.sign(...) ist, dass die über Whisper erhaltenen JSON Objekte jeweils die Attribute in alphabetisch sortierter Reihenfolge beinhalten und über die javascript Funktion JSON.stringify serialisiert werden, bevor sie den kryptographischen Funtionen übergeben werden. Grund dafür ist, dass besagte sign Funktion eine Zeichenkette als Arugment nimmt und nicht ein Objekt. Die Verwendung von JSON.stringify versichert, dass der eingabewert stets gleich strukturiert ist\footnote{convention over configuration?}
-\\Wenn web3.personal.ecRecover(...)
+Wichtig bei web3.eth.sign(...) ist, dass die über Whisper erhaltenen JSON Objekte jeweils die Attribute in alphabetisch sortierter Reihenfolge beinhalten und über die javascript Funktion JSON.stringify serialisiert werden, bevor sie den kryptographischen Funtionen übergeben werden. Grund dafür ist, dass besagte sign Funktion eine Zeichenkette als Arugment nimmt und nicht ein Objekt. Die Verwendung von JSON.stringify versichert, dass der eingabewert stets gleich strukturiert ist.
 
 \paragraph{Replay Attack}
 Sollte die Whisper Identity nicht Teil der signierten Message sein, könnte ein Angreifer eine Replay Attacke ausführen, indem dieselbe Nachricht erneut versendet wird. Als Alternative zur Einbettung der Whisper Identity im signierten Message Objekt könnte zur Verhinderung dieser Attacke die empfangende Whisper Identity im Smart Contract Rentable angegeben werden. Die Erstellung eines Absenders würde somit obsolet und Whisper würde die Verschlüsselung übernehmen, da ein Empfänger der Nachricht angegeben wird. Da die Whisper Identities einen Neustart der Applikation nicht überdauern, müsste nach jedem Neustart des Doorman eine Transaktion ausgelöst werden, die die empfangende Whisper Identity in dem jeweiligen Smart Contracts setzt. Diese Lösung wurde abgelehnt, da der Doorman Transaktionen auslösen, und somit eine Möglichkeit zur Bezahlung auf jedem Endgerät vorhanden sein muss.
+
+\subsection{Whisper v2}
+Auch Whisper v2 wurde angeschaut, aufgrund der nicht vorhandenen Unterstützung in der go-ethereum mobile API fallen gelassen und für die status-go mobile API mit Whisper v5 Unterstützung ausgetauscht.
+
+\subsubsection{Whisper Identity}
+\label{old_subpara:Whisper_Identity}
+Um Whisper Nachrichten zu senden oder zu empfangen, kann eine Whisper Identity erstellt werden. Diese Identity wird während der Laufzeit des Programs gespeichert und beim beenden von bspw. \emph{geth attach} wieder gelöscht. Wird bei einer Nachricht ein Empfänger, in Form einer Whisper Identity, angegeben, wird die Nachricht verschlüsselt, sodass nur dieser die Nachricht entschlüsseln kann. Der Absender einer Nachricht, wie auch das Erstellen einer Whisper Identity an sich, ist optional. Das heisst, es können anonyme Nachrichten über Whisper verschickt werden, die keinerlei Rückschluss auf deren Ursprung machen lassen. \cite[web3.shh/post]{web3js.readthedocs.io}
+
+\section{Veraltet}
+Nachfolgend werden Konzepte gelistet, die während des Projektes überlegt und/oder implementiert wurden aber nicht im schlussendlichen Produkt enthalten sind.
+
+\subsection{RentableDiscovery}
+Für jede Interaktion mit einem mietbaren Objekt muss dessen Adresse bekannt sein. Das heisst, um administrative Aufgaben am Objekt wahrzunehmen, diese zu mieten oder mit ihnen über das Whisper Protokoll zu interagieren. Diese benötigte Adresse kann manuell gefunden und eingegeben werden, beispielsweise durch eine Aufschrift auf dem Objekt oder durch einen QR Code. Alternativ zu diesem Ablauf wurde eine Utility entworfen, die das Erstellen und Finden von mietbaren Objekten erleichtert.
+
+Der RentableDiscovery Contract stellt eine Möglichkeit zur Verfügung, Rentable Contracts in der Blockchain einzutragen, ohne direkt mit dem Rentable Contract zu interagieren, ähnlich dem Factory Pattern aus der objektorientierten Programmierung. Diese Factory hat den Vorteil, dass damit erstellte Rentables direkt der Discovery bekannt sind und gefunden werden können. Es existiert auch die Möglichkeit, bestehende Rentables nach deren manuellen Erstellung nachzutragen. Die zu bezahlenden Kosten in gas sind beim neuen Erstellen niedriger als beim nachträglichen Hinzufügen, da nicht zuerst die Existenz der Adresse geprüft werden muss.
+
+\#TODO: einfügen einer Formel für gas-Kosten wäre nicht schlecht.
+
+\subsubsection{Weitergehende Überlegungen}
+Durch Verwendung eines QR Code Scanners im Webapp ist diese Funktionalität obsolet. Sie wird in lokkit nicht mehr auf der Oberfläche eingesetzt. Sie ist konzeptionell jedoch nach wie vor funktionsfähig und könnte verwendet werden, um eine Übersicht über bestehende Rentables zu haben und dabei nur eine einzelne Adresse (die der RentableDiscovery) zu speichern.
+
+In Zukunft könnten bei Bedarf Rentables mittels dieser RentableDiscovery in logische Gruppen unterteilen werden, um die Darstellung zu erleichtern. Weiter könnte ein dynamisches Angebot von Rentables zur Verfügung gestellt, indem Abfragen nicht über manuelle QR Codes sondern über eine (oder mehrere) RentableDiscovery gestellt werden.

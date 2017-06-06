@@ -11,6 +11,11 @@
 \makenoidxglossaries
 \input{acronym_glossary.tex}
 
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}} % linksbündig mit Breitenangabe
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}} % zentriert mit Breitenangabe
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}} % rechtsbündig mit Breitenangabe
+
 %%%----------------------------------------------------------
 \begin{document}
 %%%----------------------------------------------------------
@@ -27,7 +32,12 @@
 
 %%%----------------------------------------------------------
 \frontmatter
+
 \maketitle
+
+
+
+
 \tableofcontents
 %%%----------------------------------------------------------		
 
@@ -39,19 +49,20 @@
 \mainmatter         % Hauptteil (ab hier arab. Seitenzahlen)
 %%%----------------------------------------------------------
 
-\include{chapters/06_Aufgabenstellung}
-\include{chapters/07_Loesungsentwicklung}
-\include{chapters/08_Schlussfolgerungen_Ausblick_Lessons_Learned}
-\include{chapters/09_Quellen_Tabellen_Abbildungsverzeichnisse}
+%\include{chapters/06_Aufgabenstellung}
+%\include{chapters/07_Loesungsentwicklung}
+%\include{chapters/08_Schlussfolgerungen_Ausblick_Lessons_Learned}
+%\include{chapters/09_Quellen_Tabellen_Abbildungsverzeichnisse}
 %%%----------------------------------------------------------
 %%%Anhang
 \appendix
-\include{appendix/01_CD_Content}
-\include{appendix/02_Open_Source}
-\include{appendix/03_Alte_Konzepte}
+%\include{appendix/01_CD_Content}
+%\include{appendix/02_Open_Source}
+%\include{appendix/03_Alte_Konzepte}
 \include{appendix/04_Systemspezifikation}
 \include{appendix/05_Installation_Deployment}
-\include{appendix/06_Project_Management}
+%\include{appendix/06_Project_Management}
+%\include{appendix/07_Testplan}
 
 %%%----------------------------------------------------------
 \MakeBibliography

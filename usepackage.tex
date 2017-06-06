@@ -1,5 +1,6 @@
 %%% PACKAGES
 \usepackage[utf8]{inputenc}
+\usepackage[table,xcdraw]{xcolor} % Tabellen
 
 \usepackage[acronym, toc]{glossaries} % Acronym and Glossary
 
@@ -47,8 +48,24 @@
                 {\ -\ }{{\mdseries\ -\ }}3,
 }
 
-\usepackage{amsmath} % Formeldarstellung
+%\usepackage{amsmath} % Formeldarstellung
 
+\usepackage{longtable}
 \usepackage{booktabs} % Tabellen
 \usepackage{multirow} % Tabellen
-\usepackage[table,xcdraw]{xcolor} % Tabellen
+
+\usepackage{nameref}
+
+\usepackage[a4paper, total={152.4mm, 203.2mm}]{geometry} % page margin
+
+\usepackage{float} % benutzt für \begin{figure}[H]
+
+%\usepackage{lscape} % für \begin{longtable}
+
+
+% https://www.scribbr.de/apa-standard/verweise-im-text-laut-apa-standard/
+% https://tex.stackexchange.com/questions/35809/how-do-i-use-apa-style-citations-with-bibtex#35813
+% http://ctan.org/tex-archive/biblio/bibtex/contrib/apacite/
+%\usepackage{apacite} % apa style citation
+%\bibliographystyle{apacite}
+%\bibliography{literatur.bib}

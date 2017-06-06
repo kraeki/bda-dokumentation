@@ -1,0 +1,57 @@
+\subsection{Systemtests}
+Die Systemtests testen das Gesamtsystem ausgehend vom Benutzer. Mit diesen Tests ist sichergestellt, dass der Demonstrator funktioniert.
+
+\subsubsection{Voraussetzungen}
+Für die folgenden Systemtests wird vorausgesetzt, dass das komplette System installiert und konfiguriert ist. Der Benutzer (Tester) besitzt ein Android Mobile Telefon und kann Applikationen aus dem Internet installieren.
+
+Das Mobile Telefon muss mit dem Demonstrator WLAN verbunden sein.
+Für jeden erstellten Account wird Ether überwiesen.
+
+
+\begin{table}[H]
+\centering
+\caption{Test \#1: Installieren des Mobile Apps}
+\label{my-label}
+\begin{tabular}{@{}L{1.6cm}L{11cm}@{}}
+\toprule
+\textbf{Test \#1}
+& Installieren des Mobile Apps
+\\ \midrule
+\textbf{Ablauf}
+& 
+\begin{enumerate}
+    \item Die Android-App via https://lokkit.io/download installieren
+    \item Die Android-App starten (Benutzer muss erstellt werden)
+    \item Einloggen des erstellten Benutzers
+\end{enumerate}
+\\ \midrule
+\textbf{Ergebnis}
+& Die Android-App ist erfolgreich auf dem Mobile Telefon installiert und kann gestartet werden. Der erstellte Benutzer kann eingeloggt werden.
+\\ \bottomrule
+\end{tabular}
+\end{table}
+
+
+\begin{table}[H]
+\centering
+\caption{Test \#2: Reservieren eines Rentables}
+\label{my-label}
+\begin{tabular}{@{}L{1.6cm}L{11cm}@{}}
+\toprule
+\textbf{Test \#2}
+& Reservieren eines Rentables
+\\ \midrule
+\textbf{Ablauf}
+& 
+\begin{enumerate}
+    \item Das Rentable über den QR-Code einscannen
+    \item Das Rentable reservieren
+    \item Ausführen von Lock und Unlock während der Reservationszeit
+    \item Rückgabe des Rentables innerhalb der Reservationszeit
+\end{enumerate}
+\\ \midrule
+\textbf{Ergebnis}
+& Das Rentable konnte erfolgreich hinzugefügt werden. Die Reservation lief erfolgreich durch. Unlock und Lock haben entsprechend die Türe ge- und entsperrt. Das Rentable konnte erfolgreich zurückgeschoben werden.
+\\ \bottomrule
+\end{tabular}
+\end{table}

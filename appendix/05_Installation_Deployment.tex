@@ -1,6 +1,94 @@
 \chapter{Installation \& Deployment}
 \label{cha:Installation_Deployment}
 
+In den folgenden Abschnitten wird erklärt wie das System aufgesetzt wird. Jede Komponente wird aus den Sourcen gebildet und dann auf den Raspberries installiert. Dazu wird zuerst erklärt wie die Raspberries in Betrieb genommen werden.
+
+\section{Voraussetzungen für das Deployment}
+Die nachfolgende Anleitung wurde unter einem aktuellen GNU/Linux System erfolgreich getestet. Grundsätzlich sind andere Systeme wie Windows oder MAC jedoch nicht ausgeschlossen und können für das Deployment ebenfalls verwendet werden. Dies jedoch auf eigene Verantwortung.
+
+Konfigurationsübersicht zu diesem Zeitpunkt
+
+\begin{table}[H]
+\centering
+\caption{Systemvorausetzungen um das Deployment durchzuführen}
+\label{my-label}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Komponente 
+& Version               
+& Beschreibung                           
+\\ \midrule
+GNU/Linux  
+& Ubuntu 16.04 (Xenial) 
+& Basis System für das Deployment        
+\\ \midrule
+nodejs     
+& 7.10.0                
+& Voraussetzung für Webapp               
+\\ \midrule
+npm        
+& 4.2.0                 
+& Voraussetzung für Webapp               
+\\ \midrule
+git        
+&  2.7.4                
+& Zum Auschecken der Sourcen               
+\\ \midrule
+truffle    
+& 3.2.4                 
+& Für das Deployment der Smart Contracts 
+\\ \midrule
+geth       
+& 1.6.2                 
+& Ethereum Node                          
+\\ \midrule
+doorman    
+&                       
+&                           
+\\ \midrule
+Webapp     
+&                       
+&                                        
+\\ \bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Herunterladen der Resourcen}
+
+Die Lokkit Sourcen können wie folgt heruntergeladen werden:
+
+\begin{lstlisting}[language=bash]
+git clone https://github.com/lokkit/lokkit --recursive
+\end{lstlisting}
+
+\section{Lokkit Raspberry Pi Image}
+Für jedes der drei Raspberry Pi's wurde ein eigenes Image erstellt, welches im Anhang der CD entnommen werden kann. (TODO:) Die Images basiern auf dem offiziellen \emph{Raspbian Jessie Lite} Image \footnote{\url{https://www.raspberrypi.org/downloads/raspbian/}}.
+
+\begin{description}
+    \item[Lokkit Image 1] Dieses Image enthält die Konfiguration für den WLAN HotSpot und einen DNS/DHCP Server. Die anderen Raspberries verbinden sich zu diesem.
+    \item[Lokkit Image 2] Dieses Image ist so konfiguriert, dass es sich mit dem HotSpot des Master Images verbindet.
+    \item[Lokkit Image 3] Dieses Image ist bis auf den Hostnamen identisch mit dem Lokkit Image 2
+\end{description}
+
+Alle drei Images können z.B. mit \emph{dd} unter GNU/Linux auf eine MicroSD geflashed werden.
+
+\begin{lstlisting}[language=bash]
+dd if=rasp-master.img of=/dev/sdd
+dd if=rasp-node1.img of=/dev/sdd
+dd if=rasp-node2.img of=/dev/sdd
+\end{lstlisting}
+
+Danach können die Raspberries mit dem Image gestartet werden. Nach spätestens 5 Minuten sollte ein HotSpot "lokkit" ersichtlich sein. Das Password lautet "trust-no-one".
+
+Nun kann SSH Verbindung mit z.B. dem Master Rasbperry hergestellt werden.
+
+\begin{lstlisting}[language=bash]
+ssh 192.168.0.1 -l pi
+
+\end{lstlisting}
+
+Der User lautet \emph{pi} und das Passwort \emph{TrNoOnJuLo}.
+
 \section{Geth}
 \subsection{Installation}
 \subsection{Generell}

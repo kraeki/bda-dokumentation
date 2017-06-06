@@ -1,0 +1,48 @@
+\chapter{Testing}
+
+Dieses Dokument beschreibt wie sichergestellt wird, dass das System sich so verhaltet, wie es spezifiziert wird.
+
+\subsection{Teststrategie}
+Das System hat einen hoch komplexen Aufgbau und viele einzelne Komponenten. Umso wichtiger und komplizierter ist auch das Testing. Das Projekt wird auf drei Ebenen getestet. 
+
+\vspace{.3cm}
+\begin{description}
+    \item[Unittests] Diese Tests sind vorallem während der Entwicklung einer Komponente wichtig.
+    \item[Integrationstests] Eingige Komponenten sind stark von der Blockchain abhängig und müssen daher mit einer Blockchain-Instance getestet werden. Um dies zu vereinfachen wurde ein Dockerimage für eine lokale Blockchain erstellt  
+    \item [Systemtests] Diese Tests testen das ganze System, inklusive aller Komponenten und der Blockchain. Mittels diesen Tests werden alle Use Cases validiert. Diese Tests gelten auch als Abnahmetests.
+\end{description}
+
+In den nachfolgenden Kapiteln werden die einzlnen Unittests, Integrationstests und Systemtests aufgelistet.
+
+\input{appendix/07_Sections/Unittests}
+\input{appendix/07_Sections/Integrationstests}
+\input{appendix/07_Sections/Systemtests}
+
+\subsection{Testdruchführung am 04.06.2017}
+
+\begin{table}[H]
+\centering
+\caption{Unittests des Smart Contracts Rentable}
+\label{my-label}
+\begin{tabular}{@{}L{4.5cm}L{4cm}L{4cm}@{}}
+\toprule
+Tests &
+Tests erfolgreich & 
+Tests fehlgeschlagen 
+\\ \midrule
+7 Unittests 
+& 7
+& 0
+\\ \midrule
+3 Integrationstests  
+& 
+& 
+\\ \midrule
+2 Systemtests
+& 2
+& 0
+\\ \bottomrule
+\end{tabular}
+\end{table}
+
+TODO: add all tests

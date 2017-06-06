@@ -1,0 +1,205 @@
+\subsection{Integrationstests}
+Die Integrationstests testen die einzelnen Komponenten gegen die Blockchain. 
+
+\subsubsection{Doorman}
+
+\paragraph{Voraussetzungen}
+
+Um die Integrationstests von Doorman auszuführen muss folgendes Setup durchgeführt werden:
+
+\begin{itemize}
+    \item Auschecken der Doorman Resourcen
+    \item Installieren der Abhängigkeiten
+    \item Starten des Ethereum Nodes mittels Docker
+    \item Veröffentlichen des Smart Contracts via truffle 
+\end{itemize}
+
+Danach können die Testfälle durchgespielt werden.
+    
+\begin{table}[H]
+\centering
+\caption{Test \#1: Starten von Doorman}
+\label{my-label}
+\begin{tabular}{@{}L{1.6cm}L{11cm}@{}}
+\toprule
+\textbf{Test \#1}
+& Starten von Doorman mit Referenz zum veröffentlichten Contract
+\\ \midrule
+\textbf{Ablauf}
+& 
+\begin{enumerate}
+    \item Eintragen der Addresse des veröffentlichten Contracts im Config file von Doorman
+    \item Starten des Doormans
+\end{enumerate}
+\\ \midrule
+\textbf{Ergebnis}
+& Doorman startet und gibt folgendes Resultat auf der Konsole aus:
+\begin{verbatim}
+    Hoi ich bis der Dominik
+\end{verbatim}
+\\ \bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Test \#2: Doorman emfpängt Lock/Unlock-Befehl vom aktuellen Mieter}
+\label{my-label}
+\begin{tabular}{@{}L{1.6cm}L{11cm}@{}}
+\toprule
+\textbf{Test \#2}
+& Doorman emfpängt Lock/Unlock-Befehl vom aktuellen Mieter
+\\ \midrule
+\textbf{Ablauf}
+& 
+\begin{enumerate}
+    \item Mittels Truffle das Rentable für 5 min mieten
+    \item Danach den Lock-Befehl ausführen
+    \item Danach den Unlock-Befehl ausführen
+\end{enumerate}
+\\ \midrule
+\textbf{Ergebnis}
+& Doorman startet und gibt folgedes Resultat auf der Konsole aus:
+\begin{verbatim}
+    Hoi ich bis der Dominik
+\end{verbatim}
+\\ \bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Test \#3: Doorman emfpängt Lock/Unlock-Befehl von unbekanntem Account}
+\label{my-label}
+\begin{tabular}{@{}L{1.6cm}L{11cm}@{}}
+\toprule
+\textbf{Test \#3}
+& Doorman emfpängt Lock/Unlock-Befehl von unbekanntem Account
+\\ \midrule
+\textbf{Ablauf}
+& 
+\begin{enumerate}
+    \item Neuen Account auf der Node erstellen
+    \item Lock Befehl signiert mit dem neuen Account absenden
+    \item Unlock Befehl signiert mit dem neuen Account absenden
+\end{enumerate}
+\\ \midrule
+\textbf{Ergebnis}
+& Doorman startet und gibt folgedes Resultat auf der Konsole aus:
+\begin{verbatim}
+    Hoi ich bis der Dominik
+\end{verbatim}
+\\ \bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Webapp}
+
+\paragraph{Voraussetzungen}
+
+Um die Integrationstests von der Webapp auszuführen muss folgendes Setup durchgeführt werden:
+
+\begin{itemize}
+    \item Auschecken der Webapp Resourcen
+    \item Installieren der Abhängigkeiten
+    \item Starten des Ethereum Nodes mittels Docker
+    \item Starten der Webapp
+    \item Veröffentlichen des Smart Contracts via truffle 
+\end{itemize}
+
+Danach können die Testfälle durchgespielt werden.
+
+
+\begin{table}[H]
+\centering
+\caption{Test \#1: Hinzufügen eines Rentables }
+\label{my-label}
+\begin{tabular}{@{}L{1.6cm}L{11cm}@{}}
+\toprule
+\textbf{Test \#1}
+& Hinzufügen eines Rentables
+\\ \midrule
+\textbf{Ablauf}
+& 
+\begin{enumerate}
+    \item Füge das Rentable hinzu
+    \item Schliesse den Browser und starte erneut
+    \item Überprüfe, ob das Rentable noch hinzugefügt ist
+\end{enumerate}
+\\ \midrule
+\textbf{Ergebnis}
+& Das Rentable ist immer noch hinzugefügt.
+\\ \bottomrule
+\end{tabular}
+\end{table}
+
+
+\begin{table}[H]
+\centering
+\caption{Test \#2: Reservieren eines Rentables }
+\label{my-label}
+\begin{tabular}{@{}L{1.6cm}L{11cm}@{}}
+\toprule
+\textbf{Test \#2}
+& Reservieren eines Rentables
+\\ \midrule
+\textbf{Ablauf}
+& 
+\begin{enumerate}
+    \item Reserviere ein Rentable für 2 Minuten
+    \item Überprüfe, ob die Reservations erfolgreich erscheint.
+    \item Überprüfe, ob nach eintreten der Reservationszeit die Buttons Lock, Unlock erscheinen.
+    \item Überprüfe, ob nach Aublauf der Reservation, die Buttons wieder verschwinden
+\end{enumerate}
+\\ \midrule
+\textbf{Ergebnis}
+& Die Reservation läuft erfolgreich durch. Beim Anbruch der Reservationsdauer sind Unlock und Lock ersichtlich. Nach Ablauf von ca 2. Minuten verschwinden die Buttons wieder. 
+\\ \bottomrule
+\end{tabular}
+\end{table}
+
+
+\begin{table}[H]
+\centering
+\caption{Test \#3: Fehleranzeige bei falscher Reservation}
+\label{my-label}
+\begin{tabular}{@{}L{1.6cm}L{11cm}@{}}
+\toprule
+\textbf{Test \#3}
+& Fehleranzeige bei falscher Reservation
+\\ \midrule
+\textbf{Ablauf}
+& 
+\begin{enumerate}
+    \item Reserviere ein Rentable in der Vergangenheit
+    \item Überprüfe, ob eine entsprechende Fehlermeldung erscheint
+\end{enumerate}
+\\ \midrule
+\textbf{Ergebnis}
+& Das Rentable kann nicht reserviert werden, da eine Reservation in der Vergangenheit nicht möglich ist. 
+\\ \bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Test \#4: Fehleranzeige bei Reservation mit Account ohne Ether}
+\label{my-label}
+\begin{tabular}{@{}L{1.6cm}L{11cm}@{}}
+\toprule
+\textbf{Test \#4}
+& Fehleranzeige bei falscher Reservation
+\\ \midrule
+\textbf{Ablauf}
+& 
+\begin{enumerate}
+    \item Wechsle den Account zu einem Account der 0 Ether besitzt.
+    \item Reserviere ein Rentable in der Zukunft.
+    \item Überprüfe, ob eine entsprechende Fehlermeldung erscheint
+\end{enumerate}
+\\ \midrule
+\textbf{Ergebnis}
+& Das Rentable kann nicht reserviert werden, da der Account nicht genügend Ether hat.
+\\ \bottomrule
+\end{tabular}
+\end{table}

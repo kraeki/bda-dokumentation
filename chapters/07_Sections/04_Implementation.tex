@@ -1,4 +1,4 @@
-\section{Implementation (Komponenten)}
+\section{Implementation}
 \label{sec:Implementation}
 Nachfolgend werden getroffene Entscheidungen zum Entwurf und zur Implementation der Komponenten beschrieben. Angetroffene Probleme werden vorgestellt und und deren Lösung erklärt\footnote{Konkrete technische Hindernisse mit Verweise auf Anhang zu Open Source changes/contributions oder auch technische Limitation wie bspw. go-ethereum mobile hat keine whisper API}.
 
@@ -6,43 +6,43 @@ Allfällige Abweichungen zur Konzeption (vgl. \ref{sec:Konzeption}, bspw. teilwe
 
 \subsection{Smart Contracts}
 \label{subsec:Smart_Contracts}
-Die Smart Contracts, die in Solidity implementiert wurden, werden nachfolgend erläutert. Diese Implementationen bilden das Rückgrat der Applikation. Sie bilden die Business Logik in Code Form ab und dienen als einzige Interaktionsmöglichkeit mir der Datenbank in der Blockchain.
-
-(vgl. http://solidity.readthedocs.io/en/latest/introduction-to-smart-contracts.html)
-
-\#WICHTIG!!
-Erwähnen der shortcomings, da unsere Contracts eine nicht vordefinierte Anzahl Iterationen haben. Dies kann aufgrund des Block-Gas limits zu stalling führen. Auch lese-Operationen, die aus anderen Smart-Contracts aufgerufen werden können diesen zum stallen bringen. -> http://solidity.readthedocs.io/en/develop/security-considerations.html\#gas-limit-and-loops
+Die Smart Contracts, die in Solidity implementiert wurden, werden nachfolgend erläutert. Diese Implementationen bilden das Rückgrat der Applikation. Sie bilden die Business Logik in Code Form ab und dienen als einzige Interaktionsmöglichkeit mir der Datenbank in der Blockchain.\cite[Introduction to Smart Contracts]{solidity.readthedocs.io}
 
 \subsubsection{Generell}
+Folgende Informationen treffen auf alle entworfenen Smart Conacts gleichermassen zu.
 \paragraph{Datenhaltung}
-In einem Smart Contract können Daten in der Blockchain auf unterschiedliche Arten gespeichert werden: \emph{Storage}\footnote{http://solidity.readthedocs.io/en/latest/miscellaneous.html\#layout-of-state-variables-in-storage} oder \emph{Events} (auch \emph{Logs} genannt). Storage ist ein einfacher Schlüssel-Werte-Paar Speicher, worauf alle Instanzvariablen eines Smart Contracts gespeichert werden, die zwischen verschiedenen Funktionsaufrufen persistiert werden müssen (vgl. reservations Feld für Rentables). Ein Smart Contract kann nicht ausserhalb seines zugewiesenen Speicherbereichs operieren. Zugriffe auf diesen Speicher sind teuer. So soll verhindert werden, dass grosse Speichermengen in der Blockchain verwendet werden. \footnote{http://solidity.readthedocs.io/en/latest/introduction-to-smart-contracts.html?highlight=memory\#storage-memory-and-the-stack}. Ausgelöste Events werden in der Blockchain in Form von Transactionlogs gespeichert. Diese Logs sind sehr günstig (vgl. gas price) anzulegen, können aber von einem Smart Contract nicht gelesen werden \footnote{http://jonathanpatrick.me/blog/ethereum-compressed-text}. Über die web3 API kann auf die so erstellten Logs zugegriffen werden \#TODO: insert Beispiel.
+In einem Smart Contract können Daten in der Blockchain auf unterschiedliche Arten gespeichert werden: \emph{Storage} oder \emph{Events} (auch \emph{Logs} genannt). Storage ist ein einfacher Schlüssel-Werte-Paar Speicher, worauf alle Instanzvariablen eines Smart Contracts gespeichert werden, die zwischen verschiedenen Funktionsaufrufen persistiert werden müssen (vgl. reservations Feld für Rentables). Ein Smart Contract kann nicht ausserhalb seines zugewiesenen Speicherbereichs operieren. Zugriffe auf diesen Speicher sind teuer. So soll verhindert werden, dass grosse Speichermengen in der Blockchain verwendet werden. Ausgelöste Events werden in der Blockchain in Form von Transactionlogs gespeichert. Diese Logs sind sehr günstig (vgl. gas price) anzulegen, können aber von einem Smart Contract nicht gelesen werden. Über die web3 API kann auf die so erstellten Logs zugegriffen werden.\cite[Miscellaneous, Introduction to Smart Contracts]{solidity.readthedocs.io}\cite{jonathanpatrick.me/ethereum}
 
-Somit kann gesagt werden, dass wenn eine Instanz eines Smart Contracts persistent Daten speichern und diese Daten in einem späteren Funktionsaufruf abfragen möchte, zwingend Storage Speicher verwendet werden muss. Damit die Konsistenz der Reservationen eines mietbaren Objektes gewährleistet werden kann, muss der Rentable Smart Contract die Möglichkeit besitzen, bestehende Reservationen abzufragen. Daher ist es unumgänglich für den Rentable Smart Contracts Storage Speicher für die Datenhaltung der Reservationen zu verwenden. Auch für den Rentable Discovery Smart Contract ist es zwingen notwendig, dass die registrierten Rentable Instanzen abgefragt werden können. Somit ist auch bei diesem Storage Speicher für die Datenhaltung der Adressen zu verwenden.
+\#TODO: insert Beispiel
+
+Wenn eine Instanz eines Smart Contracts persistent Daten speichern und diese Daten in einem späteren Funktionsaufruf abfragen möchte, muss zwingend Storage Speicher verwendet werden. Damit die Konsistenz der Reservationen eines mietbaren Objektes gewährleistet werden kann, muss der Rentable Smart Contract die Möglichkeit besitzen, zukünftige Reservationen abzufragen. Daher ist es unumgänglich für den Rentable Smart Contract, Storage Speicher für die Datenhaltung der Reservationen zu verwenden. Um den benötigten Speicher, und die damit verbundenen Reservationskosten, gering zu halten könnten vergangene Reservationen auch gelöscht werden (vgl. \ref{subpara:Stalling}).
 
 \subsubsection{Rentable}
 \label{subsubsec:Rentable}
 Vgl. \ref{sys_subsubsec:Rentable}
-\\Damit alle mietbaren Objekte logisch unabhängig von einander sind, wurde der primäre Smart Contract so entworfen, dass für jedes mietbare Objekt eine separate Instanz dessen erstellt werden muss (vgl. contract Instanz erstellen). Die in der Blockchain liegende Funktionalität beinhaltet nur das Mieten, und die damit verbundene Monetären Transaktionen. Der Smart Contract weist dabei keine lokkit-spezifische Funktionalität auf. Bei dem Design wurde darauf geachtet, die Funktionalität zu abstrahieren, um es Autoren zu ermöglichen, weitere Dienste zu erstellen, die auf dem Konzept der mietbaren Objekte basiert. Diese darauf aufbauenden Dienste können auch ausserhalb des lokkit Systems bestehen und können gänzlich inkompatibel zu diesem sein.
+
+Damit alle mietbaren Objekte logisch unabhängig von einander sind, wurde der primäre Smart Contract so entworfen, dass für jedes mietbare Objekt eine separate Instanz dessen erstellt werden muss (vgl. \ref{subsubsec:Neuerstellung}). Die in der Blockchain liegende Funktionalität beinhaltet nur das Mieten, und die damit verbundene Monetären Transaktionen. Der Smart Contract weist dabei keine lokkit-spezifische Funktionalität auf. Bei dem Design wurde darauf geachtet, die Funktionalität zu abstrahieren, um es Autoren zu ermöglichen, weitere Dienste zu erstellen, die auf dem Konzept der mietbaren Objekte basiert. Diese darauf aufbauenden Dienste können auch ausserhalb des lokkit Systems bestehen und können gänzlich inkompatibel zu diesem sein.
 
 \paragraph{Withdrawal Muster}
-Bei Transaktionen, die einen Account zum Ziel haben, werden die gas-Kosten automatisch vom Sender beigefügt (\#TODO: quelle+beispiel+formel). Ist das Ziel aber eine Funktion eines Smart Contracts (wie es bei Rentable.rent der Fall ist) oder ein Smart Contract selbst\footnote{Default Function: https://ethereum.stackexchange.com/questions/15420/how-to-send-ether-to-contracts-address/15450\#15450}, so kann der Smart Contract, der die Transaktion erhält, Code ausführen, der vom initialen Sender der Transaktion bezahlt werden muss (vgl. gas). Um dies zu verhindern, sollte nicht Ether an eine Adresse überwiesen werden, von der nicht bekannt ist, ob sie ein Smart Contract oder ein Account ist\footnote{https://github.com/ethereum/go-ethereum/wiki/Contracts-and-Transactions}.
+\label{para:Withdrawal_Muster}
+Bei Transaktionen, die einen Account zum Ziel haben, werden die gas-Kosten von 500 gas automatisch vom Sender beigefügt, ohne dass dies explizit in der ausgelösten Transaktion angegeben werden muss. Ist das Ziel aber eine Funktion eines Smart Contracts (wie es bei Rentable.rent der Fall ist) oder ein Smart Contract selbst, so kann der Smart Contract, der die Transaktion erhält, Code ausführen, der vom initialen Sender der Transaktion bezahlt werden muss (vgl. gas). Um dies zu verhindern, sollte nicht Ether an eine Adresse überwiesen werden, von der nicht bekannt ist, ob sie ein Smart Contract oder ein Account ist.\cite[Wiki/Contracts and Transactions]{go-ethereum}\cite{cryptocompare.com/gas}\cite[FAQ/What is the deal with...]{solidity.readthedocs.io}
 
 \subparagraph{Beispiel}
-Sei A eine Instanz eines Rentable Contracts, der das Withdrawal Muster implementiert. Wenn ein Depot zurückerstattet wird, überweist A Ether nicht direkt an eine Zieladresse, B. Stattdessen merkt sich A die Menge Ether, die B zusteht und stellt die Möglichkeit zur Verfügung, dass B Ether vom Smart Contract abheben kann. Dies findet mittels einer Transaction auf \emph{withdraw} statt, die von B ausgelöst werden muss. Die gas-Kosten für die primär von B ausgeführte \emph{withdraw} Funktion sind vernachlässigbar und werden durch die zurückerhaltene Menge Ether kompensiert. Der Vorteil, wenn die Transaktion von B gestartet werden muss, ist, dass B für die etwaigen zusätzlichen gas-Kosten aufkommen muss, sollte B ebenfalls ein Smart Contract sein. 
+Sei A eine Instanz eines Rentable Contracts, der das Withdrawal Muster implementiert. Wenn ein Depot zurückerstattet wird, überweist A Ether nicht direkt an eine Zieladresse, B. Stattdessen merkt sich A die Menge Ether, die B zusteht und stellt die Möglichkeit zur Verfügung, dass B Ether vom Smart Contract abheben kann. Dies findet mittels einer Transaction auf \emph{withdraw} statt, die von B ausgelöst werden muss. Die gas-Kosten für die primär von B ausgeführte \emph{withdraw} Funktion sind vernachlässigbar und werden durch die zurückerhaltene Menge Ether kompensiert. Der Vorteil, wenn die Transaktion von B gestartet werden muss, ist, dass B für die etwaigen zusätzlichen gas-Kosten aufkommen muss, sollte B ebenfalls ein Smart Contract sein.
 
 \#möglicherweise ein bildli zeichnen oder beispielcode einfügen
 
 \paragraph{Re-Entrancy}
-Hierbei handelt es sich um ein Muster, das angewendet wird, wenn in einem Smart Contract ein interner Zustand existiert, der die Menge an Ether speichert, der \emph{anderen} zusteht und eine Möglichkeit besteht, diese Menge Ether zu entnehmen (\#VGL. Withdrawal Muster). Beispiele für zurückzuerstattenden Ether kann bspw. Depots wie bei lokkit oder ein Gebot in einer Auktion\footnote{http://solidity.readthedocs.io/en/develop/security-considerations.html\#re-entrancy} sein.
+Hierbei handelt es sich um ein Muster, das angewendet wird, wenn in einem Smart Contract ein interner Zustand existiert, der die Menge an Ether speichert, der \emph{anderen} zusteht und eine Möglichkeit besteht, diese Menge Ether zu entnehmen (vgl. \ref{para:Withdrawal_Muster}). Beispiele für zurückzuerstattenden Ether kann bspw. Depots wie bei lokkit oder ein Gebot in einer Auktion sein.\cite[Security Considerations/Re-Entrancy]{solidity.readthedocs.io}
 
 \subparagraph{Beispiel}
-Sei A eine Instanz eines Rentable Contracts, der diesen erwähnten internen Zustand speichert und somit das Withdrawal Muster implementiert. Unter der Annahme, dass die Zieladresse für die Rückerstattung ein beliebiger Smart Contract B ist, kann B A angreifen. Wenn eine Transaktion ausgelöst wird, wird jeweils nicht nur der Betrag in Ether überwiesen, sondern, sollte das Ziel ein Smart Contract sein, auch Code ausgeführt. Das heisst, dass B auf eine eingehende Überweisungen reagieren kann\footnote{solidity default function: function () payable\{\}} und ihrerseits erneut die Transaktionsfunktion von A aktivieren kann (\#VGL. Withdrawal Muster), bevor die Kontrolle an den ursprünglichen Aufruf von A zurückgegeben wird\footnote{daher re-entrancy, da die Funktion mehrere Male ausgeführt wird}. Wenn der Zustand von A noch nicht geändert wurde, wird der Betrag erneut gesendet, bis A keinen Ether mehr zur Verfügung hat.
+Sei A eine Instanz eines Rentable Contracts, der diesen erwähnten internen Zustand speichert und somit das Withdrawal Muster implementiert. Unter der Annahme, dass die Zieladresse für die Rückerstattung ein beliebiger Smart Contract B ist, kann B A angreifen. Wenn eine Transaktion ausgelöst wird, wird jeweils nicht nur der Betrag in Ether überwiesen, sondern, sollte das Ziel ein Smart Contract sein, auch Code ausgeführt. Das heisst, dass B auf eine eingehende Überweisungen reagieren kann und ihrerseits erneut die Transaktionsfunktion von A aktivieren kann (vgl. \ref{para:Withdrawal_Muster}), bevor die Kontrolle an den ursprünglichen Aufruf von A zurückgegeben wird. Wenn der Zustand von A noch nicht geändert wurde, wird der Betrag erneut gesendet, bis A keinen Ether mehr zur Verfügung hat.
 
 \subparagraph{Implementationsbeispiel}
 Um mehrfaches Überweisen von Ether zu verhindern, ist es unvermeidbar, zuerst den internen Status des Vertrags zu ändern, bevor Ether überwiesen wird. Die \emph{total} zur Verfügung stehende Menge Ether eines Smart Contracts wird in der Blockchain gehalten und ist Teil des Konsensus. Es ist somit nicht möglich, dass mehr Ether ausgegeben wird als in dem jeweiligen digitalen Vertrag vorhanden ist. 
 
-Im Codebeispiel \ref{lst:withdraw_erroneous} kann die \emph{send} Anweisung in Zeile zwei mehrmals ausgeführt werden, da das deposit erst zurückgesetzt wird, sobald die Übertragung erfolgreich war. Dabei ist zu bemerken, dass die Funktion .send(...) die Kontrolle an die default-Funktion\footnote{vgl. default-funktion} des Zielvertrags übergibt und deren Code ausgeführt wird.
-\begin{lstlisting}[language=javascript,caption={fehlerhaftes Code Snippet},label={lst:withdraw_erroneous}]
+Im Codebeispiel \ref{lst:withdraw_erroneous} kann die \emph{send} Anweisung in Zeile zwei mehrmals ausgeführt werden, da das deposit erst zurückgesetzt wird, sobald die Übertragung erfolgreich war. Dabei ist zu bemerken, dass die Funktion .send(...) die Kontrolle an die default-Funktion des Zielvertrags übergibt und deren Code ausgeführt wird.
+\begin{lstlisting}[language=javascript,caption={fehlerhaftes Code Snippet \protected{\cite[Common Patterns/Withdrawal From Contrats]{solidity.readthedocs.io}}},label={lst:withdraw_erroneous}]
     function withdraw() {
         if (msg.sender.send(deposit[msg.sender])) {
             deposit[msg.sender] = 0;
@@ -50,8 +50,8 @@ Im Codebeispiel \ref{lst:withdraw_erroneous} kann die \emph{send} Anweisung in Z
     }
 \end{lstlisting}
 
-Im Codebeispiel \ref{lst:withdraw_good} wehrt die dritte Zeile die Re-Entrancy Attacke ab, da der interne Kontostand zurückgesetzt wird, bevor die Transaktion ausgelöst wird. Auch hier wird der default-Funktion\footnote{vgl. default-funktion} des Zielvertrags die Kontrolle übergeben. Im Fall, dass diese aber erneut die \emph{withdraw} Funktion aufruft, wird diese keine erneute Transaktion auslösen (msg.sender.transfer(0) wird keine Transaktion auslösen\footnote{}).
-\begin{lstlisting}[language=javascript,caption={empfohlenes Code Snippet},label={lst:withdraw_good}]
+Im Codebeispiel \ref{lst:withdraw_good} wehrt die dritte Zeile die Re-Entrancy Attacke ab, da der interne Kontostand zurückgesetzt wird, bevor die Transaktion ausgelöst wird. Auch hier wird der default-Funktion des Zielvertrags die Kontrolle übergeben. Im Fall, dass diese aber erneut die \emph{withdraw} Funktion aufruft, wird durch \emph{msg.sender.transfer(0)} keine erneute Transaktion auslöst.
+\begin{lstlisting}[language=javascript,caption={empfohlenes Code Snippet \protected{\cite[Common Patterns/Withdrawal From Contrats]{solidity.readthedocs.io}}},label={lst:withdraw_good}]
     function withdraw() {
         var currentRefund = deposit[msg.sender];
         deposit[msg.sender] = 0;
@@ -67,77 +67,77 @@ Um neue oder geänderte Funktionalität in Smart Contracts zur Verfügung zu ste
 
 Truffle Migrations?
 
+\subparagraph{Stalling}
+\label{subpara:Stalling}
+Da die Laufzeit der rent Funktion von der Anzahl Reservationen abhängig ist, müssen die Gaskosten für den Aufruf entsprechend abhängig von der bestehenden Anzahl Reservationen gemacht werden. Wenn ein Rentable viele Reservationen erhält kann es sein, dass es durch das \acrfull{BGL}, das im Genesis block angegeben wird, verunmöglicht wird, neue Reservationen zu tätigen.\cite[Security Considerations/Gas Limit and Loops]{solidity.readthedocs.io}\cite{media.consensys.net/gas-and-fuel}
 
-\subsubsection{RentableDiscovery}
-Für jede Interaktion mit einem mietbaren Objekt muss dessen Adresse bekannt sein. Das heisst, um administrative Aufgaben am Objekt wahrzunehmen, diese zu mieten oder mit ihnen über das Whisper Protokoll zu interagieren. Diese benötigte Adresse kann manuell gefunden und eingegeben werden, beispielsweise durch eine Aufschrift auf dem Objekt oder durch einen QR Code\footnote{vgl webapp}. Alternativ zu diesem Ablauf wurde eine Utility entworfen, die das Erstellen und Finden von mietbaren Objekten erleichtert.
-\\Der RentableDiscovery Contract stellt eine Möglichkeit zur Verfügung, Rentable Contracts in der Blockchain einzutragen, ohne direkt mit dem Rentable Contract zu interagieren, ähnlich dem Factory Pattern aus der objektorientierten Programmierung\footnote{http://www.oodesign.com/factory-pattern.html}. Diese Factory hat den Vorteil, dass damit erstellte Rentables direkt der Discovery bekannt sind und gefunden werden können. Es existiert auch die Möglichkeit, bestehende Rentables nach deren manuellen Erstellung nachzutragen. Die zu bezahlenden Kosten in gas sind beim neuen Erstellen niedriger als beim nachträglichen Hinzufügen, da nicht zuerst die Existenz der Adresse geprüft werden muss.
+\#todo: formel für maximale Anzahl Reservationen
 
-\#TODO: einfügen einer Formel für gas-Kosten wäre nicht schlecht.
+Wenn der owner das deposit zurückerstattet, könnte die abgelaufene Reservation aus dem internen Array gelöscht werden, um die storage Datenmenge des Smart Contracts gering zu halten. Die Historischen Daten zu dem mietbaren Objekt können von einem Benutzer noch immer eingesehen werden, da die Logs in der Blockchain noch vorhanden sind. Der Vorteil dadurch wäre, dass die 
 
-\paragraph{Weitergehende Überlegungen}
-Durch Verwendung eines QR Code Scanners im Webapp wird diese Funktionalität obsolet gemacht. Sie wird in lokkit nicht mehr auf der Oberfläche eingesetzt. Sie kann optional verwendet werden, um eine Übersicht über bestehende Rentables zu haben, und dabei nur eine einzelne Adresse (die der RentableDiscovery) zu speichern.
-
-In Zukunft könnten bei Bedarf Rentables mittels dieser RentableDiscovery in logische Gruppen unterteilen werden, um die Darstellung zu erleichtern. Weiter könnte ein dynamisches Angebot von Rentables zur Verfügung gestellt, indem Abfragen nicht über manuelle QR Codes sondern über eine (oder mehrere) RentableDiscovery gestellt werden.
 
 \subsection{Real-Time Kommunikationsschnittstelle}
-Für Implementationsdetails, vgl. \ref{subsec:Real_Time_Kommunikationsschnittstelle}
+\label{subsec:Real_Time_Kommunikationsschnittstelle}
+Für Implementationsdetails, vgl. \ref{sys_subsec:Real_Time_Kommunikationsschnittstelle}
 
-Da die Block Time in der Ethereum Blockchain etwa 12 Sekunden beträgt\footnote{https://blog.ethereum.org/2014/07/11/toward-a-12-second-block-time/}, sind Transaktionen nicht nützlich, um in Echtzeit mit einem gemieteten Objekt zu interagieren. Auch die dabei anfallenden Kosten einer Transaktion\footnote{Diese Kosten sind gering für einfaches Signaling mit Smart Contracts.} sind zu begleichen und speziell bei wiederholtem Senden der Signale nicht zu verachten. Auch dient die Persistenz in der Blockchain all dieser Interaktionen keinem Nutzen, da aus dem Smart Contract bekannt ist, dass der Benutzer Zugriff auf das Gerät hat.
+Da die Block Time in der Ethereum Blockchain etwa 12 Sekunden beträgt, sind Transaktionen nicht nützlich, um in Echtzeit mit einem gemieteten Objekt zu interagieren. Auch die dabei anfallenden Kosten einer Transaktion\footnote{Diese Kosten sind gering für einfaches Signaling mit Smart Contracts.} sind zu begleichen und speziell bei wiederholtem Senden der Signale nicht zu verachten. Die Persistenz in der Blockchain all dieser Interaktionen dient keinem Nutzen, da aus dem Smart Contract bekannt ist, dass der Benutzer Zugriff auf das Gerät hat. \cite{blog.ethereum.org/block-time}
 
-Daher wurde, um mit mietbaren Objekten (vgl. \ref{subsec:lokkit_Smart_Contracts}) während des gemieteten Zeitraums in Echtzeit zu interagieren, das Protokoll Whisper v5\footnote{vgl. \ref{para:Whisper}}\footnote{Auch Whisper v2 wurde angeschaut, aufgrund der nicht vorhandenen Unterstützung in der go-ethereum mobile API fallen gelassen und für die status-go mobile API mit Whisper v5 Unterstützung ausgetauscht. VGL. Anhang} verwendet. Whisper v5 erlaubt die Übermittlung von textbasierten Nachrichten mit eingebautem Sicherheitsmechanismus zur Verschlüsselung und optionale Signatur von Nachrichten. Diese Nachrichten müssen entweder symmetrisch oder asymmetrisch verschlüsselt werden\footnote{https://github.com/ethereum/go-ethereum/wiki/Whisper-Usage}.
+Daher wurde, um mit mietbaren Objekten (vgl. \ref{subsec:Smart_Contracts}) während des gemieteten Zeitraums in Echtzeit zu interagieren, das Protokoll Whisper v5 (vgl. \ref{para:Whisper}) verwendet. Whisper v5 erlaubt die Übermittlung von textbasierten Nachrichten mit eingebautem Sicherheitsmechanismus zur Verschlüsselung und optionale Signatur von Nachrichten. Diese Nachrichten müssen entweder symmetrisch oder asymmetrisch verschlüsselt werden.\cite[Wiki/Whisper Usage]{go-ethereum}
 
 Da Whisper v5 die einzige Möglichkeit zur Echtzeitkommunikation in der Ethereum Blockchain ist, gibt es keine Alternativen dazu.
 
 \subsubsection{Verteilung}
-\ref{subsubsec:Verteilung}
-Das Whisper v5 Protokoll setzt für jede Nachricht einen Schlüssel (symmetrisch oder asymmetrisch) und ein Topic (4 bytes) voraus. Whisper Abos müssen mindestens ebenfalls einen Schlüssel und ein Topic als Filter beinhalten. Um neuen Teilnehmern zu er möglichen auf diese Nachrichten zu hören und solche zusenden, wird ein symmetrischer Schlüssel mit dem Passwort \emph{lokkit} erstellt. Dieser Schlüssel muss nicht geheim gehalten werden, da der Inhalt der Nachricht nicht sicherheitsrelevant ist\footnote{Sollte in Zukunft die Anforderung an verschlüsselte Commands gestellt werden, vgl Anhang \#TODO: generate asymmetric key + in smart contract schreiben. --> vgl. Sicherheitsaspekte. Müsste transaction auslösen von doorman}. Als Topic werden die ersten 4 Bytes der sha3 Checksumme der Adresse des Mietbaren Objektes mitgeschickt. Basierend auf diesen beiden Eigenschaften kann der Doorman (vgl. \ref{subsec:Doorman}) die für die angeschlossenen Geräte relevanten Nachrichten filtern.
+\label{subsubsec:Verteilung}
+Das Whisper v5 Protokoll setzt für jede Nachricht einen Schlüssel (symmetrisch oder asymmetrisch) und ein Topic (4 bytes) voraus. Whisper Abos müssen mindestens ebenfalls einen Schlüssel und ein Topic als Filter beinhalten. Um neuen Teilnehmern zu er möglichen, auf diese Nachrichten zu hören und solche zu senden, wird ein symmetrischer Schlüssel mit dem Passwort \emph{lokkit} erstellt. Dieser Schlüssel muss nicht geheim gehalten werden, da der Inhalt der Nachricht nicht sicherheitsrelevant ist\footnote{Sollte in Zukunft die Anforderung an verschlüsselte Commands gestellt werden, vgl Anhang \#TODO: generate asymmetric key + in smart contract schreiben. --> vgl. Sicherheitsaspekte. Müsste transaction auslösen von doorman}. Als Topic werden die ersten 4 Bytes der sha3 Checksumme der Adresse des Mietbaren Objektes mitgeschickt. Basierend auf diesen beiden Eigenschaften kann der Doorman (vgl. \ref{subsec:Doorman}) die für die angeschlossenen Geräte relevanten Nachrichten filtern.\cite[Wiki/Whisper Overview]{go-ethereum}
 
 \subsubsection{Sicherheitsaspekte}
 \label{subsubsec:Sicherheitsaspekte}
-Nur die Verwendung kryptographisch sicherer Funktionen und Funktionalität (vgl. whisper, sha3, ec crypto) garantiert kein sicheres System. Auch wenn Whisper v5 garantiert\footnote{}, dass die übermittelten Nachrichten nach gängigen Sicherheitsstandards verschlüsselt werden, können Design-Lücken bei der Implementation der Real-Time Kommunikationsschnittstelle es einem Angreifer ermöglichen, das System auf eine nicht erwünschenswerte Art zu missbrauchen.
+Auch wenn Whisper v5 garantiert, dass die übermittelten Nachrichten nach gängigen Sicherheitsstandards verschlüsselt werden, können Design-Lücken bei der Implementation der Real-Time Kommunikationsschnittstelle es einem Angreifer ermöglichen, das System auf eine nicht erwünschenswerte Art zu missbrauchen.\cite[Wiki/Whisper Overview/Encryption in version 5]{go-ethereum}
 
 \emph{In den folgenden Paragraphen wird Vorwissen um die Real-Time Kommunikationsschnittstelle vorausgesetzt. Vgl. \ref{sys_subsec:Real_Time_Kommunikationsschnittstelle} für technische Details der Schnittstelle und deren Implementation.}
 
 \paragraph{Signatur des Message Objektes}
-Der Sender/Empfänger Mechanismus von Whisper ist nicht an die Accounts/Adressen der Blockchain gekoppelt. Da mietbare Objekte (in Form von Smart Contracts) von einer Adresse gemietet werden, wird ein Sicherheitsmechanismus benötigt, um sicher zu stellen, dass der Envelope von einer Entität geschickt wurde, die im Besitz des in der Blockchain angegebenen Accounts ist. Dafür wurde die Funktion \emph{web3.eth.sign(...)}\footnote{} verwendet, um das Message Objekt zu signieren. Damit diese Funktion einen Wert zurück liefert, muss der Private Key des angegebenen Accounts auf der lokalen Node vorhanden sein und dieser Account muss entsperrt sein. Sind diese Vorbedingungen erfüllt, liefert \emph{web3.eth.sign(...)} für einen gegebenen Input (in diesem fall das Message Objekt) einen 65 Byte Hash, Digest genannt, zurück. Wenn bspw. ein Empfänger der Nachricht Funktion \emph{web3.personal.ecRecover(...)} dasselbe Message Objekt und den erhaltenen Digest als Parameter übergibt, gibt diese Funktion die öffentliche Adresse zurück, die den Digest erstellt hat. Diese öffentliche Adresse kann dann mit der eingetragenen Adresse im Smart Contract abgeglichen werden.
+Der Sender/Empfänger Mechanismus von Whisper ist nicht an die Accounts/Adressen der Blockchain gekoppelt. Da mietbare Objekte (in Form von Smart Contracts) von einer Adresse gemietet werden, wird ein Sicherheitsmechanismus benötigt, um sicher zu stellen, dass der Envelope von einer Entität geschickt wurde, die im Besitz des in der Blockchain angegebenen Accounts ist. Dafür wurde die Funktion \emph{web3.eth.sign(...)} verwendet, um das Message Objekt zu signieren. Damit diese Funktion einen Wert zurück liefert, muss der Private Key des angegebenen Accounts auf der lokalen Node vorhanden sein und dieser Account muss entsperrt sein. Sind diese Vorbedingungen erfüllt, liefert \emph{web3.eth.sign(...)} für einen gegebenen Input (in diesem fall das Message Objekt) einen 65 Byte Hash, Digest genannt, zurück. Wenn bspw. ein Empfänger der Nachricht Funktion \emph{web3.eth.personal.ecRecover(...)} dasselbe Message Objekt und den erhaltenen Digest als Parameter übergibt, gibt diese Funktion die öffentliche Adresse zurück, die den Digest erstellt hat. Diese öffentliche Adresse kann dann mit der eingetragenen Adresse im Smart Contract abgeglichen werden.\cite[web3.eth/sign, web3.eth.personal/ecRecover]{web3js.readthedocs.io}
 
 \paragraph{Replay Attack}
 \label{para:Replay_Attack}
-Folgend wird der einzige bekannte technische Angriff auf die Real-Time Schnittstelle beschrieben und erläutert wie dieser, unter Verwendung der in Ethereum eingebauten kryptographischen Funktionen\footnote{web3.eth.sign, web3.eth.recover und shh asymmetric keys}, verhindert werden kann. Jegliche Angriffsvektoren, die die Referenzimplementation \emph{geth}, die \acrshort{EVM} oder natürliche Personen (d.h. Social Engineering) betreffen, werden nicht beschrieben oder entschärft.
+Folgend wird der einzige bekannte technische Angriff auf die Real-Time Schnittstelle beschrieben und erläutert wie dieser, unter Verwendung der in Ethereum eingebauten kryptographischen Funktionen, verhindert werden kann. Jegliche Angriffsvektoren, die die Referenzimplementation \emph{geth}, die \acrshort{EVM} oder natürliche Personen (d.h. Social Engineering) betreffen, werden nicht beschrieben oder entschärft.\cite[web3.eth/sign, web3.eth.personal/ecRecover]{web3js.readthedocs.io}\cite{keccak.noekeon.org}
 
 Jeder Whisper Envelope muss mit einem symmetrischen oder asymmetrischen Schlüssel verschlüsselt werden und benötigt ein Topic (vgl. \ref{subsubsec:Verteilung}).
-Auch für jedes Abonnement (subscription) von Whispers muss ein symmetrischer oder asymmetrischer Schlüssel und mindestens ein (oder mehrere) Topic als Filter angegeben werden. Da der Symmetrische Schlüssel für lokkit Envelopes öffentlich ist, ist er nicht für kryptographische Sicherheit, sondern nur für die Filterung der Envelopes, zu verwenden. Aus diesem Grund ist es für jeden Teilnehmer, der den Envelope auf seiner Node übermittelt, möglich, diesen aufzuzeichnen, die Payload zu extrahieren und erneut zu schicken (vgl. https://en.wikipedia.org/wiki/Replay\_attack). Diese Art der Weiterleitung funktioniert, wenn die gesamte Payload inklusive Digest weitergeleitet würde und somit keine erneute Signatur des Message Objektes nötig wäre. Somit wäre es möglich, eine Payload zu erhalten, die nicht von der signierenden Entität sondern von einer Drittperson gesendet wurde. Um sicher zu gehen, dass die Nachricht von derselben Entität gesendet wurde, die auch den Digest des Message Objektes erstellt hatte, wird das \emph{key} Attribut (vgl. \ref{sys_para:Key}) ebenfalls in das Message Objekt eingebettet. Dies ist derselbe Schlüssel, der zur Signatur des Whisper Envelopes verwendet wurde. Diese beiden Schlüssel können verglichen werden (vgl. \ref{sys_subsubsec:Verteilung}, um sicher zu gehen, dass der Sender der Whisper Nachricht auch derselbe ist, wie der, der den Digest erstellt hat.
+Auch für jedes Abonnement von Whispers muss ein symmetrischer oder asymmetrischer Schlüssel und mindestens ein Topic als Filter angegeben werden. Da der Symmetrische Schlüssel für lokkit Envelopes öffentlich ist, ist er nicht für kryptographische Sicherheit, sondern nur für die Filterung der Envelopes, zu verwenden. Aus diesem Grund ist es für jeden Teilnehmer, der den Envelope auf seiner Node übermittelt, möglich, diesen aufzuzeichnen, die Payload zu extrahieren und erneut zu schicken.\cite{replay_attack_on_security_protocols}
+
+Diese Art der Weiterleitung funktioniert, wenn die gesamte Payload inklusive Digest weitergeleitet würde und somit keine erneute Signatur des Message Objektes nötig wäre. Somit wäre es möglich, eine Payload zu erhalten, die nicht von der signierenden Entität sondern von einer Drittperson gesendet wurde. Um sicher zu gehen, dass die Nachricht von derselben Entität gesendet wurde, die auch den Digest des Message Objektes erstellt hatte, wird das \emph{key} Attribut (vgl. \ref{sys_para:Key}) ebenfalls in das Message Objekt eingebettet. Dies ist derselbe Schlüssel, der zur Signatur des Whisper Envelopes verwendet wurde. Diese beiden Schlüssel können verglichen werden (vgl. \ref{sys_subsubsec:Verteilung}, um sicher zu gehen, dass der Sender der Whisper Nachricht auch derselbe ist, wie der, der den Digest erstellt hat.
 
 \#todo: bild. dringend. den obigen Abschnitt checke ich selbst nicht, 30 Minuten nachdem ich ihn gelesen hab'...
 
+\subsection{Webapp}
+\label{subsec:Webapp}
+Die Webapp ist die Hauptinteraktionsmöglichkeit von Benutzern mit dem Lokkit System...
+
+\subsection{Mobile Geräte}
+Um die Webapp zu benutzen, wird eine lokale Ethereum Node vorausgesetzt, die mit einer bestimmten Konfigurationen läuft (vgl. \ref{subsec:Webapp}, \ref{sys_subsec:Geth}). Da diese beiden Komponenten über die web3 Schnittstelle komunizieren ist es auch möglich auf mobilen Geräten die Webapp zu benutzen, sofern eine beschriebene Ethereum Node auf diesem Gerät verbunden ist.
+
+\subsubsection{geth auf Mobilgeräten}
+Das Ethereum Projekt bietet eine offizielle API an, um auf mobilen Geräten eine Ethereum Node im light mode zu betrieben. Dabei ist zu bemerken, dass die API nur native Apps unterstützt und keine der Funktionalitäten über die rpc Schnittstelle veröffentlicht werden kann. Somit ist es nicht möglich mit der offiziellen API \acrshort{DAPPs} zu erstellen und auf einem Mobilgerät darauf zuzugreifen.\cite[wiki/Mobile: Introduction]{go-ethereum}
+
+Die Status-im Plattform bietet genau diese Interaktionsmöglichkeit. Diese Applikation wurde entworfen, um auf mobilen Platformen die Verwendung von \acrshort{DAPPs} zu ermöglichen. Dabei wurde ein Modul basierend auf der go-ethereum Library von ethereum erstellt (vgl. github.com FORK), das die benötigten Schnittstellen von geth über rpc frei gibt und Verbindungen von localhost zulässt. Somit können \acrshort{DAPPs} auf mobilen Geräten verwendet werden. \cite{status-im_whitepaper, github.com/status-im/status-go}
+
+
+Die Interaktionsmöglichkeiten zum Lokkit System auf mobilen Geräten beschränkt sich momentan auf Androidgeräte mit Android version 4.4 oder höher.
+
+\subsection{Android App}
+
+\subsubsection{}
+
+
 \subsection{Doorman}
 \label{subsec:Doorman}
-Doorman ist eine mögliche Implementation in Python 2.7, die es ermöglicht, ein IoT Gerät an die erwähnten Smart Contracts (vgl. \ref{subsec:lokkit_Smart_Contracts}) und das Protokoll Whisper v5 (vgl. \ref{para:Whisper}) inkl. der definierten Schnittstelle (vgl. \ref{subsec:Real_Time_Kommunikationsschnittstelle}) anzubinden. Doorman verbindet sich mit einer angegebenen Ethereum Node, lädt die Informationen zum angegebenen Smart Contract und wartet auf Mitteilungen (vgl. \ref{subsec:Konfiguration}). Wenn eine Nachricht erhalten und der Absender erfolgreich verifiziert wurde, wird der angegebene Befehl in der Shell ausgeführt. Als einziges Argument erhält der Befehl den Inhalt des command Feldes der erhaltenen Mitteilung enthält (vgl. \ref{subpara:Command}).\#TODO: address und command, da mehrere rentables am selben doorman hängen können?
-
-\subsubsection{Konfiguration}
-\label{subsec:Konfiguration}
-Die Konfiguration des Doorman wird aus einer yml Datei\footnote{https://fdik.org/yml/} gelesen. Die Datei besitzt ein root mit namen \emph{doorman} und Attribute für die Ethereum Node, verwendete Rentable Smart Contract Adresse und auszuführendes Script bei Erhalt einer validen Nachricht.
-\begin{lstlisting}[language=yml,caption={Beispielkonfiguration für Doorman}]
-doorman:
-    node_ip: 127.0.0.1
-    node_rpc_port: 8545
-    rentable_addresses:
-        - "0xf16801293f34fc16470729f4ac91185595aa6e10"
-        - "0xf16801293f34fc16470729f4ac91185595aa6e10"
-    script: open_close_device.bat
-\end{lstlisting}
-
-\paragraph{node\_ip}
-Die Url der Ethereum Node, zu der eine Verbindung aufgebaut werden soll. Diese Node muss das shh Protokoll und auch die shh API aktiviert haben (vgl. \ref{para:Whisper}). Die Adresse ist als IP (\#TODO: ist das möglich? oder als aufzulösender hostname) anzugeben. Informationen zu protokoll wie \emph{http://} sind auszulassen.
-\paragraph{node\_rpc\_port}
-Der Port, auf dem Doorman zu der Ethereum Node verbinden soll. 
-\paragraph{rentable\_address}
-Die Adressen der Smart Contracts vom typ Rentable (vgl. \ref{subsec:Rentable}), auf deren Nachrichten gehört werden sollen. Wird eine falsche Adresse angegeben, werden Befehle nicht wie erwartet ausgeführt.
-\paragraph{script}
-Das script, das ausgeführt werden soll im Format
-\begin{lstlisting}[language=yml,caption={Beispielkonfiguration für Doorman}]
-
-\end{lstlisting}
+Doorman ist eine mögliche Implementation in Python 2.7, die es ermöglicht, ein IoT Gerät an die erwähnten Smart Contracts (vgl. \ref{subsec:Smart_Contracts}) und das Protokoll Whisper v5 (vgl. \ref{para:Whisper}) inkl. der definierten Schnittstelle (vgl. \ref{subsec:Real_Time_Kommunikationsschnittstelle}) anzubinden. Doorman verbindet sich mit einer angegebenen Ethereum Node, lädt die Informationen zum angegebenen Smart Contract und wartet auf Mitteilungen (vgl. \ref{subsec:Konfiguration}). Wenn eine Nachricht erhalten und der Absender erfolgreich verifiziert wurde, wird der angegebene Befehl in der Shell ausgeführt.
 
 \subsubsection{Wieso Python? Wieso Python 2.7?}
 
+\subsection{Controllers}
+Controllers für IoT device
+\subsubsection{Nuki}
+
+\subsubsection{Marke: Eigenbau}

@@ -151,21 +151,22 @@
   \end{picture}
     \vskip 10mm%
     {\large\sc\@author}
-    \vskip 40mm%
-    {\Large B\,A\,C\,H\,E\,L\,O\,R\,A\,R\,B\,E\,I\,T}%
-    \vskip 8mm%
-    %{\large\sf Nr.~\@nummer}
-    \vskip 8mm%
-    %{\large eingereicht am} \vskip 1mm {Fachhochschul-Bachelorstudiengang}%
-    {\large eingereicht am Bachelorstudiengang}
-    \vskip 4mm%
-    {\large\sc\@studiengang}%
-    \vskip 4mm%
-    {\large der \@schulname}%
-    \vskip 4mm%
-    {\large in \@studienort}%
-    \vskip 16mm%
-    {\large im \monthname[\value{@abgabemonat}] \arabic{@abgabejahr}}%
+    %#hirni: folgendes ausokmmentiert, da nicht nötig für HSLU
+    %\vskip 40mm%
+    %{\Large B\,A\,C\,H\,E\,L\,O\,R\,A\,R\,B\,E\,I\,T}%
+    %\vskip 8mm%
+    %%{\large\sf Nr.~\@nummer}
+    %\vskip 8mm%
+    %%{\large eingereicht am} \vskip 1mm {Fachhochschul-Bachelorstudiengang}%
+    %{\large eingereicht am Bachelorstudiengang}
+    %\vskip 4mm%
+    %{\large\sc\@studiengang}%
+    %\vskip 4mm%
+    %{\large der \@schulname}%
+    %\vskip 4mm%
+    %{\large in \@studienort}%
+    %\vskip 16mm%
+    %{\large im \monthname[\value{@abgabemonat}] \arabic{@abgabejahr}}%
 \end{center}\par
   \vfil\null
 \end{titlepage}%
@@ -442,8 +443,8 @@ acknowledged. I further declare that this or similar work has not been submitted
 
 \renewcommand{\@batitelseiten}{
 \@batitel
-%\@babetreuerseite \#existiert nicht @hslu
-\@erklaerungsseite
+%\@babetreuerseite #hirni: existiert nicht @hslu
+%\@erklaerungsseite #hirni: HSLU hat ein besseres Template :)
 }
 
 \renewcommand{\@prtitelseiten}{
@@ -474,4 +475,3 @@ acknowledged. I further declare that this or similar work has not been submitted
 %%-------------------------------------------------------------
 
 \endinput
-

@@ -1,54 +1,104 @@
 \section{Komponenten}
-\label{sec:Komponenten}
+\label{sys_sec:Komponenten}
 Folgend werden alle im Lokkit System vorhandenen Komponenten, deren Abhängigkeiten und vorgenommene Konfiguration erklärt.
 
 \subsection{Geth}
+\label{sys_subsec:Geth}
 \begin{itemize}
     \item Konfiguration von Geth
     \item Funktionsweise blockchain KURZ
 \end{itemize}
 
 \subsection{Contracts}
-Die Datenhaltung und Businesslogik des lokkit Systems liegt auf der Blockchain in Form von Smart Contracts.
+Die Datenhaltung und Businesslogik des Lokkit Systems liegt auf der Blockchain in Form von Smart Contracts.
 \subsubsection{Rentable}
+\label{sys_subsubsec:Rentable}
 Eine Instanz dieses Contracts spiegelt ein mietbares Objekt wieder.
-\paragraph{Erstellung}
-Um eine Instanz eines Rentables zu erstellen, muss eine Transaktion an den Konstruktor gestellt werden. Dies hat die Form:
-\begin{lstlisting}[language=javascript,caption={Beispiel für Rentable Erstellung},label={lst:Rentable_Erstellung}]
-var locker = rentableContract.new("description of the thing",
-1,
-"some location",
-{
-    from:web3.eth.accounts[0],
-    data: rentableCompiled["<stdin>:Rentable"].code,
-    gas:4700000,
-    gasPrce: 100000000000
-});
-\end{lstlisting}
+
+\paragraph{Attribute}
+Folgende Attribute können gelesen und gesetzt werden. Lesen wird durch die automatische Funktion von Solidity gemacht, gesetzt werden die Attribute durch eine entsprechende Funktion, die den prefix \emph{set} hat und den neuen Wert als Parameter nimmt.
+
+\begin{itemize}
+    \item{\emph{owner}, address, Besitzer des Rentable Objektes.}
+    \item{\emph{description}, string, Beschreibung des Rentable Objektes.}
+    \item{\emph{location}, string, Beschreibung des Standortes des Rentable Objektes.}
+    \item{\emph{costPerSecond}, uint, Kosten des Rentables in Wei pro Sekunde.}
+    \item{\emph{deposit}, uint, Menge Wei, die hinterlegt werden muss. Wird zurückerstattet, wenn \emph{unclaim} oder \emph{forceUnclaim} aufgerufen werden.}
+\end{itemize}
 
 \paragraph{Funktionen}
-\paragraph{Events}
 
-\label{sys_subsubsec:Rentable}
-\subsubsection{RentableDiscovery}
-\subsubsection{Faucet}
+L: Lesefunktion, S: Schreibfunktion, C: Konstruktor, E: Event
 
-\subsection{Webapp (DAPP)}
-Die Webapp (auch DAPP) für Lokkit stellt eine Gerätunabhängige Benutzeroberfläche für die Interaktion mit dem Lokkit System zur Verfügung. Es wird mindestens ein Account, mit genügend Ether, vorausgesetzt, um mit den Rentable Objekten interagieren zu können.
+\begin{longtable}{@{}lcL{9cm}@{}}
+\caption{Rentable Lesefunktionen}\label{tbl:Rentable_Funktionsuebersicht}\\
+\toprule
+Name & Typ & Beschreibung \\
+\midrule
+allReservations     & L   & Gibt alle Reservationen als Array zurück. Eine Reservation besteht aus einem Array mit drei Einträgen: Startzeit, Endzeit, Ob die aufrufende Adresse der Mieter ist.\\
+ & & Parameter: keine
+ 
+\\\midrule
+reservedAt          & L   & Gibt zurück, ob das Rentable am gegebenen Zeitpunkt \emph{time} reserviert ist.\\ & & Parameter: \emph{time}                                                                                                                       \\\midrule
+reservedBetween     & L   & Gibt zurück, ob das Rentable zwischen den gegebenen Zeitpunkten \emph{start} und \emph{end} reserviert ist.\\ & & Parameter: \emph{start}, \emph{end}                                                                                                          \\\midrule
+currentRenter       & L   & Gibt die Adresse des momentanen Mieters zurück. Wenn das Rentable momentan nicht vermietet ist, wird 0 zurückgegeben.\\ & & Parameter: keine                                                                                      \\\midrule
+costInWei           & L   & Gibt die Kosten in Wei für die Zeit zwischen \emph{start} und \emph{end} zurück.\\ & & Parameter: \emph{start}, \emph{end}                                                                                                                       \\\midrule
+myPendingRefund     & L   & Gibt zurück, wie viel Ether die aufrufende Adresse noch zur Verfügung hat.\\ & & Parameter: keine                                                                                                                      \\ \midrule
+currentReservation  & L   & Gibt die momentane Reservation zurück als Array mit drei Einträgen: Startzeit, Endzeit, Ob die aufrufende Adresse der Mieter ist.\\ & & Parameter: keine                                                             \\\midrule
+transferOwnership   & S   & Setzt den \emph{owner} des Rentables auf die angegebene Adresse \emph{newOwner}.\\ & & Parameter: \emph{newOwner}                                                                                                                         \\\midrule
+rent                & S   & Mietet das Rentable zwischen \emph{start} und \emph{end} für die sendende Adresse.\\ & & Parameter: \emph{start}, \emph{end}                                                                                                                     \\\midrule
+unclaim         & S   & Retourniert ein Rentable während die gemietete Zeit noch nicht abgelaufen ist. Der bezahlte Betrag für die zusätzliche Zeit wird gleichmässig zwischen \emph{renter} und \emph{owner} aufgeteilt. Das \emph{deposit} wird dem refund des \emph{renter}s gutgeschrieben.\\ & & Parameter: keine                            \\\midrule
+forceUnclaim         & S   & Retourniert alle Reservations, die in der Vergangenheit liegen und auf welchen nicht unclaim aufgerufen wurde. Das \emph{deposit} wird dem refund des \emph{owner}s gutgeschrieben.\\ & & Parameter: keine                            \\\midrule
+withdrawRefunds     & S   & Hebt alle bestehenden Rückerstattungen einer Adresse vom Rentable ab und überweist sie auf das Konto der sendenden Adresse\\ & & Parameter: keine                                                                     \\\midrule
+Rentable            & C   & Erstellt ein neues Rentable mit den angegebenen Parametern und der sendenden Adresse als \emph{owner}.\\ & & Parameter: \emph{pdescription}, \emph{plocation}, \emph{pcostPerSecond}, \emph{pdeposit}                                                   \\ \midrule
+OnRent              & E   & Wird ausgelöst, wenn versucht wird, das Rentable zu mieten (vgl. Funktion \emph{rent}). \emph{success} gibt an, ob die Reservation erfolgreich war.\\ & & Parameter: \emph{success}, \emph{renter}, \emph{start}, \emph{end}, \emph{msg} \\ \bottomrule
+\end{longtable}
+
+\subsection{Webapp}
+Die Webapp für Lokkit stellt eine Gerätunabhängige Benutzeroberfläche für die Interaktion mit dem Lokkit System zur Verfügung. Es wird mindestens ein Account, mit genügend Ether, vorausgesetzt, um mit den Rentable Objekten interagieren zu können.
 \subsubsection{NodeJS}
 \subsubsection{VueJS}
 \subsubsection{Ethereum Node}
 Die Vorbedingung zur Verwendung der Webapp ist eine laufende und korrekt konfigurierte Ethereum Node auf demselben Gerät, die die jsonrpc Schnittstellen \emph{eth}, \emph{shh}, \emph{personal} auf dem Port 8545 zur Verfügung stellt.
 
 
-\subsection{Doorman}
-
 \subsection{Android App}
-Die Interaktionsmöglichkeiten zum Lokkit System auf mobilen Geräten beschränkt sich momentan auf Androidgeräte (\#TODO: api version?).
+\#todo: architektur bild einfügen
+
 \subsubsection{statusgo-android}
-Diese Subkomponente des Android Apps implementiert das Ethereum Protokoll und weitere Funktionalität von status.im\footnote{http://status.im}. Sie wurde 
+Diese Subkomponente des Android Apps implementiert das Ethereum Protokoll und weitere Funktionalität von status.im.\cite{github.com/status-im/status-go}
+
+
+
 \subsubsection{Lokkit Service}
+Der Lokkit Service 
+
 \subsubsection{Lokkit Activity}
+
+\subsection{Doorman}
+Doorman verbindet auf eine ethereum node, die die shh und eth Protokolle enabled hat und hört auf Whisper v5 Nachrichten für die in der Konfiguration definierten Rentables. Wenn die payload der Nachrichten der Definition in der Real-Time Kommunikationsschnitstelle (vgl. \ref{sys_subsec:Real_Time_Kommunikationsschnittstelle} entsprechen, wird ein Script ausgeführt, das als Parameter die Adresse des Rentables, sowie das command (vgl. \ref{sys_subpara:Command}) erhält.
+
+\subsubsection{Konfiguration}
+\label{sys_subsec:Doorman_Konfiguration}
+Die Konfiguration des Doorman wird aus einer yml Datei\footnote{https://fdik.org/yml/} gelesen. Die Datei besitzt einen root mit Namen \emph{doorman} und Attribute für die Ethereum Node, verwendete Rentable Smart Contract Adressen und auszuführendes Script bei Erhalt einer validen Nachricht.
+\begin{lstlisting}[language=yml,caption={Beispielkonfiguration für Doorman}]
+doorman:
+    node_ip: 127.0.0.1
+    node_rpc_port: 8545
+    rentable_addresses:
+        - "0xf16801293f34fc16470729f4ac91185595aa6e10"
+        - "0x298345dddd494c51061da2ae137df3129ce14b69"
+    script: open_close_device.bat
+\end{lstlisting}
+
+\paragraph{node\_ip}
+Die Url der Ethereum Node, zu der eine Verbindung aufgebaut werden soll. Diese Node muss das shh Protokoll und auch die shh API aktiviert haben (vgl. \ref{para:Whisper}). Die Adresse ist als IP (\#TODO: ist das möglich? oder als aufzulösender hostname) anzugeben. Informationen zu protokoll wie \emph{http://} sind auszulassen.
+\paragraph{node\_rpc\_port}
+Der Port, auf dem Doorman zu der Ethereum Node verbinden soll. Der Standardport ist 8545.
+\paragraph{rentable\_address}
+Die Adressen der Smart Contracts vom typ Rentable (vgl. \ref{sys_subsubsec:Rentable}), auf deren Nachrichten gehört werden sollen. Wird eine ungültige Rentable Adresse angegeben, werden die Befehle nicht ausgeführt.
+\paragraph{script}
+Das script, das ausgeführt werden soll.
 
 \subsection{Controllers}
 \subsubsection{Nuki}
