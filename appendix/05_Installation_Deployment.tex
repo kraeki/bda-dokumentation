@@ -58,65 +58,210 @@ Webapp
 Die Lokkit Sourcen können wie folgt heruntergeladen werden:
 
 \begin{lstlisting}[language=bash]
-git clone https://github.com/lokkit/lokkit --recursive
+$ git clone https://github.com/lokkit/lokkit --recursive
 \end{lstlisting}
 
-\section{Lokkit Raspberry Pi Image}
+\section{Aufsetzten der Raspberry Pi's}
 Für jedes der drei Raspberry Pi's wurde ein eigenes Image erstellt, welches im Anhang der CD entnommen werden kann. (TODO:) Die Images basiern auf dem offiziellen \emph{Raspbian Jessie Lite} Image \footnote{\url{https://www.raspberrypi.org/downloads/raspbian/}}.
 
+\paragraph{}
 \begin{description}
-    \item[Lokkit Image 1] Dieses Image enthält die Konfiguration für den WLAN HotSpot und einen DNS/DHCP Server. Die anderen Raspberries verbinden sich zu diesem.
+    \item[Lokkit Image 1] Dieses Image enthält die Konfiguration für den WLAN Hotspot und einen DNS/DHCP Server. Die anderen Raspberries verbinden sich zu diesem.
     \item[Lokkit Image 2] Dieses Image ist so konfiguriert, dass es sich mit dem HotSpot des Master Images verbindet.
     \item[Lokkit Image 3] Dieses Image ist bis auf den Hostnamen identisch mit dem Lokkit Image 2
 \end{description}
 
-Alle drei Images können z.B. mit \emph{dd} unter GNU/Linux auf eine MicroSD geflashed werden.
+\paragraph{}
+Alle drei Images können z.B. mit \emph{dd} unter GNU/Linux auf eine MicroSD geflashed werden. 
 
-\begin{lstlisting}[language=bash]
-dd if=rasp-master.img of=/dev/sdd
-dd if=rasp-node1.img of=/dev/sdd
-dd if=rasp-node2.img of=/dev/sdd
+\begin{lstlisting}[language=bash,caption={Beispiel \emph{dd} unter GNU/Linux}]
+$ dd if=rasp-master.img of=/dev/sdd
+$ dd if=rasp-node1.img of=/dev/sdd
+$ dd if=rasp-node2.img of=/dev/sdd
 \end{lstlisting}
 
-Danach können die Raspberries mit dem Image gestartet werden. Nach spätestens 5 Minuten sollte ein HotSpot "lokkit" ersichtlich sein. Das Password lautet "trust-no-one".
+Danach können die Raspberries mit dem Image gestartet werden und nach spätestens 5 Minuten sollte ein Hotspot \emph{lokkit} ersichtlich sein. Die Zugangsdaten für das WLAN können der Tabelle \ref{tbl:wlan_zugang} entnommen werden.  
 
-Nun kann SSH Verbindung mit z.B. dem Master Rasbperry hergestellt werden.
+\begin{table}[]
+\centering
+\caption{WLAN Zugangsdaten}
+\label{tbl:wlan_zugang}
+\begin{tabular}{@{}ll@{}}
+\toprule
+SSID    & Passwort \\ \midrule 
+lokkit  & trust-no-one \\ \bottomrule
+\end{tabular}
+\end{table}
 
-\begin{lstlisting}[language=bash]
-ssh 192.168.0.1 -l pi
 
+Nach erfolgreichem Verbinden mit dem \emph{lokkit} Hotspot ist es nun möglich auf die Raspberries über \emph{SSH} zuzugreifen. Im untenstehenden Beispiel wird eine Verbindung zum Master-RaspberryPi hergestellt. 
+
+\begin{lstlisting}[language=bash,caption{SSH Verbindung mit Master}]
+$ ssh master.lokkit.io -l pi
+# oder auch
+$ ssh 192.168.0.1 -l pi
 \end{lstlisting}
 
-Der User lautet \emph{pi} und das Passwort \emph{TrNoOnJuLo}.
+Die Benutzer und Passwörter der Raspberry Pi's sind der Tabelle \ref{tbl:raspberry_zugang} zu entnehmen.
 
-\section{Geth}
-\subsection{Installation}
-\subsection{Generell}
-https://geth.ethereum.org/downloads/
+\begin{table}[]
+\centering
+\caption{SSH Zugang}
+\label{tbl:raspberry_zugang}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Host              & Benutzer   & Passwort \\ \midrule
+master.lokkit.io  & pi         & TrNoOnJuLo \\ \midrule
+node1.lokkit.io   & pi         & TrNoOnJuLo \\ \midrule
+node2.lokkit.io   & pi         & TrNoOnJuLo \\ \bottomrule
+\end{tabular}
+\end{table}
 
-\subsection{Ubuntu}
-sudo apt-get install software-properties-common
-sudo add-apt-repository -y ppa:ethereum/ethereum
-sudo apt-get update
-sudo apt-get install ethereum
 
-\section{Contracts}
-truffle deploy
-\subsection{Neue Instanz erstellen}
-web3.personal.unlockAccount(web3.eth.accounts[0], "")
-Rentable.new("hoi", "da", 0, 0);
+\paragraph{Netzwerk} 
+Der Hotspot verwendet das \emph{192.168.0.0/24} Netzwerk. Falls Probleme mit der DNS-Auflösung auftreten, kann das Master Raspberry Pi auch direkt mit der IP \emph{192.168.0.1} angesprochen werden.
+
+\paragraph{}
+Nachdem nun die Raspberry Pi's aufgesetzt und gestartet sind, können die Softwarekomponenten installiert werden. Die nächsten Kapitel zeigen, wie dies geht.
+
+
+
+
+
+
+
+
+\section{Aufsetzen der Private Chain}
+Die Private Chain besteht aus Ethereum Nodes (geth), welche so konfiguriert sind, dass sie ein eigenes neues Netzwerk erstellen und nicht ins eigentliche Ethereum Netzwerk (Homestead) verbinden. Der \emph{geth}\footnote{\url{https://geth.ethereum.org/}} Client hat ein breites Interface und kann über die Kommandozeile konfiguriert werden. Um die Installation und die Konfiguration der Lokkit Private Chain zu vereinfachen wurde ein Debian Paket kreiert, welches auf dem Raspberry-Pi installiert werden kann und, dass den \emph{geth} Client mit allen benötigten Parameter aufsetzt und initialisiert. Nachfolgend wird gezeigt, wie das Debian Paket erstellt und auf den Raspberry Pi's installiert wird. 
+
+\subsection{Builden der Debian Pakete}
+Zuerst muss ins Repository \emph{chain} gewechselt werden. Dann können die Pakete folgendermaßen gebuildet werden:
+
+\begin{lstlisting}[language=bash]
+$ cd chain # ins Verzeichnis wechseln
+$ debuild -us -uc # erstellt 2 Pakete ../lokkit-chain*.deb
+\end{lstlisting}
+
+Das Paket \emph{lokkit-chain-no-mine} kann dann auf die Raspberry Pi's kopiert und installiert werden. Das nächste Code Snippet muss für jedes Raspberry Pi durchgeführt werden.
+
+\begin{lstlisting}[language=bash]
+$ scp ../lokkit-chain-no-mine*.deb pi@master.lokkit.io:
+
+$ ssh pi@master.lokkit.io
+pi@master:~ $ sudo su
+Passwort: 
+pi@master:~ $ dpkg -i lokkit-chain-no-mine*.deb
+\end{lstlisting}
+
+\paragraph{}
+Somit ist die Private Chain auf den Raspberry Pi's installiert und lauffähig. Sie ist jedoch noch leer, sprich es gibt noch keinen Miner, der Blöcke mined. Analog zur Installation der Raspberry Pi's muss nun noch die Miner-Hardware installiert werden. Dazu wird das Paket \emph{lokkit-chain-mine} verwendet. Das Endresultat ist eine Private Chain bestehend aus fünf Nodes. Zwei Nodes auf der Miner-Hardware und jeweils ein Node pro Raspberry Pi.
+
+\section{Smart Contracts installieren}
+Um die drei Rentable Contracts auf der Blockchain zu veröffentlichen, muss in das Repository \emph{contracts} gewechselt werden. Anschliessend kann mittels \emph{truffle} die Contracts deployed werden. 
+
+\paragraph{}
+Damit \emph{truffle} die Contracts veröffentlichen kann, muss der erste Account auf dem Master-Rapsberry entsperrt werden. Zu diesem Zweck muss auf dem Raspberry Pi eingeloggt werden und mittels \emph{geth attach} der erste Account entsprerren. Das untenstehende Code Snippet illustriert das Vorgehen. 
+
+\begin{lstlisting}[language=bash,label={lst:rentable_deployment},caption={Deployment der Contracts}]
+$ ssh master.lokkit.io -l pi 
+pi@master:~ $ geth attach
+personal.unlockAccount(personal.listAccounts[0])
+pi@master:~ $ exit
+$ exit
+
+# Nun können die Contracts mit truffle veröffentlicht werden
+$ cd contracts # ins Verzeichnis wechseln
+$ truffle deploy --network lokkit
+Using network 'lokkit'.
+
+Running migration: 1_initial_migration.js
+  Replacing Migrations...
+  Migrations: 0x9624922904e8907373b23dfbe7723be094abf5d6
+Saving successful migration to network...
+Saving artifacts...
+Running migration: 2_deploy_contracts.js
+  Replacing Rentable...
+  Rentable: 0x58b5e51386b46d018dcd0a3db91a6c69fed20ea8
+  Replacing Rentable...
+  Rentable: 0xde93b2965af6a49161f597604c600af9ea07883a
+  Replacing Rentable...
+  Rentable: 0x75105e510adf9fa0b1b1a5d35f9d8594ad36d8ed
+Saving successful migration to network...
+\end{lstlisting}
+
+\noindent 
+Die Adressen der veröffentlichten Rentables sind im Konsolenoutput von \emph{truffle} ersichtlich (vgl. \ref{lst:rentable_deployment}). Diese Adressen können nun mittels QrCode Generators\footnote{Z.B.: http://goqr.me/de/} in einem QrCode gespeichert und ausgedruckt werden. Der Demonstrator hat für jedes Schliessfach auf der Vorderseite Platz für einen solchen.
 
 \section{Webapp}
-npm run rpccorsdomain *
-\subsection{ssl}
+Die Webapp wird ebenfalls per Debian Paket auf dem Master Raspberry Pi installiert. Nach erfolgreicher Installation ist sie unter \url{https://webapp.lokkit.io} aufrufbar. Um mit der Installation zu starten muss ins Repository \emph{webapp} gewechselt werden. Anschliessend das Debian Paket builden, auf das Raspberry Pi kopieren und installieren. Das folgender Code illustruiert das Vorgehen:
+
+\begin{lstlisting}[language=bash]
+$ cd webapp # ins Verzeichnis wechseln
+$ debuild -us -uc # erstellt 1 Paket ../lokkit-webapp*.deb
+$ scp ../lokkit-webapp*.deb pi@master.lokkit.io:
+$ ssh pi@master.lokkit.io
+pi@master:~ $ dpkg -i lokkit-webapp*.deb
+\end{lstlisting}
+
+Zum Testen kann jetzt per Web Browser auf \url{https://webapp.lokkit.io} zugegriffen werden.
 
 \section{Doorman}
-pip install doorman.velo
+Doorman muss auf allen drei Raspberry Pi's installiert und dann unterschiedlich konfiguriert werden. Die Installation erfolgt ebenfalls durch ein Debian Paket.
+
+\begin{lstlisting}[language=bash]
+$ cd doorman # ins Verzeichnis wechseln
+$ debuild -us -uc # erstellt 1 Paket ../lokkit-doorman*.deb
+$ scp ../lokkit-doorman*.deb pi@master.lokkit.io:
+$ ssh pi@master.lokkit.io
+pi@master:~ $ dpkg -i lokkit-doorman*.deb
+\end{lstlisting}
+
+Nach erfolgreicher Installation von Doorman, muss dieser jeweils mit der, für das Schliessfach angepassten, Konfiguration gestartet werden. Die Konfiguration enthält jeweils die Adresse des entsprechenden Rentables und verweist auf ein Script, dass das Schloss ansprechen kann. Beim Locker 2 und 3 sind die Schlösser identisch, und somit auch das Script. 
+
+\paragraph{}
+Die Konfiguration von Doorman liegt unter \emph{/etc/lokkit/doorman.yaml} und muss folgenden Inhalt haben:
+
+\begin{lstlisting}[language=yaml,caption={Doorman-Konfiguration für Locker 2 und 3}]
+doorman:
+    node_ip: 127.0.0.1
+    node_rpc_port: 8545
+    rentable_addresses:
+        - "0x58b5e51386b46d018dcd0a3db91a6c69fed20ea8" # Achtung: Korrekte Adresse eintragen
+    symmetric_key_password: lokkit
+    script: /opt/lokk.sh
+\end{lstlisting} 
+
+\paragraph{} 
+Für Locker 1 und 2 muss noch die Datei \emph{/opt/lokk.sh} erstellt werden, welches den GPIO ansteuert und somit das Schloss öffnen kann.
+
+\begin{lstlisting}[language=bash,caption={Script für Locker 2 und 3, das von Doorman aufgerufen wird}]
+#!/bin/sh
+
+port=17 # Verwendeter GPIO Port
+echo Initializing port $port
+echo $port > /sys/class/gpio/export
+echo "out" > /sys/class/gpio/gpio${port}/direction
+echo Initialization done
+
+# Öffnen des Schlosses
+echo "1" > /sys/class/gpio/gpio${port}/value
+
+# Warten von 3 Sekunden
+sleep 3
+
+# Schliessen
+echo "0" > /sys/class/gpio/gpio${port}/value
+\end{lstlisting} 
+
+\paragraph{}
+Auf dem Locker 1 muss ein anderes Script hinterleget werden, welches das Nuki Schloss anprechen kann. Zuerst muss aber das Script auf dem Raspbery-Master (Locker 1) installiert werden. Dazu wird das Repository \emph{nuki} direkt auf das Master Raspberry kopiert. Anschliessend wird in der Doorman Konfiguration das Script auf /opt/nuki/lokk.sh geändert.
+
+\begin{lstlisting}[language=bash]
+$ scp nuki pi@master.lokkit.io:
+$ ssh pi@master.lokkit.io
+pi@master:~ $ sudo mv nuki /opt
+\end{lstlisting}
+
 
 \section{Android App}
-lokkit.io/app
-\subsection{Berechtigungen}
-\subsubsection{Camera}
-Für barcode scanner (webview im app)
-\subsubsection{Storage}
-Für localstorage (webview im app)
+Die Android App ist das letzte Stück dieser Kette. Sie kann unter \url{https://lokkit.io/download} heruntergeladen und installiert werden.
