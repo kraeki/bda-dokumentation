@@ -203,6 +203,18 @@ Netzwerkinformationen (c), Details eines Rentables (d).}
 
 \subsection{Android App}
 \label{sys_subsec:Android_App}
+\begin{figure}[H]
+\centering\small
+\setlength{\tabcolsep}{0mm}	% alle Spaltenränder auf 0mm
+\begin{tabular}{c@{\hspace{12mm}}c} % mittlerer Abstand = 12mm
+  \includegraphics[width=.48\textwidth]{} &
+  \includegraphics[width=.42\textwidth]{android_sequence_start_existing} \\
+  (a) & (b)
+\end{tabular}
+\caption{erster Start (a), spätere Starts (b)}
+\label{fig:android_sequence_start}
+\end{figure}
+
 Die Android App startet und administriert eine Ethereum Node mit dem Lokkit Genesis Block, um die Verwendung vom Lokkit Webapp (vgl. \ref{sys_subsec:Webapp}) auf einem Androidgerät zu ermöglichen.
 
 Wenn die Android App das erste mal gestartet wird, wird der Lokkit Service gebunden und die Activity nach einem Passwort für den Account gefragt (vgl. \ref{fig:android_sequence_start}). Bei nachfolgenden Starts wird der erstellte Account geladen und die Activity nach dessen Password gefragt. Wenn die Verbindung erfolgreich hergestellt werden konnte, wird das Webapp geladen.
