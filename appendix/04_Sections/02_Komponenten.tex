@@ -49,6 +49,8 @@ Falls zu viel Ether an den Contract überwiesen wird oder eine Rückerstattung d
 
 L: Lesefunktion, S: Schreibfunktion, C: Konstruktor, E: Event
 
+Alle Funktionen, die einen Zeitpunkt als Parameter (\emph{start} oder \emph{end}) annehmen, setzen ein Unix timestamp Format voraus.
+
 \begin{longtable}{@{}lcL{9cm}@{}}
 \caption{Rentable Lesefunktionen}\label{tbl:Rentable_Funktionsuebersicht}\\
 \toprule
@@ -66,12 +68,12 @@ setDescription   & S   & Setzt \emph{description} des Rentables auf den angegebe
 setLocation   & S   & Setzt die \emph{location} des Rentables auf den angegebenen Text \emph{newLocation}.\\ & & Parameter: \emph{newLocation} \\\midrule
 setCostPerSecond   & S   & Setzt die \emph{costPerSecond} des Rentables auf die angegebene Menge \emph{newCostPerSecond}.\\ & & Parameter: \emph{newCostPerSecond} \\\midrule
 setDeposit   & S   & Setzt das \emph{peposit} des Rentables auf die angegebene Menge \emph{newDeposit}.\\ & & Parameter: \emph{newDeposit} \\\midrule
-rent                & S   & Mietet das Rentable zwischen \emph{start} und \emph{end} für die sendende Adresse.\\ & & Parameter: \emph{start}, \emph{end} \\\midrule
+rent                & S   & Mietet das Rentable zwischen \emph{start} und \emph{end} für die sendende Adresse.\newline{}Vorbedingungen: start muss früher als end sein. Die Menge Ether muss für die Reservation ausreichen (vgl. \emph{costInWei}). \\ & & Parameter: \emph{start}, \emph{end} \\\midrule
 unclaim         & S   & Retourniert ein Rentable während die gemietete Zeit noch nicht abgelaufen ist. Der bezahlte Betrag für die zusätzliche Zeit wird gleichmässig zwischen \emph{renter} und \emph{owner} aufgeteilt. Das \emph{deposit} wird dem refund des \emph{renter}s gutgeschrieben.\\ & & Parameter: keine \\\midrule
 forceUnclaim         & S   & Retourniert alle Reservations, die in der Vergangenheit liegen und auf welchen nicht unclaim aufgerufen wurde. Das \emph{deposit} wird dem refund des \emph{owner}s gutgeschrieben.\\ & & Parameter: keine \\\midrule
 withdrawRefunds     & S   & Hebt alle bestehenden Rückerstattungen einer Adresse vom Rentable ab und überweist sie auf das Konto der sendenden Adresse\\ & & Parameter: keine \\\midrule
 Rentable            & C   & Erstellt ein neues Rentable mit den angegebenen Parametern und der sendenden Adresse als \emph{owner}.\\ & & Parameter: \emph{pdescription}, \emph{plocation}, \emph{pcostPerSecond}, \emph{pdeposit} \\ \midrule
-OnRent              & E   & Wird ausgelöst, wenn versucht wird, das Rentable zu mieten (vgl. Funktion \emph{rent}). \emph{success} gibt an, ob die Reservation erfolgreich war.\\ & & Parameter: \emph{success}, \emph{renter}, \emph{start}, \emph{end}, \emph{msg} \\ \midrule
+OnRent              & E   & Wird ausgelöst, wenn versucht wird, das Rentable zu mieten (vgl. Funktion \emph{rent}). \emph{success} gibt an, ob die Reservation erfolgreich war. \emph{msg} beinhaltet eine Statusmeldung zum Funktionsaufruf (Fehlerbeschreibung im Fehlerfall).\\ & & Parameter: \emph{success}, \emph{renter}, \emph{start}, \emph{end}, \emph{msg} \\ \midrule
 OnUpdateOwner              & E   & Wird ausgelöst, wenn \emph{owner} durch die \emph{transferOwnership} Funktion verändert wird.\\ & & Parameter: \emph{oldOwner}, \emph{newOwner} \\ \midrule
 OnUpdateDescription              & E   & Wird ausgelöst, wenn \emph{description} durch die \emph{setDescription} Funktion verändert wird.\\ & & Parameter: \emph{oldDescription}, \emph{newDescription} \\ \midrule
 OnUpdateLocation              & E   & Wird ausgelöst, wenn \emph{location} durch die \emph{setLocation} Funktion verändert wird.\\ & & Parameter: \emph{oldLocation}, \emph{newLocation} \\ \midrule
@@ -83,12 +85,8 @@ OnUpdateDeposit              & E   & Wird ausgelöst, wenn \emph{deposit} durch 
 
 \subsection{Webapp}
 \label{sys_subsec:Webapp}
+
 Die Webapp für Lokkit stellt eine Gerätunabhängige Benutzeroberfläche für die Interaktion mit dem Lokkit System zur Verfügung. Es wird mindestens ein Account, mit genügend Ether, vorausgesetzt, um mit den Rentable Objekten interagieren zu können.
-
-\paragraph{}
-Das Webapp basiert auf \emph{NodeJS} und benutzt \emph{VueJS} mit Material Design für die Benutzeroberfläche. Um mit der Blockchain zu interagieren wird die \emph{Web3.js} Library verwendet. Die Abbildung \ref{fig:Aufbau der Webapp} zeigt eine grobe Übersicht über die verschiedenen Elemente.
-
-
 
 \begin{figure}[H]
 \centering
@@ -97,10 +95,111 @@ Das Webapp basiert auf \emph{NodeJS} und benutzt \emph{VueJS} mit Material Desig
 \label{fig:Aufbau der Webapp}
 \end{figure}
 
-\subsubsection{NodeJS}
-\subsubsection{VueJS}
+\paragraph{}
+Die Webapp ist eine Single Page Aplication (SPA), basiert auf \emph{NodeJS} und benutzt \emph{VueJS}\footnote{\url{https://vuejs.org/}} mit Material Design für die Benutzeroberfläche. Um mit der Blockchain zu interagieren wird die \emph{Web3.js} Library verwendet, welche die \emph{RPC/8545} Schnittstelle des \emph{Geth Nodes} implementiert. 
+Die Schnittstelle gegen Aussen ist \emph{HTTP/80}. Diese ist ungeschützt und wird bei der Installation der Webapp durch einen Webserver geschützt. Die Abbildung \ref{fig:Aufbau der Webapp} zeigt eine grobe Übersicht über die verschiedenen Elemente.
+
+
+\subsubsection{Webapp Abhängikeiten}
+Nachfolgend ist die Liste aller zur Laufzeit benötigten Module und Libraries.
+
+\begin{table}[H]
+\centering
+\caption{Webapp Runtime Abhängigkeiten}
+\label{tbl:Webapp Runtime Abhängigkeiten}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Library/Modul         & Version & Beschreibung
+\\ \midrule
+material-design-icons & 3.0.1 & Offizielle Icons für Material Design                       \\
+mdi                   & 1.9.33 & Community Icons für Material Design                       \\
+moment                & 2.18.1 & Javascript Datum und Zeit Library                         \\
+qrcode-reader         & 1.0.0  & Library zum Dekodieren von QR-Codes                       \\
+vue                   & 2.2.2  & Vue.js                                                    \\
+vue-material          & 0.7.1  & Material Design Komponenten für Vue.js                    \\
+vue-resource          & 1.3.1  & Resource Management für Vue.js                            \\
+vue-router            & 2.3.0  & Routing für Vue.js                                        \\
+vue-toasted           & 1.0.27 & Zum Anzeigen von Status- und Fehlermeldungen              \\
+vuex                  & 2.3.1  & Zentralisiertes State Management für Vue.js               \\
+vuex-localstorage     & 1.0.0  & Zur Speicherung der Session im Local Storage des Browsers \\
+web3                  & web.js & Library für die Kommunikation in die Blockchain           \\ 
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\subsubsection{Webapp Projektstruktur}
+Die Projektstruktur ist durch die Verwendung von \emph{NPM} gegeben. Nachfolgend wird kurz eine Übersicht über die Verzeichnisse gegeben.
+
+\begin{minipage}{\textwidth}
+\begin{lstlisting}[style=tree,caption={Projektstruktur der Webapp}]
+webapp
+├── build                   # Build Verzeichnis
+├── certs                   # Zertifikate
+│   ├── server.crt
+│   └── server.key
+├── config                  # Konfiguration für dev/prod/test
+├── debian                  # Konfiguration für das Debian Paket
+├── index.html              # Hauptseite
+├── node_modules            
+├── package.json            # Definiert Build Process und Abhängigkeiten
+├── README.md               
+├── src                     # Sourcen
+│   ├── App.vue
+│   ├── components          # Enthält all Komponenten, Views, etc.
+│   ├── main.js
+│   ├── router              # Definiert das Routing
+│   ├── services            # Enthält Web3 Abstraktionsservice
+│   └── store.js            
+├── static
+│   ├── lokkit_icon_100.png
+│   └── lokkit_icon_400.png
+├── test                     
+│   ├── e2e
+│   └── unit
+└── web3.js                 # Gepatchtes Web3.js
+\end{lstlisting}
+\end{minipage}
+
 \subsubsection{Ethereum Node}
-Die Vorbedingung zur Verwendung der Webapp ist eine laufende und korrekt konfigurierte Ethereum Node auf demselben Gerät, die die jsonrpc Schnittstellen \emph{eth}, \emph{shh}, \emph{personal} auf dem Port 8545 zur Verfügung stellt.
+Die Vorbedingung zur Verwendung der Webapp ist eine laufende und korrekt konfigurierte Ethereum Node, die die jsonrpc Schnittstellen \emph{eth}, \emph{shh}, \emph{personal} auf dem Port 8545 zur Verfügung stellt.
+
+
+\subsubsection{Webapp Funktionalität und Design}
+Die Oberfläche kann grundsätzlich in vier verschiedene Ansichten unterteilt werden. Die erste Ansicht zeigt das Menu zur Navigation zwischen den Ansichten (vgl. Abbildung \ref{fig:4 Ansichten der Webapp} (a)). Das Menu bietet neben dem Absprung auf andere Ansichten auch die Möglickeit den Account zu wechseln. Weiter kann der \emph{Local Storage} gelöscht werden, wodurch alle bereits eingescannten Rentables wieder verschwienden. Die Abbildung \ref{fig:4 Ansichten der Webapp} (b) stellt die drei bereits eingescannten Rentables in Form von einer Liste dar. 
+Ebenfalls bietet die Webapp die Möglickeit an sich mit einem beliebigen Node zu verbinden. Diese Einstellung ist z.B. in der Netzwerkansicht (vgl. Abbildung \ref{fig:4 Ansichten der Webapp} (c)) untergebracht. Für jedes Rentable gibt es ausserdem eine Detailansicht, welche die Interaktion mit dem Smart Contract in der Blockchain darstellt. Über diese Ansicht, kann der Benutzer das Rentable reservieren, schliessen, öffnen und wieder zurück geben. Die Abbildung \ref{fig:4 Ansichten der Webapp} (d) präsentiert die Detailansicht.
+
+\paragraph{QrCode Leser}
+Die Webapp benötigt für das Dekodieren des QrCode Zugriff auf eine Kamera. Dieses Feature basiert rein auf dem HTML5 Standard. Es sind keine Browserplugins nötig. Dekodiert wird mit der Library "qrcode-reader". Der Ablauf ist wie folgt:
+
+\begin{enumerate}
+    \item Die Webseite öffnet einen Live-Stream der Webcam
+    \item Eine Javascript-Funktion zeichnet im Sekundentakt ein Bild auf ein Canvas (HTML Element)
+    \item Anschliessend kann die qrcode-reader Library das Bild im Canvas dekodieren
+\end{enumerate}
+
+Der QrCode muss eine gültige Rentable Adresse (z.B. 0xde93b2965af6a49161f597604c600af9ea07883a) enthalten. Ist dies nicht der Fall wird eine Fehlermeldung angezeigt.
+
+
+\begin{figure}
+\centering\small
+\setlength{\tabcolsep}{0mm}	% alle Spaltenränder auf 0mm
+\begin{tabular}{c@{\hspace{12mm}}c} % mittlerer Abstand = 12mm
+  \frame{\includegraphics[width=.45\textwidth]{webapp_menu}} &
+  \frame{\includegraphics[width=.45\textwidth]{webapp_rentables}} \\
+  (a) & (b)
+  \\[.5cm]	%vertical extra spacing (4 points)
+  \frame{\includegraphics[width=.45\textwidth]{webapp_network}} &
+  \frame{\includegraphics[width=.45\textwidth]{webapp_rentable1}} \\
+  (c) & (d)
+\end{tabular}
+%
+\caption{Webapp 4 Ansichten der Webapp-- 
+Menu (a), Liste aller gescannten Rentables (b),
+Netzwerkinformationen (c), Details eines Rentables (d).}
+\label{fig:4 Ansichten der Webapp}
+\end{figure}
+
 
 \subsection{Android App}
 \label{sys_subsec:Android_App}
@@ -136,6 +235,7 @@ Die Statusgo Library bedingt, dass eine erstellte Transaktion zuerst durch Statu
 \begin{tabular}{@{}L{3cm}L{2cm}L{10cm}@{}}
 \toprule
 action & extras & Beschreibung \\ \midrule
+io.lokkit.\newline{}TRANSACTION\newline{}\_QUEUED\newline{} & id, from, to, value, gas, gasPrice & Wird versendet, wenn eine neue Transaktion von Statusgo erhalten wurde. Diese muss mit io.lokkit.COMPLETE\_TRANSACTION oder io.lokkit.DISCARD\_TRANSACTION bestätigt werden. \\\midrule
 io.lokkit.\newline{}COMPLETE\newline{}\_TRANSACTION\newline{}\_FAILED & id, reason & Wird als Antwort auf io.lokkit.COMPLETE\_TRANSACTION gesendet, wenn eine Transaktion nicht bestätigt werden konnte. \\\midrule
 io.lokkit.\newline{}COMPLETE\newline{}\_TRANSACTION\newline{}\_SUCCESSFUL & id & Wird als Antwort auf io.lokkit.COMPLETE\_TRANSACTION gesendet, wenn eine Transaktion erfolgreich bestätigt werden konnte. \\\midrule
 io.lokkit.\newline{}LOGIN\newline{}\_SUCCESSFUL & - & Wird als Antwort auf io.lokkit.LOGIN gesendet, wenn das in io.lokkit.LOGIN gesendete Password für das Entsperren des gespeicherten Accounts verwendet werden konnte. \\\midrule
@@ -148,7 +248,7 @@ io.lokkit.\newline{}COMPLETE\newline{}\_TRANSACTION & id & Da der Demonstrator n
 
 \begin{table}[H]
 \centering
-\caption{Intents, die von Lokkit verarbeitet werden}
+\caption{Intents, die vom Lokkit Service verarbeitet werden}
 \label{tbl:LokktService_ListenIntents}
 \begin{tabular}{@{}L{3cm}L{2cm}L{10cm}@{}}
 \toprule

@@ -11,31 +11,27 @@ Hier folgt die Aufgabenstellung, die ebenfalls im Rahmen dieser Projektarbeit er
 
 \section{Ziele}
 \label{sec:Ziele}
-Der zentrale Aspekt dieses Projektes war der Wissenserwerb im Bereich Blockchain und die konkrete Anwendung dieses neu erworbenen Wissens durch die Konzeption und Implementation in einem IoT Demonstrator. Dieser sollte durch sorgfältige und gründliche Implementation dem Auftraggeber in einem verwendbaren Zustand übergeben werden können.
-
-\begin{itemize}
-    \item \textbf{ Was sind die Ziele die durch diese Arbeit erreicht werden sollen? }
-    \item \textbf{ Was soll mit dem Demonstrator erreicht werden? }
-    \item \textbf{ Was ist das Ziel des Demonstrators? }
-    \item Demonstrieren der Vorteile der Blockchain
-    \item \dots
-\end{itemize}
+"Der zentrale Aspekt dieses Projektes war der Wissenserwerb im Bereich Blockchain und die konkrete Anwendung dieses neu erworbenen Wissens durch die Konzeption und Implementation eines IoT Demonstrators. Dieser sollte durch sorgfältige und gründliche Arbeit dem Auftraggeber in einem eigenständig verwendbaren Zustand übergeben werden können. Die konkrete Aufgabenstellung für den Demonstrator wurde ebenfalls im Rahmen dieses Projektes vom Projektteam entwickelt und mit dem Auftraggeber besprochen", \ref{pm_subsec:Projektziele}.
 
 \section{Konkrete Aufgabenstellung}
 \label{sec:Konkrete_Aufgabenstellung}
-\emph{Da die Aufgabenstellung in dieser Bachelorarbeit ebenfalls erarbeitet werden musste, ist diese konkrete Aufgabenstellung ein Produkt der Recherchephase (vgl. \ref{pm_subsubsec:Recherchephase}). Bei fehlendem Wissen um Blockchain, Ethereum oder dieser Aufgabenstellung wird empfohlen, die einleitenden Kapitel \ref{sec:Arbeitsmethodik} und \ref{sec:Recherche} vorzugreifen.}
+\emph{Da die konkrete Aufgabenstellung in dieser Bachelorarbeit ebenfalls erarbeitet werden musste, ist diese ein Produkt der Recherchephase (vgl. \ref{pm_subsubsec:Recherchephase}). Bei fehlendem Wissen um Blockchain, Ethereum oder den entwickelten Demonstrator wird empfohlen, die einleitenden Kapitel der Lösungsfindung \ref{sec:Arbeitsmethodik} und \ref{sec:Recherche} vorzugreifen.}
 
-Es soll ein System entwickelt werden, um Schliessfächer zu (ver-)mieten. Dabei sollen die Verträge in Form von Smart Contracts (vgl. \ref{subsec:Smart_Contracts}) in einer privaten Ethereum Blockchain (vgl. \ref{}) definiert werden. Ein Benutzer soll über eine grafische Benutzeroberfläche ein freies Schliessfach reservieren können. Während der Benutzer der aktuelle Mieter eines Faches ist, kann er das Schloss per Knopfdruck ver- und entriegeln.
+Es soll ein System entwickelt werden, um Schliessfächer zu (ver-)mieten. Dabei sollen die Verträge in Form von Smart Contracts (vgl. \ref{subsec:Recherche_Smart_Contracts}) in einer privaten Ethereum Blockchain (vgl. \ref{subsec:private_chain}) definiert werden. Ein Benutzer soll über eine grafische Benutzeroberfläche ein freies Schliessfach reservieren können. Während der Benutzer der aktuelle Mieter eines Faches ist, kann er das Schloss per Knopfdruck ver- und entriegeln.
 
 \section{Anforderungen an den Demonstrator}
 \label{sec:Anforderungen_Demonstrator}
 
 \subsection{Smart Contracts}
-Datenhaltung und Businesslogik mittels Smart Contracts.
+Die Businesslogik und Datenhaltung ist mittels Smart Contracts zu lösen. Diese bilden das zentrale Objekt in diesem System.
 
-X. Der Smart Contract soll Kosten für die Dauer des Mietvertrags definieren, die durch die Überweisung von Ether beglichen werden.
+X. Die Smart Contracts sollen eine Funktion bieten, neue Schliessfächer erfassen zu können.
 
-X. Der Benutzer soll ein Depot für die Mietdauer an den Smart Contract entrichten, das dem Besitzer eines Schliessfaches als Sicherheit dient, falls das Schliessfach nicht freigegeben wird.
+X. Die Smart Contracts sollen eine Funktion zum Eingehen eines zeitlich begrenzten Mietvertrags anbieten.
+
+X. Die Smart Contracts soll Kosten für die Dauer des Mietvertrags definieren, die durch die Überweisung von Ether beglichen werden.
+
+//X. Der Benutzer soll ein Depot für die Mietdauer an die Smart Contracts entrichten, das dem Besitzer eines Schliessfaches als Sicherheit dient, falls das Schliessfach nicht freigegeben wird.
 
 \subsection{Webapp}
 Die Interaktion von Benutzern mit Smart Contracts in der Blockchain wird durch eine Webapp umgesetzt. Folgende Anforderungen beziehen sich auf zu entwickelnde Webapp.\cite[Wiki/DAPP-Developer-Resources, Wiki/Useful-Dapp-Patterns]{github.com/ethereum}
@@ -44,50 +40,57 @@ X. Die Webapp soll eine Liste von verfügbaren Schliessfächer anzeigen.
 
 X. Die Webapp soll das einfache Hinzufügen von Schliessfächern zu der Liste der verfügbaren Schliessfächern ermöglichen.
 
-X. Die Webapp soll das Mieten von Schliessfächern mit einer ansprechenden grafischen Benutzeroberfläche ermöglichen.
+X. Die Webapp soll das Mieten von Schliessfächern mit einer einfach zu bedienenden Benutzeroberfläche ermöglichen.
 
-X. Die Webapp soll dem Benutzer in allen Fällen Rückmeldung über ausgeführte Funktionen geben.
+//X. Die Webapp soll dem Benutzer in allen Fällen Rückmeldung über ausgeführte Funktionen geben.
+
+X. Die Webapp soll auf der zur Verfügung gestellten Hardware gehostet werden können (namentlich: Raspi)
 
 \subsection{Mobile App}
-Folgende Requirements beschränken sich auf die Mobile App für Android (später: Android App).
+Folgende Anforderungen beschränken sich auf die Mobile App für Android (später: Android App).
 
-X. Die Mobile App soll eine Ethereum Node starten, die mit dem definierten privaten Netzwerk verbindet.
+X. Die Mobile App soll eine Ethereum Node starten, die mit dem definierten privaten Netzwerk verbindet und die verwendet werden, um die Webapp lokal mit der Node zu verbinden.
 
 X. Die Mobile App soll die Erstellung von einem Benutzerkonto auf der lokalen Ethereum Node ermöglichen.
 
-X. Die Mobile App soll 
+X. Die Mobile App soll...
 
 \subsection{IoT Controller}
 Damit die Schliessfächer angesprochen werden können, müssen auf den IoT Geräten Controller implementiert werden, die die Hardware ansteuern. Folgende Anforderungen gelten für alle Controller unterschiedlicher Hardware.
 
-X. Der Controller soll auf Anfragen das Schliessfach öffnen oder schliessen.
+X. Der Controller soll auf gültige Anfragen das Schliessfach öffnen oder schliessen.
 
 \subsection{Demonstrator Hardware}
+
+
 X. Der Demonstrator soll ohne externe Abhängigkeiten funktionsfähig sein.
 
-X. 
+X. Der Demonstrator soll...
 
 \subsection{Übergreifend}
 Diese Anforderungen sind funktionsübergreifend gültig und müssen von allen betroffenen Komponenten berücksichtigt werden.
 
-X. Ver- und Entriegeln eines Schliessfachs kann nur von einem, durch einen Smart Contract berechtigten, Benutzer erfolgen.
+X. Ver- und Entriegeln eines Schliessfachs kann nur von einem durch einen Smart Contract berechtigten Benutzer erfolgen.
 
 X. Alle Implementationen mit grafischer Benutzeroberfläche sollen in einem einheitlichen Erscheinungsbild erstellt werden.
 
-\subsection{Scope}
-X. Das Hinzufügen von neuen mietbaren Objekten ist nicht Teil dieser Arbeit.
+\subsection{Scopeabgrenzung}
+X. Das Hinzufügen von neuen mietbaren Objekten ist nicht Teil dieser Arbeit. Der Demonstrator wird mit den mitgelieferten Schliessfächern vorkonfigurierten.
 
-Der Demonstrator wird mit vorkonfigurierten Smart Contracts 
-
-\begin{itemize}
-    \item Der Demonstrator soll auf dem Schulareal ausgestellt werden können. 
-    \item Der Demonstrator soll keine Abhängigkeiten nach Aussen haben (kein Internet benötigen)
-    \item Der Demonstrator soll wiederverwendbar sein.
-    \item Der Aufbau des Demonstrators sowie die Inbetriebnahme muss dokumentiert sein.
-\end{itemize}
-
-Der Demonstrator 
+X.
 
 \section{Erwartete Resultate}
 \label{sec:Erwartete_Resultate}
-Ein lauffähiger Prototyp des Schliessfachvermietsystems.
+
+\subsection{Software}
+\begin{itemize}
+    \item Smart Contracts in Solidity
+    \item Webapp (Plattformunabhängig)
+    \item Mobile App (Android exkl.)
+    \item IoT Controllers
+\end{itemize}
+
+\subsection{Hardware}
+\begin{itemize}
+    \item Ein lauffähiger Demonstrator für das Schliessfachsystem.
+\end{itemize}

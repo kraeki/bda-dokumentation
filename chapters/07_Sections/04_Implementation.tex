@@ -8,18 +8,17 @@ Allfällige Abweichungen zur Konzeption (vgl. \ref{sec:Konzeption}, bspw. teilwe
 \label{subsec:Smart_Contracts}
 Die Smart Contracts, die in Solidity implementiert wurden, werden nachfolgend erläutert. Diese Implementationen bilden das Rückgrat der Applikation. Sie bilden die Business Logik in Code Form ab und dienen als einzige Interaktionsmöglichkeit mir der Datenbank in der Blockchain.\cite[Introduction to Smart Contracts]{solidity.readthedocs.io}
 
-\subsubsection{Generell}
-Folgende Informationen treffen auf alle entworfenen Smart Conacts gleichermassen zu.
+\subsubsection{Rentable}
+\label{subsubsec:Rentable}
+Damit alle mietbaren Objekte logisch unabhängig von einander sind, wurde der primäre Smart Contract (vgl. \ref{sys_subsubsec:Rentable}) so entworfen, dass für jedes mietbare Objekt eine separate Instanz dessen erstellt werden muss (vgl. \ref{subsubsec:Neuerstellung}). Die in der Blockchain liegende Funktionalität beinhaltet nur das Mieten, und die damit verbundene Monetären Transaktionen. Der Smart Contract weist dabei keine Schliessfach-spezifische Funktionalität auf. Bei dem Design wurde darauf geachtet, die Funktionalität zu abstrahieren, um es Autoren zu ermöglichen, weitere Dienste zu erstellen, die auf dem Konzept der mietbaren Objekte basiert. Diese darauf aufbauenden Dienste können auch ausserhalb des Lokkit Systems bestehen und können gänzlich inkompatibel zu diesem sein.
+
+
 \paragraph{Datenhaltung}
 In einem Smart Contract können Daten in der Blockchain auf unterschiedliche Arten gespeichert werden: \emph{Storage} oder \emph{Events} (auch \emph{Logs} genannt). Storage ist ein einfacher Schlüssel-Werte-Paar Speicher, worauf alle Instanzvariablen eines Smart Contracts gespeichert werden, die zwischen verschiedenen Funktionsaufrufen persistiert werden müssen (vgl. reservations Feld für Rentables). Ein Smart Contract kann nicht ausserhalb seines zugewiesenen Speicherbereichs operieren. Zugriffe auf diesen Speicher sind teuer. So soll verhindert werden, dass grosse Speichermengen in der Blockchain verwendet werden. Ausgelöste Events werden in der Blockchain in Form von Transactionlogs gespeichert. Diese Logs sind sehr günstig (vgl. gas price) anzulegen, können aber von einem Smart Contract nicht gelesen werden. Über die web3 API kann auf die so erstellten Logs zugegriffen werden.\cite[Miscellaneous/Introduction to Smart Contracts]{solidity.readthedocs.io}\cite{jonathanpatrick.me/ethereum}
 
 \#TODO: insert Beispiel
 
-Wenn eine Instanz eines Smart Contracts persistent Daten speichern und diese Daten in einem späteren Funktionsaufruf abfragen möchte, muss zwingend Storage Speicher verwendet werden. Damit die Konsistenz der Reservationen eines mietbaren Objektes gewährleistet werden kann, muss der Rentable Smart Contract die Möglichkeit besitzen, zukünftige Reservationen abzufragen. Daher ist es unumgänglich für den Rentable Smart Contract, Storage Speicher für die Datenhaltung der Reservationen zu verwenden. Um den benötigten Speicher, und die damit verbundenen Reservationskosten, gering zu halten könnten vergangene Reservationen auch gelöscht werden (vgl. \ref{subpara:Stalling}).
-
-\subsubsection{Rentable}
-\label{subsubsec:Rentable}
-Damit alle mietbaren Objekte logisch unabhängig von einander sind, wurde der primäre Smart Contract (vgl. \ref{sys_subsubsec:Rentable}) so entworfen, dass für jedes mietbare Objekt eine separate Instanz dessen erstellt werden muss (vgl. \ref{subsubsec:Neuerstellung}). Die in der Blockchain liegende Funktionalität beinhaltet nur das Mieten, und die damit verbundene Monetären Transaktionen. Der Smart Contract weist dabei keine lokkit-spezifische Funktionalität auf. Bei dem Design wurde darauf geachtet, die Funktionalität zu abstrahieren, um es Autoren zu ermöglichen, weitere Dienste zu erstellen, die auf dem Konzept der mietbaren Objekte basiert. Diese darauf aufbauenden Dienste können auch ausserhalb des lokkit Systems bestehen und können gänzlich inkompatibel zu diesem sein.
+Wenn eine Instanz eines Smart Contracts persistent Daten speichern und diese Daten in einem späteren Funktionsaufruf abfragen möchte, muss zwingend Storage Speicher verwendet werden. Damit die Konsistenz der Reservationen eines mietbaren Objektes gewährleistet werden kann, muss der Rentable Smart Contract die Möglichkeit besitzen, zukünftige Reservationen abzufragen. Daher ist es unumgänglich für den Rentable Smart Contract, Storage Speicher für die Datenhaltung der Reservationen zu verwenden. Um den benötigten Speicher, und die damit verbundenen Reservationskosten, gering zu halten, könnten vergangene Reservationen auch gelöscht werden (vgl. \ref{subpara:Stalling}).
 
 \paragraph{Withdrawal Muster}
 \label{para:Withdrawal_Muster}
@@ -71,8 +70,7 @@ Da die Laufzeit der rent Funktion von der Anzahl Reservationen abhängig ist, m�
 
 \#todo: formel für maximale Anzahl Reservationen
 
-Wenn der owner das deposit zurückerstattet, könnte die abgelaufene Reservation aus dem internen Array gelöscht werden, um die storage Datenmenge des Smart Contracts gering zu halten. Die Historischen Daten zu dem mietbaren Objekt können von einem Benutzer noch immer eingesehen werden, da die Logs in der Blockchain noch vorhanden sind. Der Vorteil dadurch wäre, dass die 
-
+Wenn der owner das deposit zurückerstattet, könnte die abgelaufene Reservation aus dem internen Array gelöscht werden, um die storage Datenmenge des Smart Contracts gering zu halten. Die Historischen Daten zu dem mietbaren Objekt können von einem Benutzer noch immer eingesehen werden, da die Logs in der Blockchain noch vorhanden sind. Da die Datenmenge so klein bleibt, ist die Abfrage ob reserviert werden kann, und somit auch das Reservieren selbst, schneller und günster (vgl. Gas Kosen).
 
 \subsection{Real-Time Kommunikationsschnittstelle}
 \label{subsec:Real_Time_Kommunikationsschnittstelle}
@@ -106,7 +104,24 @@ Auch für jedes Abonnement von Whispers muss ein symmetrischer oder asymmetrisch
 
 Diese Art der Weiterleitung funktioniert, wenn die gesamte Payload inklusive Digest weitergeleitet würde und somit keine erneute Signatur des Message Objektes nötig wäre. Somit wäre es möglich, eine Payload zu erhalten, die nicht von der signierenden Entität sondern von einer Drittperson gesendet wurde. Um sicher zu gehen, dass die Nachricht von derselben Entität gesendet wurde, die auch den Digest des Message Objektes erstellt hatte, wird das \emph{key} Attribut (vgl. \ref{sys_para:Key}) ebenfalls in das Message Objekt eingebettet. Dies ist derselbe Schlüssel, der zur Signatur des Whisper Envelopes verwendet wurde. Diese beiden Schlüssel können verglichen werden (vgl. \ref{sys_subsubsec:Verteilung}, um sicher zu gehen, dass der Sender der Whisper Nachricht auch derselbe ist, wie der, der den Digest erstellt hat.
 
-\#todo: bild. dringend. den obigen Abschnitt checke ich selbst nicht, 30 Minuten nachdem ich ihn gelesen hab'...
+\#todo: evtl ein bild?
+
+\paragraph{``Business Sicht''}
+\emph{Die folgende Ansicht ist stark vereinfacht und nicht technisch akkurat. Sie sollte als Veranschaulichung des Einsatzes eines Rentable Smart Contracts aus der Sicht eines potentiellen Mieters dienen.}
+
+Folgend wird angenommen, dass eine Instanz eines Rentable Contracts, in der Blockchain existiert. In diesem Vertrag werden die Eigenschaften des Rentable Objekts festgehalten. Für den formellen Vertrag von Interesse sind lediglich der Besitzer, die Kosten pro Sekunde und das zu hinterlegende Depot. Alle weiteren Informationen sind informativer Natur. Ein potenzieller Mieter kann nun folgendermassen mit diesem Vertrag interagieren:
+
+\begin{itemize}
+    \item herauszufinden, ob das Rentable an einem Zeitpunkt vermietet ist
+    \item herauszufinden, ob das Rentable in einer Zeitspanne vermietet ist
+    \item das Rentable mieten
+    \item Auf Änderungen im Zustand des Rentable reagieren
+\end{itemize}
+
+Wenn ein Mieter das Schliessfach gemietet hat, muss es vor Ablauf der Mietdauer wieder zurückgegeben werden, damit das hinterlegte Depot an den Mieter zurückerstattet wird. Wird das Schliessfach nicht zurückgegeben, so geht das hinterlegte Depot an den Besitzer. Mit dem Zurückgeben verliert der Benutzer auch jegliche Rechte am Objekt.
+
+--> Also lässt sich sagen, dass entweder die gesamte Welt programmieren können muss, um diese Contracts zu verstehen...
+
 
 \subsection{Webapp}
 \label{subsec:Webapp}
@@ -144,3 +159,6 @@ Controllers für IoT device
 \subsubsection{Nuki}
 
 \subsubsection{Marke: Eigenbau}
+
+\subsection{Hardware}
+Das ist eher abstract-material? \emph{Als Proof of Concept wurde in dieser Arbeit einen Demonstrator entwickelt. Es handelt sich um ein Schliessfach-Vermietsystem, welches als Backend eine private Blockchain nutzt. Jedes Fach hat ein elektrisches Türschloss, welches über ein Raspberry PI durch die Blockchain kontrolliert wird. Ein Schließfach und ein Raspberry PI bilden zusammen eine Einheit (ein Node der privaten Blockchain). Das erste Schliessfach erstellt ausserdem ein WLAN Hotspot, auf den alle anderen Einheiten verbinden. Der Demonstrator verfügt über 3 Einheiten, welche sich zum Hotspot verbinden. Die Anzahl der Einheiten ist nicht beschränkt, solange sie in der Reichweite des WLAN Hotspots befinden. Alle Einheiten zusammen bilden die private Blockchain.}
