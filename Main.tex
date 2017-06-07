@@ -11,10 +11,18 @@
 \makenoidxglossaries
 \input{acronym_glossary.tex}
 
-
+% Kolonnen Definition für Tabellen
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}} % linksbündig mit Breitenangabe
 \newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}} % zentriert mit Breitenangabe
 \newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}} % rechtsbündig mit Breitenangabe
+
+% Config für tree listings
+\lstdefinestyle{tree}{
+  literate=
+  {├}{{\smash{\raisebox{-1ex}{\rule{1pt}{\baselineskip}}}\raisebox{0.5ex}{\rule{1ex}{1pt}}}}1 
+  {─}{{\raisebox{0.5ex}{\rule{1.5ex}{1pt}}}}1 
+  {└}{{\smash{\raisebox{0.5ex}{\rule{1pt}{\dimexpr\baselineskip-1.5ex}}}\raisebox{0.5ex}{\rule{1ex}{1pt}}}}1 
+}
 
 %%%----------------------------------------------------------
 \begin{document}

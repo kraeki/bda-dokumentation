@@ -7,8 +7,11 @@
     \item \textbf{Schnittstellen beschreiben. bspw. Whisper für webapp<->doorman Kommunikation erwähnen, aber \emph{nicht} deb eigenen Signaturmechanismus oder den Aufbau der ausgetauschten Nachrichten}
 \end{itemize}
 
-Die entwickelte Webapp ermöglicht es einem Owner ein Objekt über die Blockchain zu vermieten. Er kann dabei das Depot und die Mietkosten festlegen. Ein Renter kann dann dieses Objekt für eine bestimmte Zeit mieten. Die Abwicklung des Vertrages und dessen Kosten geschieht im Hintergrund in der Blockchain. Es gibt keinen Zwischenmann (z.B. Bank), der für die Überweisung zuständig ist, sondern das Geld fliesst direkt vom Renter zum Owner. 
-Ein Objekt kann grundsätzlich alles sein: Ein elektrisches Fahrrad, eine Ferienwohnung oder einfach ein Schließfach. Es muss jedoch möglich sein ein Kontrollmechanismus anzubringen, der gleichzeitig ein Node in der Blockchain darstellt. Bei einem elektrischen Fahrrad wäre es z.B. möglich einen Minicomputer im Fahrgestellt zu montieren, welcher den Akku aktiviert oder deaktiviert und über eine Sim-Karte mit der Blockchain synchronisiert. Möchte ein Benutzer das Fahrrad verwenden, so müsste er dieses zuerst über die Blockchain mieten und erst dann kann er den Akku aktivieren. Die Mietkosten würden direkt dem Anbieter des Fahrrades überwiesen werden.
+Folgend wird das entworfene Konzept, zur Lösung der unter \ref{cha:Aufgabenstellung} beschriebenen Aufgabenstellung, beschrieben. Es umfasst den Entwurf von konkreten Systemteilen und -Komponenten, die implementiert werden müssen.
+
+Die Webapp ermöglicht es einem Owner, ein Objekt über einen in der Blockchain festgelegten Smart Contact zu vermieten. Er kann dabei das Depot und die Mietkosten festlegen. Ein Renter kann dann dieses Objekt für eine bestimmte Zeit mieten. Die Abwicklung des Vertrages und Begleichung der Kosten geschieht über die Auslösung durch den Renter in der Blockchain. Es gibt keinen Zwischenmann (z.B. Bank), der für die Überweisung zuständig ist, sondern das Geld fliesst vom Renter direkt zum Owner, basierend auf den definierten Regeln im Smart Contract.
+
+Abhandlung über das Fahrrad verschieben? \emph{Ein Objekt kann grundsätzlich alles sein: Ein elektrisches Fahrrad, eine Ferienwohnung oder ein Schließfach. Es muss jedoch möglich sein, einen Kontrollmechanismus anzubringen, der an eine Blockchain Node angebunden werden kann. Bei einem elektrischen Fahrrad wäre es z.B. möglich einen Minicomputer im Fahrgestellt zu montieren, welcher den Akku aktiviert oder deaktiviert und über eine Sim-Karte mit der Blockchain synchronisiert. Möchte ein Benutzer das Fahrrad verwenden, so müsste er dieses zuerst über die Blockchain mieten und erst dann kann er den Akku aktivieren. Die Mietkosten würden über den Smart Contract dem Anbieter des Fahrrades überwiesen werden.}
 
 \begin{figure}
 \centering
@@ -16,9 +19,6 @@ Ein Objekt kann grundsätzlich alles sein: Ein elektrisches Fahrrad, eine Ferien
 \caption{Das Mobile-Konzept, dessen Umsetzung möglich ist}
 \label{fig:Mobile_Konzept}
 \end{figure}
-
-\vspace{1em}
-Als Proof of Concept wurde in dieser Arbeit einen Demonstrator entwickelt. Es handelt sich um ein Schliessfach-Vermietsystem, welches als Backend eine private Blockchain nutzt. Jedes Fach hat ein elektrisches Türschloss, welches über ein Raspberry PI durch die Blockchain kontrolliert wird. Ein Schließfach und ein Raspberry PI bilden zusammen eine Einheit (ein Node der privaten Blockchain). Das erste Schliessfach erstellt ausserdem ein WLAN Hotspot, auf den alle anderen Einheiten verbinden. Der Demonstrator verfügt über 3 Einheiten, welche sich zum Hotspot verbinden. Die Anzahl der Einheiten ist nicht beschränkt, solange sie in der Reichweite des WLAN Hotspots befinden. Alle Einheiten zusammen bilden die private Blockchain. 
 
 \subsection{Interaktion mit dem Demonstrator}
 \label{sec:Interaktion mit dem Demonstrator}
@@ -38,7 +38,7 @@ Folgende Interaktionen sind möglich.
 \vspace{1em}\noindent
 \textbf{Als Renter}
 \begin{itemize}
-    \item Nach Rentables suchen (Discover)
+    \item Neues Rentable eintragen
     \item Informationen und Verfügbarkeit eines Rentables prüfen
     \item Ein Rentable reservieren (rent)
 \end{itemize}
@@ -48,7 +48,6 @@ Folgende Interaktionen sind möglich.
 \begin{itemize}
     \item Sperren und Entsperren des Rentables (Lock/Unlock)
     \item Zurückgeben des Schließfachs (Unclaim)
-    \item Verlängern der aktuellen Reservation (Emergency)
 \end{itemize}
 
 \subsection{Regeln}
@@ -134,4 +133,6 @@ Im Rahmen dieser Arbeit wurde auch ein Konzept überlegt, wie solche Probleme ve
     \item \textbf{ Kann man updates fahren?}
     \item \textbf{ Schrittanleitung zur Installation?}
 \end{itemize}
-    
+
+\subsection{Nutzen von Blockchain}
+Warum ist blockchain besser als "server unten rein stellen"?
