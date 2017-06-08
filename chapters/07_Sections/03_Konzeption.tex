@@ -1,27 +1,42 @@
 \section{Konzept und Implementation}
 \label{sec:Konzeption}
-Folgend wird das entworfene Konzept, zur Lösung der unter \ref{cha:Aufgabenstellung} beschriebenen Aufgabenstellung, beschrieben. Es umfasst den Entwurf von konkreten Systemteilen und -Komponenten, die implementiert werden müssen. Weiter werden getroffene Entscheidungen zum Entwurf und zur Implementation der Komponenten beschrieben. Angetroffene Probleme werden vorgestellt und und deren Lösung erklärt\footnote{Konkrete technische Hindernisse mit Verweise auf Anhang zu Open Source changes/contributions oder auch technische Limitation wie bspw. go-ethereum mobile hat keine whisper API}.
+Folgend wird das entworfene Konzept und die Lösng der unter \ref{cha:Aufgabenstellung} beschriebenen Aufgabenstellung, beschrieben. Es umfasst den Entwurf von konkreten Systemteilen und -Komponenten. Weiter werden getroffene Entscheidungen zum Entwurf und zur Implementation der Komponenten beschrieben.
 
-Die Webapp ermöglicht es einem Owner, ein Objekt über einen in der Blockchain festgelegten Smart Contact zu vermieten. Er kann dabei das Depot und die Mietkosten festlegen. Ein Renter kann dann dieses Objekt für eine bestimmte Zeit mieten. Die Abwicklung des Vertrages und Begleichung der Kosten geschieht über die Auslösung durch den Renter in der Blockchain. Es gibt keinen Zwischenmann (z.B. Bank), der für die Überweisung zuständig ist, sondern das Geld fliesst vom Renter direkt zum Owner, basierend auf den definierten Regeln im Smart Contract.
-
-Ein Objekt kann grundsätzlich alles sein: Ein elektrisches Fahrrad, eine Ferienwohnung oder ein Schließfach. Es muss jedoch möglich sein, einen Kontrollmechanismus anzubringen, der an eine Blockchain Node angebunden werden kann. Bei einem elektrischen Fahrrad wäre es z.B. möglich einen Minicomputer im Fahrgestellt zu montieren, welcher den Akku aktiviert oder deaktiviert und über eine Sim-Karte mit der Blockchain synchronisiert. Möchte ein Benutzer das Fahrrad verwenden, so müsste er dieses zuerst über die Blockchain mieten und erst dann kann er den Akku aktivieren. Die Mietkosten würden über den Smart Contract dem Anbieter des Fahrrades überwiesen werden.
+ANDI TEXT
+Das Konzept, das aus dieser Arbeit hervorgeht, besteht aus einem Schrank mit elektronischen Schliessfächer, die in der Blockchain als Smart Contracts abgebildet sind und über eine Mobile App gemietet werden können (siehe Abbildung \ref{fig:Grobkonzept}). Jedes Schliessfach verfügt über eine Identifikation die durch ein Mobilegerät eingelesen werden kann. Anschliessed werden die Daten des Schliessfachs aus der Blockchain geladen und dargestellt. Der Benutzer kann nun, sofern sein Account der Blockchain genügend Geld hat, das Schliessfach mieten und übernimmt dadurch die Kontrolle über den Schliessmechanismus. 
 
 \begin{figure}
 \centering
 \includegraphics[width=.95\textwidth]{Mobile_Konzept}
-\caption{Das Grobkonzept, dessen Umsetzung möglich ist}
-\label{fig:Mobile_Konzept}
+\caption{Das Grobkonzept "Lokkit"}
+\label{fig:Grobkonzept}
 \end{figure}
 
-\subsection{Sicherheit}
-Im Design und bei der Umsetzung dieses Systems wurde angenommen, dass die Implementation des gesamten Ethereum Protokolls und der web3 Funktionen kryptographisch sicher ist und die Validität eines Smart Contracts nicht infrage gestellt werden kann, sofern die Blockchain in einem validen Zustand ist.\cite{github.com/ethereum/web3js, go-ethereum}
+In den nachfolgenden Abschnitten wird der das Konzept detailliert und begründet. Der Fokus liegt auf dem Smart Contract. Die System Spezifikation ist im Kapitel \ref{cha:Systemspezifikation}) zu finden.
 
-Der einzige selbst entwickelte Sicherheitskritische Aspekt ist bei der Übermittlung der Nachrichten mittels Whisper v5 (vgl. \ref{para:Whisper}). Entsprechend findet sich im Kapitel \ref{subsubsec:Sicherheitsaspekte} eine Abhandlung der gemachten Überlegungen und getroffene Massnahmen zur Sicherstellung der validen Herkunft der Nachrichten.
+\subsection{Physischer Aufbau}
+
+Jedes Schliessfach funktioniert autonom und besteht aus dem Schliessfach selbst, einem Raspberry Pi und einem Schloss. Das Raspberry Pi ist mit dem Schliessmechanismus verbunden und kann dieses auf Befehl hin Öffnen und Schliessen. Gleichzeitig repräsentiert es ein Node und bildet im Verbund mit den anderen Raspberry Pis die private Blockchain, die als Backend der Lösung fungiert. Die Abbildung Abbildung ... stellt den Aufbau exemplarisch dar.
+
+Eines der Raspberry Pi's erstellt ein WLAN Hotspot und bietet DNS und DHCP für das Netzwerk an.
+
+\paragraph{Weshalb autonomer Aufbau?}
+Grundsätzlich könnte auch einfach ein Rechner alle Schliessfächer steuern und Teil der privaten Blockchain sein. Diese Variante würde jedoch mehr einen zentralen Ansatz suggerieren und nicht den dezentralen Ansatz der Blockchain unterstreichen. Ausserdem besteht eine Blockchain aus mehreren Nodes, was den Einsatz von mehreren Raspberry Pis spiegelt. 
+\paragraph{Begründung Raspberry Pi}
+Die Raspberry Pis wurden vom Auftraggeber zur Verfügung gestellt. Es handelt sich um ein kompakter, vollständiger Computer der das Ansteuern von Hardware (Schliessmechanismus) über den GPIO erleichtert. Ausserdem eignet es sich zum Erstellen eines eigenen Netzwerkes, das für die private Blockchain benötigt wird und verfügt über genügend Rechenpower um eine \emph{geth} Node (ohne Mining) laufen zu lassen.
+
+\subsection{Schnittstelle zum Anwender}
+
+Wiso Mobile App
+
+
+\subsection{Prozess}
+
 
 \subsection{Interaktion mit dem Demonstrator}
 \label{sec:Interaktion mit dem Demonstrator}
 
-Ein Benutzer muss sich zuerst als einen weiteren Node mit der Blockchain verbinden. Anschliessend kann er über die entwickelte Webapp (DAPP) mit dem System interagieren. 
+Ein Benutzer muss sich zuerst als einen weiteren Node mit der Blockchain verbinden. Anschliessend kann er über die entwickelte Webapp mit dem System interagieren.
 
 \vspace{1em}\noindent
 Folgende Interaktionen sind möglich.
@@ -29,8 +44,8 @@ Folgende Interaktionen sind möglich.
 \vspace{1em}\noindent
 \textbf{Als Owner}
 \begin{itemize}
-    \item Neues Rentable erfassen
-    \item Bestehende Rentable deaktivieren, aktivieren oder unbenutzbar machen
+    \item Ein neues Rentable erfassen
+    \item Bestehende Rentables deaktivieren, aktivieren oder unbenutzbar machen
     \item Eigenschaften eines bestehenden Rentable ändern
     \item Rentable einem anderen Owner überschreiben
     \item Deposit von vergangenen Reservationen erhalten
@@ -48,13 +63,11 @@ Folgende Interaktionen sind möglich.
 \textbf{Als aktueller Renter (current renter)}
 \begin{itemize}
     \item Sperren und Entsperren des Rentables (Lock/Unlock)
-    \item Zurückgeben des Schließfachs (Unclaim)
+    \item Zurückgeben des Rentables (unclaim)
 \end{itemize}
 
 \subsection{Regeln}
-\begin{enumerate}
-    \item Es gibt keine Reservationsüberlappungen
-\end{enumerate}
+Es gibt keine Reservationsüberlappungen
 
 \subsection{Fallbeispiele}
 \label{sec:Fallbeispiele}
@@ -62,7 +75,7 @@ Die folgenden Fallbeispiele erläutern das Zusammenspiel der Interaktionen und d
 
 \subsubsection{Normal-Fall}
 In Abb.~\ref{fig:Cases}\,(a) reserviert Benutzer A das Schliessfach von $t_{R1}$ bis $t_{R2}$ zum Zeitpunkt $t_0$. Das Deposit und die Mietkosten werden ihm somit abgezogen.
-Zum Zeitpunt $t_{R1}$ wird Benutzer A zum \emph{Current Renter} und besitzt dadurch privilegierten Zugriff. Er kann jetzt das Schliessfach öffnen (Unlock) und schliessen (Lock). Nach einer gewissen Zeit noch vor Ablauf der Reservation, entschliesst sich Benutzer A das Schliessfach wieder abzugeben (Unclaim), da er es nicht mehr benötigt. Die Reservation wird somit auf diesen Zeitpunkt gekürzt und Benutzer A erhählt sein Deposit und die Mietkosten für die ungenutzte Zeit zurück. Die priviligierten Rechte werden umgehend wieder an den Owner abgegeben.
+Zum Zeitpunt $t_{R1}$ wird Benutzer A zum \emph{Current Renter} und besitzt dadurch privilegierten Zugriff. Er kann jetzt das Schliessfach öffnen (Unlock) und schliessen (Lock). Nach einer gewissen Zeit noch vor Ablauf der Reservation, entschliesst sich Benutzer A das Schliessfach wieder abzugeben (Unclaim) (vgl. \ref{sys_subsubsec:Rentable}, speziell \ref{sys_para:claim_unclaim}), da er es nicht mehr benötigt. Die Reservation wird somit auf diesen Zeitpunkt gekürzt und Benutzer A erhählt sein Deposit und die Mietkosten für die ungenutzte Zeit teilweise zurück.
 
 \begin{figure}
 \centering\small
@@ -86,9 +99,20 @@ Normal-Fall (a), Keine-Rückgabe (b).}
 %\end{figure}
 
 \subsubsection{Reservationsende ohne Betätigung der Rückgabe}
-Wie im Normal-Fall beschrieben, ist Benutzer A momentaner Renter (current renter) des Schliessfaches. Anstelle jedoch das Schließfach wieder zurückzugeben, lässt er die Reservationszeit auslaufen. Zum Zeitpunkt $t_{R2}$ werden ihm die Rechte entzogen und er erhält keine Rückerstattung des Deposits. Es liegt also in Benutzer A seinem Interesse, alle eingeschlossenen Gegestände vor Ablauf der Reservation aus dem Schließfach zu nehmen und dieses zurückzugeben (Unclaim). Siehe Abb.~\ref{fig:Cases}\,(b) als Illustration.
+Wie im Normal-Fall beschrieben, ist Benutzer A Current Renter des Schliessfaches. Anstatt das Schliessfach wieder zurückzugeben, lässt er die Reservationszeit auslaufen. Zum Zeitpunkt $t_{R2}$ werden ihm die Rechte entzogen und das Deposit wird nicht zurückerstattet. Es liegt also in Benutzer A seinem Interesse, alle eingeschlossenen Gegestände vor Ablauf der Reservation aus dem Schließfach zu nehmen und dieses zurückzugeben (Unclaim). Siehe Abb.~\ref{fig:Cases}\,(b) als Illustration.
 
 \subsubsection{Fall von Schäden}
-Benutzer A reserviert wie im Normal-fall ein Schliessfach. Zum Zeitpunkt t1 will er das Schliessfach öffen (Unlock), dieses reagiert jedoch nicht. Er muss nun Kontakt mit dem Owner aufnehmen und die Sache klären. Auf jeden Fall sollte er nun das Schliessfach zurückgeben (Unclaim) um die Kosten niedrig zu halten, im Falle, dass sich der Owner nicht auffinden lässt oder dieser kein Interesse zeigt.
+Benutzer A reserviert wie im Normalfall ein Schliessfach. Zum Zeitpunkt t1 will er das Schliessfach öffen (Unlock), dieses reagiert jedoch nicht. Er muss nun Kontakt mit dem Owner aufnehmen und die Sache klären. Auf jeden Fall sollte er nun das Schliessfach zurückgeben (Unclaim), um seine Kosten gering zu halten, im Falle, dass der Owner nicht kontaktierbar lässt oder dieser kein Interesse zeigt.
 
 Im Rahmen dieser Arbeit wurde auch ein Konzept überlegt, wie solche Probleme vermindert werden könnten. Durch Einführen eines Review Systems, wo Benutzer die Owner beurteilen können. Owner mit einer guten Bewertung (Score) wären dann vertrauenswürdiger.
+
+\subsection{Private Blockchain}
+ANDI TEXT
+
+\subsection{Business Logik (Smart Contract)}
+
+
+\subsection{Sicherheit}
+Im Design und bei der Umsetzung dieses Systems wurde angenommen, dass die Implementation des gesamten Ethereum Protokolls und der Web3 Funktionen kryptographisch sicher ist. Die Validität eines Smart Contracts sollte nicht infrage gestellt werden, sofern die Blockchain in einem validen Zustand ist.\cite{github.com/ethereum/web3js, go-ethereum}
+
+Der einzige selbst entwickelte sicherheitskritische Aspekt ist bei der Übermittlung der Nachrichten mittels Whisper v5 (vgl. \ref{para:Whisper}). Entsprechend findet sich im Kapitel \ref{subsubsec:Sicherheitsaspekte} eine Abhandlung der gemachten Überlegungen und getroffene Massnahmen zur Sicherstellung der validen Herkunft der Nachrichten.

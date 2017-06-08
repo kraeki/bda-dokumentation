@@ -48,10 +48,10 @@ Basierend auf der konkreten Aufgabenstellung wurden zu implementierende Anforder
 Folgende Bereiche werden bei der Anforderungsfindung unterschieden:
 \begin{itemize}
     \item Smart Contracts
-    \item grafische Benutzeroberfläche
+    \item Grafische Benutzeroberfläche
     \item Mobile App
     \item IoT Controller
-    \item übergreifende Anforderungen
+    \item Übergreifende Anforderungen
 \end{itemize}
 
 \begin{table}[H]
@@ -60,17 +60,17 @@ Folgende Bereiche werden bei der Anforderungsfindung unterschieden:
 \label{tbl:Anforderungen}
 \begin{tabular}{@{}L{3cm}L{10cm}@{}}
 \toprule
-Bereich & Beschreibung \\ \midrule
+\textbf{Bereich} & \textbf{Beschreibung} \\ \midrule
 Smart Contracts & Die Smart Contracts sollen eine Funktion bieten, neue Schliessfächer erfassen zu
 können. \\ \midrule
  & Die Smart Contracts sollen eine Funktion zum Eingehen eines zeitlich begrenzten
 Mietvertrags anbieten. \\ \midrule
  & Die Smart Contracts soll Kosten für die Dauer des Mietvertrags definieren, die durch die Überweisung von Ether beglichen werden.\\ \midrule
-grafische Benutzeroberfläche & Die grafische Benutzeroberfläche soll eine Liste von verfügbaren Schliessfächer anzeigen \\ \midrule
+Grafische Benutzeroberfläche & Die grafische Benutzeroberfläche soll eine Liste von verfügbaren Schliessfächer anzeigen. \\ \midrule
  & Die grafische Benutzeroberfläche soll das einfache Hinzufügen von Schliessfächern zu der Liste der verfügbaren Schliessfächern ermöglichen. \\ \midrule
  & Die grafische Benutzeroberfläche soll das Mieten von Schliessfächern mit einer einfach zu bedienenden Benutzeroberfläche ermöglichen. \\ \midrule
  & Die grafische Benutzeroberfläche soll dem Benutzer in allen Fällen Rückmeldung über ausgeführte Funktionen geben. \\ \midrule
- & Die grafische Benutzeroberfläche soll auf der zur Verfügung gestellten Hardware gehostet werden können \\ \midrule
+ & Die grafische Benutzeroberfläche soll auf der zur Verfügung gestellten Hardware gehostet werden können. \\ \midrule
 Mobile App & Die Mobile App soll eine Ethereum Node starten, die mit dem definierten privaten Netzwerk verbindet und die verwendet werden, um die Webapp lokal mit der Node zu verbinden. \\ \midrule
  & Die Mobile App soll die Erstellung von einem Benutzerkonto auf der lokalen Ethereum Node ermöglichen. \\ \midrule
 IoT Controller & Der Controller soll auf gültige Anfragen das Schliessfach öffnen oder schliessen. \\ \midrule
@@ -81,7 +81,7 @@ IoT Controller & Der Controller soll auf gültige Anfragen das Schliessfach öff
 \end{table}
 
 
-\subsection{Scopeabgrenzung}
+\subsection{Scope}
 Das Hinzufügen von neuen mietbaren Objekten ist nicht Teil dieser Arbeit. Der Demonstrator wird mit den mitgelieferten Schliessfächern vorkonfigurierten.
 
 Auch die Verwendung von Oracles ist nicht Teil dieses Projekts. Als Oracle wird die Möglichkeit bezeichnet, Berechnungen eines Smart Contracts, durch Verteilung auf mehrere externe Systeme, von der Blockchain zu lösen. Dies ist noch immer ein low-trust Szenario, da keinem externen System alleine die Möglichkeit zur Veränderung der Blockchain gegeben wird, sondern auch der Konsens dieser Systeme in die Blockchain geschrieben wird. Ein mögliches Anwendungsszenario für Oracles können beispielsweise Wechselkurse für physische Währungen sein. \cite{blog.ethereum.org/oracles}
@@ -92,16 +92,16 @@ Auch die Verwendung von Oracles ist nicht Teil dieses Projekts. Als Oracle wird 
 \subsection{Software}
 Folgend werden die zu liefernden Softwarekomponenten beschrieben. Alle Komponenten sollen als Source Code inklusive einer Anleitung zur Installation geliefert werden, damit das System repliziert oder erweitert werden kann.
 
-\subparagraph{Smart Contracts}
-Die Smart Contracts sollen als Source Code geliefert werden. Zusätzlich zu den Grundlieferobjekten werden Designentscheide und verschiedene Sichtweisen auf diese Smart Contracts in diesem Bericht mitgeliefert.
+\paragraph{Smart Contracts}
+Die Smart Contracts sollen als Source Code geliefert werden. Zusätzlich werden Designentscheide und verschiedene Sichtweisen auf diese Smart Contracts in diesem Bericht mitgeliefert.
 
-\subparagraph{grafische Benutzeroberfläche}
+\paragraph{Grafische Benutzeroberfläche}
 Die grafische Benutzeroberfläche ist das Interaktionsportal von Benutzern mit den Smart Contracts und dem Demonstrator
 
-\subparagraph{Mobile App}
+\paragraph{Mobile App}
 Die Mobile App soll zusätzlich als fertig als installierbares Paket geliefert werden.
 
-\subparagraph{Controllers}
+\paragraph{Controllers}
 Für alle implementierten Schliessmechanismen ist die Ansteuerung der Hardware mitzuliefern.
 
 \subsection{Hardware}
