@@ -26,7 +26,7 @@ Dieses Command verkörpert den Befehl, der ausgeführt werden soll. Abhängig vo
 \subparagraph{Rentable Address}
 Obwohl die Adresse bereits in den topics der Nachricht vorhanden ist, wird sie in der Message erneut angegeben. Grund dafür ist, dass die topics nur der Filterung der Nachrichten dienen. Das Message Objekt wurde kryptographisch signiert und somit kann festgestellt werden, dass die Nachricht auch wie gesendet zugestellt wird.
 \subparagraph{Whisper Identity}
-Obwohl die Whisper Identity optional für Whisper ist (vgl. \ref{old_subpara:Whisper_Identity}), wird sie vorausgesetzt, um die Real-Time Kommunikation von lokkit zu benutzen. Die Whisper Identity des Absenders einer Nachricht ist öffentlich zugänglich und kann von jeder Nachricht abgefragt werden, sofern ein Absender gesetzt wurde.
+Obwohl die Whisper Identity optional für Whisper ist (vgl. \ref{old_subpara:Whisper_Identity}), wird sie vorausgesetzt, um die Real-Time Kommunikation von Lokkit zu benutzen. Die Whisper Identity des Absenders einer Nachricht ist öffentlich zugänglich und kann von jeder Nachricht abgefragt werden, sofern ein Absender gesetzt wurde.
 
 \paragraph{Digest}
 Whisper Nahrichten kann ein Sender und ein Empfänger in Form von \emph{Whisper Identities} angegeben werden. Da diese Whisper Identities aber nicht an Adressen in der Blockchain gebunden, sondern kurzlebige Objekte sind, wurde eine weitere Sicherheitsmassnahme implementiert, um den korrekten Absender einer Nachricht zu validieren.
@@ -53,6 +53,6 @@ Für jede Interaktion mit einem mietbaren Objekt muss dessen Adresse bekannt sei
 Der RentableDiscovery Contract stellt eine Möglichkeit zur Verfügung, Rentable Contracts in der Blockchain einzutragen, ohne direkt mit dem Rentable Contract zu interagieren, ähnlich dem Factory Pattern aus der objektorientierten Programmierung. Diese Factory hat den Vorteil, dass damit erstellte Rentables direkt der Discovery bekannt sind und gefunden werden können. Es existiert auch die Möglichkeit, bestehende Rentables nach deren manuellen Erstellung nachzutragen. Die zu bezahlenden Kosten in gas sind beim neuen Erstellen niedriger als beim nachträglichen Hinzufügen, da nicht zuerst die Existenz der Adresse geprüft werden muss.
 
 \subsubsection{Weitergehende Überlegungen}
-Durch Verwendung eines QR Code Scanners im Webapp ist diese Funktionalität obsolet. Sie wird in lokkit nicht mehr auf der Oberfläche eingesetzt. Sie ist konzeptionell jedoch nach wie vor funktionsfähig und könnte verwendet werden, um eine Übersicht über bestehende Rentables zu haben und dabei nur eine einzelne Adresse (die der RentableDiscovery) zu speichern.
+Durch Verwendung eines QR Code Scanners im Webapp ist diese Funktionalität obsolet. Sie wird in Lokkit nicht mehr auf der Oberfläche eingesetzt. Sie ist konzeptionell jedoch nach wie vor funktionsfähig und könnte verwendet werden, um eine Übersicht über bestehende Rentables zu haben und dabei nur eine einzelne Adresse (die der RentableDiscovery) zu speichern.
 
 In Zukunft könnten bei Bedarf Rentables mittels dieser RentableDiscovery in logische Gruppen unterteilen werden, um die Darstellung zu erleichtern. Weiter könnte ein dynamisches Angebot von Rentables zur Verfügung gestellt, indem Abfragen nicht über manuelle QR Codes sondern über eine (oder mehrere) RentableDiscovery gestellt werden.

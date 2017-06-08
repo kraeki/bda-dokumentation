@@ -35,7 +35,7 @@ Hierbei handelt es sich um ein Muster, das angewendet wird, wenn in einem Smart 
 Sei A eine Instanz eines Rentable Contracts, der diesen erwähnten internen Zustand speichert und somit das Withdrawal Muster implementiert. Unter der Annahme, dass die Zieladresse für die Rückerstattung ein beliebiger Smart Contract B ist, kann B A angreifen. Wenn eine Transaktion ausgelöst wird, wird jeweils nicht nur der Betrag in Ether überwiesen, sondern, sollte das Ziel ein Smart Contract sein, auch Code ausgeführt. Das heisst, dass B auf eine eingehende Überweisungen reagieren kann und ihrerseits erneut die Transaktionsfunktion von A aktivieren kann (vgl. \ref{para:Withdrawal_Muster}), bevor die Kontrolle an den ursprünglichen Aufruf von A zurückgegeben wird. Wenn der Zustand von A noch nicht geändert wurde, wird der Betrag erneut gesendet, bis A keinen Ether mehr zur Verfügung hat.
 
 \subparagraph{Implementationsbeispiel}
-Um mehrfaches Überweisen von Ether zu verhindern, ist es unvermeidbar, zuerst den internen Status des Vertrags zu ändern, bevor Ether überwiesen wird. Die \emph{total} zur Verfügung stehende Menge Ether eines Smart Contracts wird in der Blockchain gehalten und ist Teil des Konsensus. Es ist somit nicht möglich, dass mehr Ether ausgegeben wird als in dem jeweiligen digitalen Vertrag vorhanden ist. 
+Um mehrfaches Überweisen von Ether zu verhindern, ist es unvermeidbar, zuerst den internen Status des Vertrags zu ändern, bevor Ether überwiesen wird. Die \emph{total} zur Verfügung stehende Menge Ether eines Smart Contracts wird in der Blockchain gehalten und ist Teil des Konsensus. Es ist somit nicht möglich, dass mehr Ether ausgegeben wird als in dem jeweiligen digitalen Vertrag vorhanden ist.
 
 Im Codebeispiel \ref{lst:withdraw_erroneous} kann die \emph{send} Funktion in Zeile zwei mehrmals ausgeführt werden, da das Deposit erst zurückgesetzt wird, sobald die Übertragung erfolgreich war. Dabei ist zu bemerken, dass die Funktion \emph{send} die Kontrolle an die default-Funktion des Zielvertrags übergibt und deren Code ausgeführt wird.\cite[FAQ/What's up with...]{solidity.readthedocs.io}
 \begin{lstlisting}[language=javascript,caption={fehlerhaftes Code Snippet \protected{\cite[Common Patterns/Withdrawal From Contrats]{solidity.readthedocs.io}}},label={lst:withdraw_erroneous}]
@@ -79,7 +79,7 @@ Da Whisper v5 die einzige Möglichkeit zur Echtzeitkommunikation in der Ethereum
 
 \subsubsection{Verteilung}
 \label{subsubsec:Verteilung}
-Das Whisper v5 Protokoll setzt für jede Nachricht einen Schlüssel (symmetrisch oder asymmetrisch) und ein Topic (4 bytes) voraus. Whisper Abos müssen mindestens ebenfalls einen Schlüssel und ein Topic als Filter beinhalten. Um neuen Teilnehmern zu er möglichen, auf diese Nachrichten zu hören und solche zu senden, wird ein symmetrischer Schlüssel mit dem Passwort \emph{lokkit} erstellt. Dieser Schlüssel muss nicht geheim gehalten werden, da der Inhalt der Nachricht nicht sicherheitsrelevant ist. Als Topic werden die ersten 4 Bytes der sha3 Checksumme der Adresse des Rentables mitgeschickt. Basierend auf diesen beiden Eigenschaften kann der Doorman (vgl. \ref{subsec:Doorman}) die für die angeschlossenen Geräte relevanten Nachrichten filtern.\cite[Wiki/Whisper Overview]{go-ethereum}
+Das Whisper v5 Protokoll setzt für jede Nachricht einen Schlüssel (symmetrisch oder asymmetrisch) und ein Topic (4 bytes) voraus. Whisper Abos müssen mindestens ebenfalls einen Schlüssel und ein Topic als Filter beinhalten. Um neuen Teilnehmern zu er möglichen, auf diese Nachrichten zu hören und solche zu senden, wird ein symmetrischer Schlüssel mit dem Passwort \emph{Lokkit} erstellt. Dieser Schlüssel muss nicht geheim gehalten werden, da der Inhalt der Nachricht nicht sicherheitsrelevant ist. Als Topic werden die ersten 4 Bytes der sha3 Checksumme der Adresse des Rentables mitgeschickt. Basierend auf diesen beiden Eigenschaften kann der Doorman (vgl. \ref{subsec:Doorman}) die für die angeschlossenen Geräte relevanten Nachrichten filtern.\cite[Wiki/Whisper Overview]{go-ethereum}
 
 \subsubsection{Sicherheitsaspekte}
 \label{subsubsec:Sicherheitsaspekte}
@@ -95,7 +95,7 @@ Der Sender/Empfänger Mechanismus von Whisper ist nicht an die Accounts/Adressen
 Folgend wird der einzige bekannte technische Angriff auf die Real-Time Schnittstelle beschrieben und erläutert wie dieser, unter Verwendung der in Ethereum eingebauten kryptographischen Funktionen, verhindert werden kann. Jegliche Angriffsvektoren, die die Referenzimplementation \emph{geth}, die \acrshort{EVM} oder natürliche Personen (d.h. Social Engineering) betreffen, werden nicht beschrieben oder entschärft.\cite[web3.eth/sign, web3.eth.personal/ecRecover]{web3js.readthedocs.io}\cite{keccak.noekeon.org}
 
 Jeder Whisper Envelope muss mit einem symmetrischen oder asymmetrischen Schlüssel verschlüsselt werden und benötigt ein Topic (vgl. \ref{subsubsec:Verteilung}).
-Auch für jedes Abonnement von Whispers muss ein symmetrischer oder asymmetrischer Schlüssel und mindestens ein Topic als Filter angegeben werden. Da der Symmetrische Schlüssel für lokkit Envelopes öffentlich ist, ist er nicht für kryptographische Sicherheit, sondern nur für die Filterung der Envelopes, zu verwenden. Aus diesem Grund ist es für jeden Teilnehmer, der den Envelope auf seiner Node übermittelt, möglich, diesen aufzuzeichnen, die Payload zu extrahieren und erneut zu schicken.\cite{replay_attack_on_security_protocols}
+Auch für jedes Abonnement von Whispers muss ein symmetrischer oder asymmetrischer Schlüssel und mindestens ein Topic als Filter angegeben werden. Da der Symmetrische Schlüssel für Lokkit Envelopes öffentlich ist, ist er nicht für kryptographische Sicherheit, sondern nur für die Filterung der Envelopes, zu verwenden. Aus diesem Grund ist es für jeden Teilnehmer, der den Envelope auf seiner Node übermittelt, möglich, diesen aufzuzeichnen, die Payload zu extrahieren und erneut zu schicken.\cite{replay_attack_on_security_protocols}
 
 Diese Art der Weiterleitung funktioniert, wenn die gesamte Payload inklusive Digest weitergeleitet würde und somit keine erneute Signatur des Message Objektes nötig wäre. Somit wäre es möglich, eine Payload zu erhalten, die nicht von der signierenden Entität sondern von einer Drittperson gesendet wurde. Um sicher zu gehen, dass die Nachricht von derselben Entität gesendet wurde, die auch den Digest des Message Objektes erstellt hatte, wird das \emph{key} Attribut (vgl. \ref{sys_para:Key}) ebenfalls in das Message Objekt eingebettet. Dies ist der öffentliche Schlüsselteil, der zur Signatur des Whisper Envelopes verwendet wurde und im Feld \emph{sig} des Whisper Envelopes mitgeschickt wird. Diese beiden Schlüssel können verglichen werden (vgl. \ref{sys_subsubsec:Verteilung}, um sicher zu gehen, dass der Sender der Whisper Nachricht auch derselbe ist, wie der, der den Digest erstellt hat.
 
@@ -106,7 +106,7 @@ Die Webapp ist die Hauptinteraktionsmöglichkeit von Benutzern mit dem Lokkit Sy
 \subsubsection{Deisgnentscheide}
 Gemäss der Web3 Philosophie wird die Interaktion von Benutzern mit Smart Contracts in der Blockchain durch sogenannte \acrshort{DAPPs} umgesetzt. Da es sich darin um eine genauere Spezifizierung einer Webapp handelt, wird in diesem Bericht auf die Benutzeroberfläche ausschliesslich als \emph{Web App} referenziert.\cite[Wiki/DAPP-Developer-Resources, Wiki/Useful-Dapp-Patterns]{github.com/ethereum}\cite{github.com/ethereum/web3js,web3js.readthedocs.io}
 
-Wenn eine Applikation, die auf die Ethereum Blockchain zugreift \emph{nicht} als \acrshort{DAPP} implementiert würde, müsste sie separat für jede unterstüzte Platofrm implementiert werden. 
+Wenn eine Applikation, die auf die Ethereum Blockchain zugreift \emph{nicht} als \acrshort{DAPP} implementiert würde, müsste sie separat für jede unterstüzte Platofrm implementiert werden.
 
 Grundsätzlich werden \acrshort{DAPPs} mittels JavaScript als klassiche Web Applikation umgesetzt. Anders als bei herkömmlichen solchen Applikationen werden die Daten nicht etwa von dem Server geschickt, sondern über die Verbindung zu einer lokalen Ethereum Node gelesen.\cite[Wiki/DAPP-Developer-Resources, Wiki/Useful-Dapp-Patterns]{github.com/ethereum}
 
@@ -145,7 +145,7 @@ Doorman ist eine mögliche Implementation in Python 2.7, die es ermöglicht, ein
 Python 2.7 wurde als Plattform gewählt, da diese Implementation als Script, falls nötig, einfach von Anwendern abgeändert werden kann. Weiter ist diese Lösung plattformunabhängig, da die einzige Voraussetzung daran ist, dass Python 2.7 installiert ist. Python 3.6+ konnte nicht ohne weiteren Aufwand verwendet werden, da die einzige zur Verfügung stehende jsonrpc Schnittstelle, ethjsonrpc, ebenfalls in Python 2.7 implementiert ist.
 
 \subsection{Controllers}
-Die Controller-Komponente ist das Stück, 
+Die Controller-Komponente ist das Stück,
 Controllers für IoT device
 \subsubsection{Nuki}
 

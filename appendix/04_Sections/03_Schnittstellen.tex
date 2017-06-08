@@ -1,14 +1,14 @@
 \section{Interne Schnittstellen}
-In diesem Abschnitt werden die internen Schnittstellen des lokkit Systems beschrieben.
+In diesem Abschnitt werden die internen Schnittstellen des Lokkit Systems beschrieben.
 
 \subsection{Real-Time Kommunikationsschnittstelle}
 \label{sys_subsec:Real_Time_Kommunikationsschnittstelle}
 Diese Schnittstelle dient der Echtzeitkommunikation zwischen dem Webapp (vgl. \ref{sys_subsec:Webapp}) und dem Doorman (vgl. \ref{sys_subsec:Doorman}). Sie bedient sich kryptografischer Funktionen aus der Web3 Library, um die Validität des Absenders zu validieren.
 
 \subsubsection{Aufbau der Nachricht}
-Für das gesamte von Whisper v5 versendete Packet wird der Ausdruck \emph{Envelope} verwendet. Die darin enthaltene textbasierte Nachricht, die einen validen JSON-String beinhaltet, wird als \emph{Payload} bezeichnet. Da Whisper v5 nur textbasierte Payloads unterstützt, wurde eine Nachricht im \acrshort{JSON} Format definiert, die eine strukturierte Möglichkeit zur Datenübermittlung ermöglicht. Diese wird übermittelt, indem sie vom Sender zu einer String-Repräsentation umgewandelt wird und nach Erhalt beim Empfänger wiederum zu einem JSON geparst wird. Das definierte Objekt besitzt zwei Attribute: \emph{digest} (vgl. \ref{sys_para:Digest}), nachfolgend Diges und \emph{message} (vgl. \ref{sys_para:Message}), nachfolgend Message Objekt. 
+Für das gesamte von Whisper v5 versendete Packet wird der Ausdruck \emph{Envelope} verwendet. Die darin enthaltene textbasierte Nachricht, die einen validen JSON-String beinhaltet, wird als \emph{Payload} bezeichnet. Da Whisper v5 nur textbasierte Payloads unterstützt, wurde eine Nachricht im \acrshort{JSON} Format definiert, die eine strukturierte Möglichkeit zur Datenübermittlung ermöglicht. Diese wird übermittelt, indem sie vom Sender zu einer String-Repräsentation umgewandelt wird und nach Erhalt beim Empfänger wiederum zu einem JSON geparst wird. Das definierte Objekt besitzt zwei Attribute: \emph{digest} (vgl. \ref{sys_para:Digest}), nachfolgend Diges und \emph{message} (vgl. \ref{sys_para:Message}), nachfolgend Message Objekt.
 
-\begin{lstlisting}[language=json,caption={Beispiel einer lokkit JSON Nachricht, deren \emph{digest} vom account \emph{0x55047206d03afef0d79bb2d90710bf9f23737860} erstellt wurde.}]
+\begin{lstlisting}[language=json,caption={Beispiel einer Lokkit JSON Nachricht, deren \emph{digest} vom account \emph{0x55047206d03afef0d79bb2d90710bf9f23737860} erstellt wurde.}]
 {
   digest: "0x06351aa8220219b621d7c2c5340110d3be147b92ef8035469df996762e021f512f4f8  30dee0ed1d59998b4bafaa3abb589668d940bdce867f7e6d83315a454af1b",
   message: {
@@ -24,13 +24,13 @@ Für das gesamte von Whisper v5 versendete Packet wird der Ausdruck \emph{Envelo
 Das Message Objekt innerhalb der Payload enthält drei Attribute: \emph{command}, \emph{rentableAddress} und \emph{key}. Funktional relevant für den Empfänger sind dabei nur command und rentableAddress. Das key Attribut ist eine zusätzliche Sicherheit, um Replay-Angriffe mit demselben Packet zu verhindern, bei welchen dasselbe Paket von einem anderen Sender versendet wird.
 \subparagraph{Command}
 \label{sys_subpara:Command}
-Dieses Feld teilt den Befehl mit, den das mietbare Objekt ausführen soll. Abhängig von der jeweiligen Implementation des IoT Geräts kann dieses Feld andere Werte beinhalten. Im Beispiel von lokkit werden \emph{lock} und \emph{unlock} für Schliessfächer geschickt. Weitere Befehle sind denkbar, die ebenfalls den Doorman als Empfänger verwenden.
+Dieses Feld teilt den Befehl mit, den das mietbare Objekt ausführen soll. Abhängig von der jeweiligen Implementation des IoT Geräts kann dieses Feld andere Werte beinhalten. Im Beispiel von Lokkit werden \emph{lock} und \emph{unlock} für Schliessfächer geschickt. Weitere Befehle sind denkbar, die ebenfalls den Doorman als Empfänger verwenden.
 \subparagraph{Rentable Address}
 Damit der Empfänger weiss, welches mietbare Objekt von dem Befehl angesteuert werden soll, wird die gesamte Adresse mitgegeben. Alternativ könnte dieses Feld weggelassen werden und über das Topic der Nachricht bestimmt werden.
 
 \subparagraph{Key}
 \label{sys_para:Key}
-Dieses Feld beinhaltet den öffentlichen Schlüssel eines asymmetrischen Schlüsselpaars des Senders. Derselbe Schlüssel muss zum signieren des Envelopes verwendet werden\footnote{Diese Signatur ist optional bei Whisper, wird jedoch für lokkit Envelopes vorgeschrieben}. Der öffentliche Schlüssel des für die Signatur verwendeten Schlüsselpaars wird ebenfalls im Envelope als Feld \emph{sig} mitgeschickt. Bei einer validen Nachricht sind also das Feld \emph{key} des Message Objektes und das Feld \emph{sig} des Envelopes identisch\footnote{Für weitere Informationen, vgl. \ref{para:Replay_Attack}}.
+Dieses Feld beinhaltet den öffentlichen Schlüssel eines asymmetrischen Schlüsselpaars des Senders. Derselbe Schlüssel muss zum signieren des Envelopes verwendet werden\footnote{Diese Signatur ist optional bei Whisper, wird jedoch für Lokkit Envelopes vorgeschrieben}. Der öffentliche Schlüssel des für die Signatur verwendeten Schlüsselpaars wird ebenfalls im Envelope als Feld \emph{sig} mitgeschickt. Bei einer validen Nachricht sind also das Feld \emph{key} des Message Objektes und das Feld \emph{sig} des Envelopes identisch\footnote{Für weitere Informationen, vgl. \ref{para:Replay_Attack}}.
 
 \paragraph{Digest}
 \label{sys_para:Digest}
