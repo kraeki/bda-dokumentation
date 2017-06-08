@@ -1,17 +1,20 @@
-\section{Implementation}
-\label{sec:Implementation}
-Nachfolgend werden getroffene Entscheidungen zum Entwurf und zur Implementation der Komponenten beschrieben. Angetroffene Probleme werden vorgestellt und und deren Lösung erklärt\footnote{Konkrete technische Hindernisse mit Verweise auf Anhang zu Open Source changes/contributions oder auch technische Limitation wie bspw. go-ethereum mobile hat keine whisper API}.
-
-Allfällige Abweichungen zur Konzeption (vgl. \ref{sec:Konzeption}, bspw. teilweise oder fehlende Implementation, werden erwähnt und, wo angebracht, werden weitere Überlegungen und Möglichkeiten zur Erweiterung der Komponenten erläutert.
-
 \subsection{Smart Contracts}
 \label{subsec:Smart_Contracts}
 Die Smart Contracts, die in Solidity implementiert wurden, werden nachfolgend erläutert. Diese Implementationen bilden das Rückgrat der Applikation. Sie bilden die Business Logik in Code Form ab und dienen als einzige Interaktionsmöglichkeit mir der Datenbank in der Blockchain.\cite[Introduction to Smart Contracts]{solidity.readthedocs.io}
 
 \subsubsection{Rentable}
 \label{subsubsec:Rentable}
-Damit alle mietbaren Objekte logisch unabhängig von einander sind, wurde der primäre Smart Contract (vgl. \ref{sys_subsubsec:Rentable}) so entworfen, dass für jedes mietbare Objekt eine separate Instanz dessen erstellt werden muss (vgl. \ref{subsubsec:Neuerstellung}). Die in der Blockchain liegende Funktionalität beinhaltet nur das Mieten, und die damit verbundene Monetären Transaktionen. Der Smart Contract weist dabei keine Schliessfach-spezifische Funktionalität auf. Bei dem Design wurde darauf geachtet, die Funktionalität zu abstrahieren, um es Autoren zu ermöglichen, weitere Dienste zu erstellen, die auf dem Konzept der mietbaren Objekte basiert. Diese darauf aufbauenden Dienste können auch ausserhalb des Lokkit Systems bestehen und können gänzlich inkompatibel zu diesem sein.
+Damit alle mietbaren Objekte logisch unabhängig von einander sind, wurde der primäre Smart Contract (vgl. \ref{sys_subsubsec:Rentable}) so entworfen, dass für jedes mietbare Objekt eine separate Instanz dessen erstellt werden muss (vgl. \ref{subsubsec:Neuerstellung}). Die in der Blockchain liegende Funktionalität beinhaltet nur das Mieten, und die damit verbundenen Monetären Transaktionen. Der Smart Contract weist dabei keine Schliessfach-spezifische Funktionalität auf. Bei dem Design wurde darauf geachtet, die Funktionalität zu abstrahieren, um es Autoren zu ermöglichen, weitere Dienste zu erstellen, die auf dem Konzept der mietbaren Objekte basiert. Diese darauf aufbauenden Dienste können auch ausserhalb des Lokkit Systems bestehen und können gänzlich inkompatibel zu diesem sein.
 
+\paragraph{Deposit}
+Sollte das Rentable aus Zeitgründen nicht zurückgegeben werden, so wird das Depot nicht dem Mieter zurückerstattet. Dadurch ist der Mieter daran interessiert, das Rentable für einen längeren Zeitraum als nötig zu mieten, um sicher zu gehen, dass es zurückgegeben werden kann. Da diese längere Zeitspanne bezahlt werden muss, wird die Hälfte der Kosten zurückerstattet. Die nicht zurückerstattete Hälfte der Kosten wird als verlorene Opportunitätskosten für den Owner verbucht.
+
+verworfene Alternativen:
+\begin{itemize}
+    \item Würde der gesamte Betrag zurückgegeben werden, ist die Motivation nur für die tatsächlich benötigte Dauer zu mieten nicht gegeben. Mieter könnten dann ohne Mehrkosten für viel länger als sie das Rentable benötigen mieten und die Kosten bei retournieren zurückerstattet bekommen.
+    \item Wenn keine Rückerstattung der Kosten der nicht benutzten Zeit gemacht würde, wäre das retournieren lediglich eine Schikane ohne Mehrwert. Wenn das retournieren also obsolet ist, kann auch das Deposit abgeschafft werden.
+\end{itemize}
+Durch die Teilung der Kosten und Einführung eines Deposits wird dem Renter auferlegt, seine benötigte Zeit zu überdenken, aber bietet ihm auch gewissen Spielraum.
 
 \paragraph{Datenhaltung}
 In einem Smart Contract können Daten in der Blockchain auf unterschiedliche Arten gespeichert werden: \emph{Storage} oder \emph{Events} (auch \emph{Logs} genannt). Storage ist ein einfacher Schlüssel-Werte-Paar Speicher, worauf alle Instanzvariablen eines Smart Contracts gespeichert werden, die zwischen verschiedenen Funktionsaufrufen persistiert werden müssen (vgl. reservations Feld für Rentables). Ein Smart Contract kann nicht ausserhalb seines zugewiesenen Speicherbereichs operieren. Zugriffe auf diesen Speicher sind teuer. So soll verhindert werden, dass grosse Speichermengen in der Blockchain verwendet werden. Ausgelöste Events werden in der Blockchain in Form von Transactionlogs gespeichert. Diese Logs sind sehr günstig (vgl. gas price) anzulegen, können aber von einem Smart Contract nicht gelesen werden. Über die web3 API kann auf die so erstellten Logs zugegriffen werden.\cite[Miscellaneous/Introduction to Smart Contracts]{solidity.readthedocs.io}\cite{jonathanpatrick.me/ethereum}
@@ -22,7 +25,7 @@ Wenn eine Instanz eines Smart Contracts persistent Daten speichern und diese Dat
 
 \paragraph{Withdrawal Muster}
 \label{para:Withdrawal_Muster}
-Bei Transaktionen, die einen Account zum Ziel haben, werden die gas-Kosten von 500 gas automatisch vom Sender beigefügt, ohne dass dies explizit in der ausgelösten Transaktion angegeben werden muss. Ist das Ziel aber eine Funktion eines Smart Contracts (wie es bei Rentable.rent der Fall ist) oder ein Smart Contract selbst, so kann der Smart Contract, der die Transaktion erhält, Code ausführen, der vom initialen Sender der Transaktion bezahlt werden muss (vgl. gas). Um dies zu verhindern, sollte nicht Ether an eine Adresse überwiesen werden, von der nicht bekannt ist, ob sie ein Smart Contract oder ein Account ist.\cite[Wiki/Contracts and Transactions]{go-ethereum}\cite{cryptocompare.com/gas}\cite[FAQ/What is the deal with...]{solidity.readthedocs.io}
+Bei Transaktionen, die einen Account zum Ziel haben, werden die gas-Kosten von 500 gas automatisch vom Sender beigefügt, ohne dass dies explizit in der ausgelösten Transaktion angegeben werden muss. Ist das Ziel aber eine Funktion eines Smart Contracts, wie es bei Rentable.rent der Fall ist, oder ein Smart Contract selbst, so kann der Smart Contract, der die Transaktion erhält, Code ausführen, der vom initialen Sender der Transaktion bezahlt werden muss (vgl. gas). Um dies zu verhindern, sollte nicht Ether an eine Adresse überwiesen werden, von der nicht bekannt ist, ob sie ein Smart Contract oder ein Account ist.\cite[Wiki/Contracts and Transactions]{go-ethereum}\cite{cryptocompare.com/gas}\cite[FAQ/What is the deal with...]{solidity.readthedocs.io}
 
 \subparagraph{Beispiel}
 Sei A eine Instanz eines Rentable Contracts, der das Withdrawal Muster implementiert. Wenn ein Depot zurückerstattet wird, überweist A Ether nicht direkt an eine Zieladresse, B. Stattdessen merkt sich A die Menge Ether, die B zusteht und stellt die Möglichkeit zur Verfügung, dass B Ether vom Smart Contract abheben kann. Dies findet mittels einer Transaction auf \emph{withdraw} statt, die von B ausgelöst werden muss. Die gas-Kosten für die primär von B ausgeführte \emph{withdraw} Funktion sind vernachlässigbar und werden durch die zurückerhaltene Menge Ether kompensiert. Der Vorteil, wenn die Transaktion von B gestartet werden muss, ist, dass B für die etwaigen zusätzlichen gas-Kosten aufkommen muss, sollte B ebenfalls ein Smart Contract sein.
@@ -68,8 +71,6 @@ Truffle Migrations?
 \label{subpara:Stalling}
 Da die Laufzeit der rent Funktion von der Anzahl Reservationen abhängig ist, müssen die Gaskosten für den Aufruf entsprechend abhängig von der bestehenden Anzahl Reservationen gemacht werden. Wenn ein Rentable viele Reservationen erhält kann es sein, dass es durch das \acrfull{BGL}, das im Genesis block angegeben wird, verunmöglicht wird, neue Reservationen zu tätigen.\cite[Security Considerations/Gas Limit and Loops]{solidity.readthedocs.io}\cite{media.consensys.net/gas-and-fuel}
 
-\#todo: formel für maximale Anzahl Reservationen
-
 Wenn der owner das deposit zurückerstattet, könnte die abgelaufene Reservation aus dem internen Array gelöscht werden, um die storage Datenmenge des Smart Contracts gering zu halten. Die Historischen Daten zu dem mietbaren Objekt können von einem Benutzer noch immer eingesehen werden, da die Logs in der Blockchain noch vorhanden sind. Da die Datenmenge so klein bleibt, ist die Abfrage ob reserviert werden kann, und somit auch das Reservieren selbst, schneller und günster (vgl. Gas Kosen).
 
 \subsection{Real-Time Kommunikationsschnittstelle}
@@ -104,34 +105,29 @@ Auch für jedes Abonnement von Whispers muss ein symmetrischer oder asymmetrisch
 
 Diese Art der Weiterleitung funktioniert, wenn die gesamte Payload inklusive Digest weitergeleitet würde und somit keine erneute Signatur des Message Objektes nötig wäre. Somit wäre es möglich, eine Payload zu erhalten, die nicht von der signierenden Entität sondern von einer Drittperson gesendet wurde. Um sicher zu gehen, dass die Nachricht von derselben Entität gesendet wurde, die auch den Digest des Message Objektes erstellt hatte, wird das \emph{key} Attribut (vgl. \ref{sys_para:Key}) ebenfalls in das Message Objekt eingebettet. Dies ist derselbe Schlüssel, der zur Signatur des Whisper Envelopes verwendet wurde. Diese beiden Schlüssel können verglichen werden (vgl. \ref{sys_subsubsec:Verteilung}, um sicher zu gehen, dass der Sender der Whisper Nachricht auch derselbe ist, wie der, der den Digest erstellt hat.
 
-\#todo: evtl ein bild?
-
-\paragraph{``Business Sicht''}
-\emph{Die folgende Ansicht ist stark vereinfacht und nicht technisch akkurat. Sie sollte als Veranschaulichung des Einsatzes eines Rentable Smart Contracts aus der Sicht eines potentiellen Mieters dienen.}
-
-Folgend wird angenommen, dass eine Instanz eines Rentable Contracts, in der Blockchain existiert. In diesem Vertrag werden die Eigenschaften des Rentable Objekts festgehalten. Für den formellen Vertrag von Interesse sind lediglich der Besitzer, die Kosten pro Sekunde und das zu hinterlegende Depot. Alle weiteren Informationen sind informativer Natur. Ein potenzieller Mieter kann nun folgendermassen mit diesem Vertrag interagieren:
-
-\begin{itemize}
-    \item herauszufinden, ob das Rentable an einem Zeitpunkt vermietet ist
-    \item herauszufinden, ob das Rentable in einer Zeitspanne vermietet ist
-    \item das Rentable mieten
-    \item Auf Änderungen im Zustand des Rentable reagieren
-\end{itemize}
-
-Wenn ein Mieter das Schliessfach gemietet hat, muss es vor Ablauf der Mietdauer wieder zurückgegeben werden, damit das hinterlegte Depot an den Mieter zurückerstattet wird. Wird das Schliessfach nicht zurückgegeben, so geht das hinterlegte Depot an den Besitzer. Mit dem Zurückgeben verliert der Benutzer auch jegliche Rechte am Objekt.
-
---> Also lässt sich sagen, dass entweder die gesamte Welt programmieren können muss, um diese Contracts zu verstehen...
-
-
 \subsection{Webapp}
 \label{subsec:Webapp}
-Die Webapp ist die Hauptinteraktionsmöglichkeit von Benutzern mit dem Lokkit System...
+Die Webapp ist die Hauptinteraktionsmöglichkeit von Benutzern mit dem Lokkit System. Es bietet eine grafische Benutzeroberfläche, die von allen Geräten aus verwendet werden kann, sofern diese Html und JavaScript Browser unterstützen. Um die volle Funktionalität zu verwenden, wird eine Verbindung zu einer Ethereum Node vorausgesetzt, die mindestens eine Instanz eines Rentable Smart Contracts enthält (vgl. \ref{subsubsec:Rentable}). Die Verbindung kann zu einer Ethereum Node gemacht werden, die entsprechend konfiguriert wurden. Dabei ist zu beachten, dass es erhebliche Sicherheitseinbussen gibt, wenn auf eine nicht lokale Node verbunden wird (vgl. \ref{subsubsec:Remote_Node}). Aus diesem Grund wird folgend davon ausgegangen, dass auf eine lokale Node verbunden wird.
+
+\subsubsection{Deisgnentscheide}
+Gemäss der web3 Philosophie wird die Interaktion von Benutzern mit Smart Contracts in der Blockchain durch sogenannte \acrshort{DAPPs} umgesetzt. Da es sich darin um eine genauere Spezifizierung einer Webapp handelt, wird in diesem Bericht auf die Benutzeroberfläche ausschliesslich als \emph{Webapp} referenziert.\cite[Wiki/DAPP-Developer-Resources, Wiki/Useful-Dapp-Patterns]{github.com/ethereum}\cite{github.com/ethereum/web3js,web3js.readthedocs.io}
+
+Wenn eine Applikation, die auf die Ethereum Blockchain zugreift \emph{nicht} als \acrshort{DAPP} implementiert würde, müsste sie separat für jede unterstüzte Platofrm implementiert werden. 
+
+Grundsätzlich werden \acrshort{DAPPs} mittels JavaScript als klassiche Web Applikation umgesetzt. Anders als bei herkömmlichen solchen Applikationen werden die Daten nicht etwa von dem Server geschickt, sondern über die Verbindung zu einer lokalen Ethereum Node gelesen.\cite[Wiki/DAPP-Developer-Resources, Wiki/Useful-Dapp-Patterns]{github.com/ethereum}
+
+Die verwendete Library web3 bietet dabei die nötige Funktionalität, um über die jsonrpc Schnittstelle mit der Ethereum Node zu kommunizieren.\cite{github.com/ethereum/web3js}
+
+
+\subsubsection{Remote Node}
+\label{subsubsec:Remote_Node}
+Wenn mit einer \acrshort{DAPP} auf eine remote Node verbunden wird, sollten dem Anwender einige Punkte bekannt sein. Sollten neue Accounts auf dieser Node erstellt werden, sind die Privaten Schlüssel auch auf dieser Node abgelegt. Alle anderen Benutzer, die ebenfalls auf eine remote Node verbinden, können im Namen von entsperrten Accounts Zahlungen tätigen. Aus diesem Grund wird abgeraten, \acrshort{DAPPs} auf remote Nodes zu verbinden, welchen man nicht vertrauen kann. Die Lokkit Webapp wird dies unterstützen, um eine einfachere Demonstration der Funktionalität zu ermöglichen, wenn ein Gerät mit nicht unterstützer Platform mit dem Demonstrator verbinden möchte. In live-Systemen wird jedoch wehement von diesem Vorgehen abgeraten. Meist werden die entsprechenden Funktionen auch vom Betreiber der Node ausgeschaltet, da auch für den Betreiber de Node Schaden entstehen könnte, wenn fremden Benutzern die Kontrolle über Teile der Node gegeben wird.\cite[Wiki/DAPP-Developer-Resources, Wiki/Useful-Dapp-Patterns]{github.com/ethereum}
 
 \subsection{Mobile Geräte}
 Um die Webapp zu benutzen, wird eine lokale Ethereum Node vorausgesetzt, die mit einer bestimmten Konfigurationen läuft (vgl. \ref{subsec:Webapp}, \ref{sys_subsec:Geth}). Da diese beiden Komponenten über die web3 Schnittstelle komunizieren ist es auch möglich auf mobilen Geräten die Webapp zu benutzen, sofern eine beschriebene Ethereum Node auf diesem Gerät verbunden ist.
 
 \subsubsection{Ethereum Node auf Mobilgeräten}
-Das Ethereum Projekt bietet eine offizielle API an, um auf mobilen Geräten eine Ethereum Node im light mode zu betrieben. Dabei ist zu bemerken, dass die API nur native Apps unterstützt und keine der Funktionalitäten über die rpc Schnittstelle angeboten werden kann. Somit ist es nicht möglich, mit der offiziellen API von einem mobilen Gerät aus auf \acrshort{DAPPs} zuzugreifen, die eine lokale Ethereum Node mit freigeschalteter rpc Schnittstelle voraussetzen. Sollte die offizielle go-ethereum Libary für mobile Geräte verwendet werden, muss die Node und jegliche Funktionalität in der nativen Applikation implementiert werden.\cite[wiki/Mobile: Introduction]{go-ethereum}
+Das Ethereum Projekt bietet eine offizielle API an, um auf mobilen Geräten eine Ethereum Node als Light Node (vgl. \ref{para:Light_Node})zu betrieben. Dabei ist zu bemerken, dass die API nur native Apps unterstützt und keine der Funktionalitäten über die rpc Schnittstelle angeboten werden kann. Somit ist es nicht möglich, mit der offiziellen API von einem mobilen Gerät aus auf \acrshort{DAPPs} zuzugreifen, die eine lokale Ethereum Node mit freigeschalteter rpc Schnittstelle voraussetzen. Sollte die offizielle go-ethereum Libary für mobile Geräte verwendet werden, muss die Node und jegliche Funktionalität in der nativen Applikation implementiert werden.\cite[wiki/Mobile: Introduction]{go-ethereum}
 
 Sollte ein \acrshort{DAPP} die Verbindung zu Ethereum Nodes ausser localhost zulassen, ist es möglich diese zu verwenden, ohne dass auf dem Gerät eine Ethereum Node betrieben wird. Dies birgt aber erhebliche Sicherheitsrisiken, da die Vertrauenswürdigkeit der externen Node nicht gewährleistet werden kann. Aus diesem Grund wurde für Geräte mit Android Version 4.4 (KitKat) oder höher eine mobile Applikation (vgl. \ref{subsec:Android_App}) entwickelt. Aus Zeitgründen, aufgrund fehlender Hardware und fehlendem Fachwissen wurde für Mobile Geräte mit weiteren Betriebssystemen keine Applikation zum Betrieb einer Ethereum Node umgesetzt.
 \paragraph{status-im}
@@ -141,7 +137,7 @@ Die Status-im Plattform bietet diese Interaktionsmöglichkeit zwischen mobilen G
 \label{subsec:Android_App}
 Um die Verbindung mit der Lokkit Webapp (vgl. \ref{subsec:Webapp}) von Androidgeräten aus ohne Abstriche bzgl. der Sicherheit zu ermöglichen, wurde eine native Applikation entwickelt, die eine Ethereum Node mit dem Lokkit Genesis Block auf einem Mobilen Gerät betreibt (vgl. \ref{sys_subsec:Android_App}.
 
-Die Android App startet eine lokale Node mit dem Lokkit Genesis Block im light mode, ermöglicht es, einfach einen neuen Account auf der Node zu erstellen und verbindet automatisch mit den IoT Nodes der Lokkit Blockchain, sofern das Gerät sich im vorbereiteten Demonstrationsnetzwerk befindet. Daraufhin wird das Webapp geöffnet, um dem Benutzer einen möglichst nahtlosen Übergang zu ermöglichen.
+Die Android App startet eine lokale Node mit dem Lokkit Genesis Block als Light Node (vgl. \ref{para:Light_Node}) und ermöglicht es, einfach einen neuen Account auf der Node zu erstellen und verbindet automatisch mit den IoT Nodes der Lokkit Blockchain, sofern das Gerät sich im vorbereiteten Demonstrationsnetzwerk befindet. Daraufhin wird das Webapp geöffnet, um dem Benutzer einen möglichst nahtlosen Übergang zu ermöglichen.
 \subsubsection{Android Version}
 Um bestmögliche Kompatibilität auch für ältere Geräte zu ermöglichen, wurde als Basis die Android Version 4.4 KitKat (API Version 19 gewählt), da noch immer über 18\% der registrierten Androidgeräte diese Version benutzen.\cite[Android/Dashboards]{developer.android.com}
 \subsubsection{status-go}

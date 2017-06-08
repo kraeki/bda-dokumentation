@@ -7,13 +7,13 @@ In diesem Abschnitt werden die internen Schnittstellen des lokkit Systems beschr
 \subsubsection{Aufbau der Nachricht}
 Für das gesamte von Whisper v5 versendete Packet wird der Ausdruck \emph{Envelope} verwendet. Die darin enthaltene textbasierte Nachricht, die einen validen JSON-String beinhaltet, wird als \emph{Payload} bezeichnet. Da Whisper v5 nur textbasierte Payloads unterstützt, wurde eine Nachricht im \acrshort{JSON} Format definiert, die eine strukturierte Möglichkeit zur Datenübermittlung ermöglicht. Diese wird übermittelt, indem sie vom Sender zu einer String-Repräsentation umgewandelt wird und nach Erhalt beim Empfänger wiederum zu einem JSON geparst wird. Das definierte Objekt besitzt zwei Attribute: \emph{digest} (vgl. \ref{sys_para:Digest}), nachfolgend Diges und \emph{message} (vgl. \ref{sys_para:Message}), nachfolgend Message Objekt. 
 
-\begin{lstlisting}[language=json,caption={Beispiel einer lokkit JSON Nachricht}]
+\begin{lstlisting}[language=json,caption={Beispiel einer lokkit JSON Nachricht, deren \emph{digest} vom account \emph{0x55047206d03afef0d79bb2d90710bf9f23737860} erstellt wurde.}]
 {
-  digest: \#TODO: insert digest,
+  digest: "0x06351aa8220219b621d7c2c5340110d3be147b92ef8035469df996762e021f512f4f8  30dee0ed1d59998b4bafaa3abb589668d940bdce867f7e6d83315a454af1b",
   message: {
     command: "open",
-    rentableAddress: "0x4cbee4df58c717f47a5e6e8d305a450fcdbe1e24",
-    key: \#TODO:INSERT SAMPLE KEY
+    key: "435712b75b3546c06ed5e9ab19fbc309c5f2e0a57701e56e39f43f449b6e72c9",
+    rentableAddress: "0xbac41871cf121f6c02d345af52c82c83759a2e3b"
   }
 }
 \end{lstlisting}
