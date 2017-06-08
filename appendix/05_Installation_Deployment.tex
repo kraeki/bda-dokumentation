@@ -62,7 +62,7 @@ $ git clone https://github.com/lokkit/lokkit --recursive
 \end{lstlisting}
 
 \section{Aufsetzten der Raspberry Pi's}
-Für jedes der drei Raspberry Pi's wurde ein eigenes Image erstellt, welches im Anhang der CD entnommen werden kann. (TODO:) Die Images basiern auf dem offiziellen \emph{Raspbian Jessie Lite} Image \footnote{\url{https://www.raspberrypi.org/downloads/raspbian/}}.
+Für jedes der drei Raspberry Pi's wurde ein eigenes Image erstellt. Die Images basieren auf dem offiziellen \emph{Raspbian Jessie Lite} Image \footnote{\url{https://www.raspberrypi.org/downloads/raspbian/}}.
 
 \paragraph{}
 \begin{description}
@@ -190,10 +190,10 @@ Saving successful migration to network...
 \end{lstlisting}
 
 \noindent 
-Die Adressen der veröffentlichten Rentables sind im Konsolenoutput von \emph{truffle} ersichtlich (vgl. \ref{lst:rentable_deployment}). Diese Adressen können nun mittels QrCode Generators\footnote{Z.B.: http://goqr.me/de/} in einem QrCode gespeichert und ausgedruckt werden. Der Demonstrator hat für jedes Schliessfach auf der Vorderseite Platz für einen solchen.
+Die Adressen der veröffentlichten Rentables sind im Konsolenoutput von \emph{truffle} ersichtlich (vgl. \ref{lst:rentable_deployment}). Diese Adressen können nun mittels QrCode Generator\footnote{Z.B.: \url{http://goqr.me/de/}} gespeichert und ausgedruckt werden. Der Demonstrator hat für jedes Schliessfach auf der Vorderseite Platz für einen solchen.
 
 \section{Webapp}
-Die Webapp wird ebenfalls per Debian Paket auf dem Master Raspberry Pi installiert. Nach erfolgreicher Installation ist sie unter \url{https://webapp.lokkit.io} aufrufbar. Um mit der Installation zu starten muss ins Repository \emph{webapp} gewechselt werden. Anschliessend das Debian Paket builden, auf das Raspberry Pi kopieren und installieren. Das folgender Code illustruiert das Vorgehen:
+Die Webapp wird ebenfalls per Debian Paket auf dem Master Raspberry Pi installiert. Nach erfolgreicher Installation ist sie unter \url{https://webapp.lokkit.io} aufrufbar. Um mit der Installation zu starten muss ins Repository \emph{webapp} gewechselt werden. Anschliessend kann das Debian Paket gebuildet und auf das Raspberry Pi kopiert und installiert werden. Der folgende Code illustriert das Vorgehen:
 
 \begin{lstlisting}[language=bash]
 $ cd webapp # ins Verzeichnis wechseln
@@ -216,7 +216,7 @@ $ ssh pi@master.lokkit.io
 pi@master:~ $ dpkg -i lokkit-doorman*.deb
 \end{lstlisting}
 
-Nach erfolgreicher Installation von Doorman, muss dieser jeweils mit der, für das Schliessfach angepassten, Konfiguration gestartet werden. Die Konfiguration enthält jeweils die Adresse des entsprechenden Rentables und verweist auf ein Script, dass das Schloss ansprechen kann. Beim Locker 2 und 3 sind die Schlösser identisch, und somit auch das Script. 
+Nach erfolgreicher Installation von Doorman, muss dieser jeweils mit der, für das Schliessfach angepassten, Konfiguration gestartet werden. Die Konfiguration enthält jeweils die Adresse des entsprechenden Rentables und verweist auf ein Script, das das Schloss ansprechen kann. Beim Locker 2 und 3 sind die Schlösser identisch, und somit auch das Script. 
 
 \paragraph{}
 Die Konfiguration von Doorman liegt unter \emph{/etc/lokkit/doorman.yaml} und muss folgenden Inhalt haben:
