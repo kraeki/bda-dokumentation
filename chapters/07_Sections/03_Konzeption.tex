@@ -12,7 +12,7 @@ Das Konzept, das aus dieser Arbeit hervorgeht, besteht aus einem Schrank mit ele
 \label{fig:Grobkonzept}
 \end{figure}
 
-In den nachfolgenden Abschnitten wird der das Konzept detailliert und begründet. Der Fokus liegt auf dem Smart Contract. Die System Spezifikation ist im Kapitel \ref{cha:Systemspezifikation}) zu finden.
+In den nachfolgenden Abschnitten wird der das Konzept detailliert und begründet. Der Fokus liegt auf dem Smart Contract. Die System Spezifikation ist im Kapitel \ref{cha:Systemspezifikation} zu finden.
 
 \subsection{Physischer Aufbau}
 
@@ -25,23 +25,15 @@ Grundsätzlich könnte auch einfach ein Rechner alle Schliessfächer steuern und
 \paragraph{Begründung Raspberry Pi}
 Die Raspberry Pis wurden vom Auftraggeber zur Verfügung gestellt. Es handelt sich um ein kompakter, vollständiger Computer der das Ansteuern von Hardware (Schliessmechanismus) über den GPIO erleichtert. Ausserdem eignet es sich zum Erstellen eines eigenen Netzwerkes, das für die private Blockchain benötigt wird und verfügt über genügend Rechenpower um eine \emph{geth} Node (ohne Mining) laufen zu lassen.
 
-\subsection{Schnittstelle zum Anwender}
-
-Wiso Mobile App
-
-
-\subsection{Prozess}
-
-
 \subsection{Interaktion mit dem Demonstrator}
 \label{sec:Interaktion mit dem Demonstrator}
 
-Ein Benutzer muss sich zuerst als einen weiteren Node mit der Blockchain verbinden. Anschliessend kann er über die entwickelte Webapp mit dem System interagieren.
+Ein Benutzer muss sich zuerst als einen weiteren Node mit der Blockchain verbinden. Anschliessend kann er über die Webapp mit dem System interagieren.
 
-\vspace{1em}\noindent
+\vspace{0.7em}\noindent
 Folgende Interaktionen sind möglich.
 
-\vspace{1em}\noindent
+\vspace{0.7em}\noindent
 \textbf{Als Owner}
 \begin{itemize}
     \item Ein neues Rentable erfassen
@@ -51,7 +43,7 @@ Folgende Interaktionen sind möglich.
     \item Deposit von vergangenen Reservationen erhalten
 \end{itemize}
 
-\vspace{1em}\noindent
+\vspace{0.7em}\noindent
 \textbf{Als potientieller Renter}
 \begin{itemize}
     \item Informationen und Verfügbarkeit eines Rentables prüfen
@@ -59,19 +51,16 @@ Folgende Interaktionen sind möglich.
     \item Gutschriften abheben
 \end{itemize}
 
-\vspace{1em}\noindent
+\vspace{0.7em}\noindent
 \textbf{Als aktueller Renter (current renter)}
 \begin{itemize}
     \item Sperren und Entsperren des Rentables (Lock/Unlock)
     \item Zurückgeben des Rentables (unclaim)
 \end{itemize}
 
-\subsection{Regeln}
-Es gibt keine Reservationsüberlappungen
-
 \subsection{Fallbeispiele}
 \label{sec:Fallbeispiele}
-Die folgenden Fallbeispiele erläutern das Zusammenspiel der Interaktionen und die Verschiebung der priviligierten Rechte entlang der Zeitachse.
+Die folgenden beiden Fallbeispiele erläutern die Interaktion mit einem Schliessfach entlang der Zeitachse.
 
 \subsubsection{Normal-Fall}
 In Abb.~\ref{fig:Cases}\,(a) reserviert Benutzer A das Schliessfach von $t_{R1}$ bis $t_{R2}$ zum Zeitpunkt $t_0$. Das Deposit und die Mietkosten werden ihm somit abgezogen.
@@ -102,15 +91,9 @@ Normal-Fall (a), Keine-Rückgabe (b).}
 Wie im Normal-Fall beschrieben, ist Benutzer A Current Renter des Schliessfaches. Anstatt das Schliessfach wieder zurückzugeben, lässt er die Reservationszeit auslaufen. Zum Zeitpunkt $t_{R2}$ werden ihm die Rechte entzogen und das Deposit wird nicht zurückerstattet. Es liegt also in Benutzer A seinem Interesse, alle eingeschlossenen Gegestände vor Ablauf der Reservation aus dem Schließfach zu nehmen und dieses zurückzugeben (Unclaim). Siehe Abb.~\ref{fig:Cases}\,(b) als Illustration.
 
 \subsubsection{Fall von Schäden}
-Benutzer A reserviert wie im Normalfall ein Schliessfach. Zum Zeitpunkt t1 will er das Schliessfach öffen (Unlock), dieses reagiert jedoch nicht. Er muss nun Kontakt mit dem Owner aufnehmen und die Sache klären. Auf jeden Fall sollte er nun das Schliessfach zurückgeben (Unclaim), um seine Kosten gering zu halten, im Falle, dass der Owner nicht kontaktierbar lässt oder dieser kein Interesse zeigt.
+Benutzer A reserviert wie im Normalfall ein Schliessfach. Zum Zeitpunkt t1 will er das Schliessfach öffen (Unlock), dieses reagiert jedoch nicht. Er muss nun Kontakt mit dem Owner aufnehmen und die Sache klären. Auf jeden Fall sollte er nun das Schliessfach zurückgeben (Unclaim), um seine Kosten gering zu halten, im Falle, dass der Owner nicht kontaktierbar ist oder dieser kein Interesse zeigt.
 
-Im Rahmen dieser Arbeit wurde auch ein Konzept überlegt, wie solche Probleme vermindert werden könnten. Durch Einführen eines Review Systems, wo Benutzer die Owner beurteilen können. Owner mit einer guten Bewertung (Score) wären dann vertrauenswürdiger.
-
-\subsection{Private Blockchain}
-ANDI TEXT
-
-\subsection{Business Logik (Smart Contract)}
-
+Ein mögliches Konzept, wie solche Probleme vermindert werden könnten, wäre z.B. das Einführen eines Review Systems, wo Benutzer die Owner beurteilen könnten. Owner mit einer guten Bewertung (Score) wären dann vertrauenswürdiger. Im Rahmen dieser Arbeit wurde dies aber nicht mehr weiter ausgeführt. 
 
 \subsection{Sicherheit}
 Im Design und bei der Umsetzung dieses Systems wurde angenommen, dass die Implementation des gesamten Ethereum Protokolls und der Web3 Funktionen kryptographisch sicher ist. Die Validität eines Smart Contracts sollte nicht infrage gestellt werden, sofern die Blockchain in einem validen Zustand ist.\cite{github.com/ethereum/web3js, go-ethereum}
