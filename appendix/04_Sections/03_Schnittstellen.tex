@@ -39,9 +39,16 @@ Um den Digest eines Message Objekts zu erzeugen wird die Funktion \emph{web3.eth
 Wichtig dabei ist, dass die über Whisper erhaltenen JSON Objekte jeweils die Attribute in alphabetisch sortierter Reihenfolge beinhalten und über die javascript Funktion JSON.stringify serialisiert werden, bevor sie den kryptographischen Funtionen übergeben werden. Grund dafür ist, dass besagte sign Funktion eine Zeichenkette als Arugment nimmt und nicht ein Objekt. Die Verwendung von JSON.stringify versichert, dass der Eingabewert stets gleich strukturiert ist.
 
 \begin{lstlisting}[language=javascript,caption={beispiel generate digest und ecRecover}]
-\#todo: example code
-\end{lstlisting}
+// Sender
+var message = { 'command': command, 'rentableAddress': rentableAddress, 'key': publicKey };
+var messageBytes = web3.fromAscii(JSON.stringify(message));
+var digest = web3.eth.sign(adi, messageBytes);
 
+// Empfänger
+var payload = JSON.parse(web3.toAscii(envelope.payload));
+var signer = web3.personal.ecRecover(web3.fromAscii(JSON.stringify(payload.message)), payload.digest);
+\end{lstlisting}
+Dabei wird der Empfänger als Resultat von \emph{ecRecover} die Adresse erhalten, die beim Sender entsperrt war, als \emph{web3.eth.sign} aufgerufen wurde.
 
 \subsubsection{Verteilung}
 \label{sys_subsubsec:Verteilung}
@@ -56,8 +63,13 @@ shh.post({key:key, topic:topic, payload:web3.fromAscii(msg)});
 
 
 \begin{lstlisting}[language=javascript,caption={Beispiel eines Whisper v5 Filters}]
-var filterId = web3.shh.\#todo implement filter;
+var shhPw = "lokkit";
+var key = shh.addSymmetricKeyFromPassword(shhPw);
+var topic = web3.sha3(rentableAddress).substr(0, 10);
+var filterId = web3.shh.subscribe({type: 'sym', topics: [topic], key: key});
 web3.shh.getFilterUpdates(filterId).forEach(function(err, result) {
-    console.log("something");
+    // result ist der envelope.
+    console.log(result.sig);
+    console.log(result.payload);
 }
 \end{lstlisting}

@@ -1,9 +1,8 @@
 \section{Konzept und Implementation}
 \label{sec:Konzeption}
-Folgend wird das entworfene Konzept und die Lösng der unter \ref{cha:Aufgabenstellung} beschriebenen Aufgabenstellung, beschrieben. Es umfasst den Entwurf von konkreten Systemteilen und -Komponenten. Weiter werden getroffene Entscheidungen zum Entwurf und zur Implementation der Komponenten beschrieben.
+Folgend wird das entworfene Konzept und die Lösng der unter \ref{cha:Aufgabenstellung} beschriebenen Aufgabenstellung, erläutert. Es umfasst den Entwurf von konkreten Systemteilen und -Komponenten. Weiter werden getroffene Entscheidungen zum Entwurf und zur Implementation dieser Komponenten beschrieben.
 
-ANDI TEXT
-Das Konzept, das aus dieser Arbeit hervorgeht, besteht aus einem Schrank mit elektronischen Schliessfächer, die in der Blockchain als Smart Contracts abgebildet sind und über eine Mobile App gemietet werden können (siehe Abbildung \ref{fig:Grobkonzept}). Jedes Schliessfach verfügt über eine Identifikation die durch ein Mobilegerät eingelesen werden kann. Anschliessed werden die Daten des Schliessfachs aus der Blockchain geladen und dargestellt. Der Benutzer kann nun, sofern sein Account der Blockchain genügend Geld hat, das Schliessfach mieten und übernimmt dadurch die Kontrolle über den Schliessmechanismus. 
+Das Konzept, das aus dieser Arbeit hervorgeht, besteht aus einem Schrank mit elektronischen Schliessfächer, die in der Blockchain als Smart Contracts abgebildet sind und über eine Mobile App gemietet werden können (vgl. \ref{fig:Grobkonzept}). Jedes Schliessfach verfügt über eine Identifikation die durch ein Mobilegerät eingelesen werden kann. Anschliessed werden die Daten des Schliessfachs aus der Blockchain geladen und dargestellt. Der Benutzer kann nun, sofern sein Account in der Blockchain genügend Geld hat, das Schliessfach mieten und übernimmt dadurch die exklusive Kontrolle über den Schliessmechanismus. 
 
 \begin{figure}
 \centering
@@ -12,23 +11,22 @@ Das Konzept, das aus dieser Arbeit hervorgeht, besteht aus einem Schrank mit ele
 \label{fig:Grobkonzept}
 \end{figure}
 
-In den nachfolgenden Abschnitten wird der das Konzept detailliert und begründet. Der Fokus liegt auf dem Smart Contract. Die System Spezifikation ist im Kapitel \ref{cha:Systemspezifikation} zu finden.
+In den nachfolgenden Abschnitten wird das Konzept weiter ausgeführt. Die System Spezifikation ist im Kapitel \ref{cha:Systemspezifikation} zu finden.
 
 \subsection{Physischer Aufbau}
+Jedes Schliessfach funktioniert autonom und besteht aus dem Schliessfach selbst, einem Raspberry Pi und einem Schloss. Das Raspberry Pi ist mit dem Schliessmechanismus verbunden und kann dieses auf Befehl hin Öffnen und Schliessen. Gleichzeitig wird eine Blockchain Node darauf ausgeführt und bildet im Verbund mit den anderen Raspberry Pis das private Netzwerk, das als Backend der Lösung fungiert.
 
-Jedes Schliessfach funktioniert autonom und besteht aus dem Schliessfach selbst, einem Raspberry Pi und einem Schloss. Das Raspberry Pi ist mit dem Schliessmechanismus verbunden und kann dieses auf Befehl hin Öffnen und Schliessen. Gleichzeitig repräsentiert es ein Node und bildet im Verbund mit den anderen Raspberry Pis die private Blockchain, die als Backend der Lösung fungiert. Die Abbildung Abbildung ... stellt den Aufbau exemplarisch dar.
+Eines der Raspberry Pi's erstellt einen WLAN Hotspot und bietet DNS und DHCP Services für das Netzwerk an.
 
-Eines der Raspberry Pi's erstellt ein WLAN Hotspot und bietet DNS und DHCP für das Netzwerk an.
-
-\paragraph{Weshalb autonomer Aufbau?}
-Grundsätzlich könnte auch einfach ein Rechner alle Schliessfächer steuern und Teil der privaten Blockchain sein. Diese Variante würde jedoch mehr einen zentralen Ansatz suggerieren und nicht den dezentralen Ansatz der Blockchain unterstreichen. Ausserdem besteht eine Blockchain aus mehreren Nodes, was den Einsatz von mehreren Raspberry Pis spiegelt. 
-\paragraph{Begründung Raspberry Pi}
-Die Raspberry Pis wurden vom Auftraggeber zur Verfügung gestellt. Es handelt sich um ein kompakter, vollständiger Computer der das Ansteuern von Hardware (Schliessmechanismus) über den GPIO erleichtert. Ausserdem eignet es sich zum Erstellen eines eigenen Netzwerkes, das für die private Blockchain benötigt wird und verfügt über genügend Rechenpower um eine \emph{geth} Node (ohne Mining) laufen zu lassen.
+\paragraph{Autonomer Aufbau}
+Grundsätzlich könnte auch einfach ein Rechner alle Schliessfächer steuern und Teil der privaten Blockchain sein. Diese Variante würde jedoch mehr einen zentralen Ansatz suggerieren und nicht den dezentralen Ansatz der Blockchain unterstreichen. Ausserdem besteht eine Blockchain aus mehreren Nodes, was den Einsatz von mehreren Raspberry Pis rechtfertigt. 
+\paragraph{Raspberry Pi}
+Die Raspberry Pis wurden vom Auftraggeber zur Verfügung gestellt. Es handelt sich um einen kompakten, vollständigen Computer, der das Ansteuern von Hardware (Schliessmechanismus) über den GPIO Pin ermöglicht. Ausserdem eignet es sich zum Erstellen eines eigenen Netzwerkes, das für die private Blockchain benötigt wird und verfügt über genügend Rechenpower um eine \emph{geth} Node (ohne Mining) laufen zu lassen.
 
 \subsection{Interaktion mit dem Demonstrator}
 \label{sec:Interaktion mit dem Demonstrator}
 
-Ein Benutzer muss sich zuerst als einen weiteren Node mit der Blockchain verbinden. Anschliessend kann er über die Webapp mit dem System interagieren.
+Ein Benutzer muss sich zuerst mit einer Node mit der Blockchain verbinden. Anschliessend kann er über die Webapp mit dem System interagieren.
 
 \vspace{0.7em}\noindent
 Folgende Interaktionen sind möglich.
@@ -55,7 +53,7 @@ Folgende Interaktionen sind möglich.
 \textbf{Als aktueller Renter (current renter)}
 \begin{itemize}
     \item Sperren und Entsperren des Rentables (Lock/Unlock)
-    \item Zurückgeben des Rentables (unclaim)
+    \item Zurückgeben des Rentables (unclaim, vgl. \ref{sys_para:claim_unclaim})
 \end{itemize}
 
 \subsection{Fallbeispiele}
