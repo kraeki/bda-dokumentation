@@ -4,12 +4,12 @@ Folgend werden alle im Lokkit System vorhandenen Komponenten, deren Abhängigkei
 
 \subsection{Geth}
 \label{sys_subsec:Geth}
-Geth ist die Referenzimplementation des Ethereum Protokoll. Sie wurde als Node für die Raspberry Pis verwendet.\cite{go-ethereum}
+Geth ist die Referenzimplementation des Ethereum Protokoll. Sie wurde als Node für die Raspberry PIs verwendet.\cite{go-ethereum}
 
 \subsubsection{Konfiguration}
 Damit die vom Doorman oder Webapp benötigten Einstellungen in Geth richtig vorgenommen wurden, wird folgend das benutzte Kommando zum Starten von Geth gelistet und einzelne Teile davon erklärt.
 \begin{lstlisting}[language=bash,caption={Beispielkommando für das Starten einer Node für Doorman oder Webapp}]
-geth --datadir data --nodekeyhex=091bd6067cb4612df85d9c1ff85cc47f259ced4d4cd99816b14f35650f59c322 --rpc --rpcport 8545 --rpcaddr "127.0.0.1" --verbosity 4 -shh --rpcapi "ws,eth,net,web3,admin,personal,shh" --networkid 42 --ipcpath lokkit  --port "30303" --lightserv 50 --vmodule p2p=4 --rpccorsdomain "*"
+geth --datadir data --nodekeyhex 091bd6067cb4612df85d9c1ff85cc47f259ced4d4cd99816b14f35650f59c322 --rpc --rpcport 8545 --rpcaddr "127.0.0.1" -shh --rpcapi "ws,eth,net,web3,admin,personal,shh" --networkid 42 --ipcpath lokkit  --port "30303" --lightserv 50 --rpccorsdomain "*"
 \end{lstlisting}
 
 \begin{table}[H]
@@ -20,8 +20,8 @@ geth --datadir data --nodekeyhex=091bd6067cb4612df85d9c1ff85cc47f259ced4d4cd9981
 \toprule
 geth & Die ausführbare Datei \\ \midrule
 --datadir data & der Pfad für alle Daten \\ \midrule
---nodekeyhex=X & Wenn die Node las bootnode verwendet wird, muss ein beliebiger nodekeyhex angegeben werden \\ \midrule
---bootnodes=enode://X & Die bootnode, die zur Entdeckung weiterer Nodes angefragt werden soll \\ \midrule
+--nodekeyhex X & Wenn die Node las bootnode verwendet wird, muss ein beliebiger nodekeyhex angegeben werden \\ \midrule
+--bootnodes enode://X & Die bootnode, die zur Entdeckung weiterer Nodes angefragt werden soll \\ \midrule
 --rpc & jsonrpc Schnittstelle aktivieren \\ \midrule
 --rpcport 8545 & Port für die rpcjson Schnittstelle \\ \midrule
 --rpcaddr "127.0.0.1" & Adresse für die jsonrpc Schnittstelle \\ \midrule
@@ -197,6 +197,7 @@ Die Oberfläche kann grundsätzlich in vier verschiedene Ansichten unterteilt we
 Ebenfalls bietet die Webapp die Möglickeit an sich mit einem beliebigen Node zu verbinden. Diese Einstellung ist z.B. in der Netzwerkansicht (vgl. Abbildung \ref{fig:4 Ansichten der Webapp} (c)) untergebracht. Für jedes Rentable gibt es ausserdem eine Detailansicht, welche die Interaktion mit dem Smart Contract in der Blockchain darstellt. Über diese Ansicht, kann der Benutzer das Rentable reservieren, schliessen, öffnen und wieder zurück geben. Die Abbildung \ref{fig:4 Ansichten der Webapp} (d) präsentiert die Detailansicht.
 
 \paragraph{QrCode Leser}
+\label{sys_para:QrCode Leser}
 Die Webapp benötigt für das Dekodieren des QrCode Zugriff auf eine Kamera. Dieses Feature basiert rein auf dem HTML5 Standard. Es sind keine Browserplugins nötig. Dekodiert wird mit der Library "qrcode-reader". Der Ablauf ist wie folgt:
 
 \begin{enumerate}

@@ -1,42 +1,42 @@
 \chapter{Schlussfolgerung}
 \label{cha:Schlussfolgerung}
-\begin{itemize}
-    \item \textbf{Wie beurteilen Sie die Blockchain-Technologie? Generell? im Bezug auf IoT? Gibt's offensichtliche Hindernisse?}
-    \item \textbf{Was wuerden Sie im Projekt anders machen?}
-    \item \textbf{Was hat am meisten Zeit gekostet?}
-    
-    \item \textbf{Sehen Sie Zukunft in dieser technologie?}
-    \item \textbf{}
-\end{itemize}
+
+Abschliessend wird über das Projekt und dessen Ablauf reflektiert. Die erledigte Arbeit wird folgend infrage gestellt und eine kritische Position gegenüber der verwendeten Technologien, Entscheidungen im Projektverlauf und der Aufgabenstellung angenommen.
+
+\section{Fazit Aufgabenstellung}
+\label{sec:Fazit_Aufgabenstellung}
+Die Umsetzung der erarbeiteten Aufgabenstellung dient als Demonstrator und soll ein \acrshort{PoC} sein. Der Fokus war von Anfang an, auch seitens der Auftraggebers, auf der Blockchain Technologie. Der \acrshort{IoT} Aspekt sollte der abschliessenden Veranschaulichung des \acrshort{PoC} dienen. Dabei gab es einige Limitationen in der Anwendung der Funktionalitäten der Blockchain, da auf die Komplexität und die Anwendungsbereiche der zu implementierenden Demonstrator Hardware Rücksicht genommen werden musste. Die physische Umsetzung des Demonstrators hat auch Zeit gekostet, die anders verwendet zu zusätzlichen Erkenntnissen im Bereich Blockchain hätte führen können.
+
+Der unmittelbare Nutzen des Demonstrators, wo zentrale Angebote bereits vorhanden sind, beispielsweise an Bahnhöfen der SBB, ist nicht sofort ersichtlich. Einige Nachteile in diesem konkreten Beispiel wären benötigte Elektronik, Stromverbrauch und Verfügbarkeit des Angebots. Auch die Abhängigkeit zu der Blockchain kann verheerende Folgen haben, sollte dieses aus einem beliebigen Grund kompromittiert werden.
+
+Das System wurde nur im Rahmen eines privaten Netzwerkes aufgebaut und getestet - kurze explorative Exkurse auf die \emph{Ropsten} Testchain sind davon ausgeschlossen. Skalierungsfragen wurden hierbei nicht beantwortet, wie beispielsweise die Performance und Zuverlässigkeit der Events aus Solidity oder Propagation von Whisper v5 Nachrichten in der öffentlichen Blockchain. Sollte erhebliche Latenz durch die Skalierung entstehen, wäre die Lösung so nicht zu verwenden und würde die Kundenzufriedenheit negativ beeinflussen.
+
+\section{Fazit Blockchain}
+Wie im Kapitel \ref{sec:Fazit_Aufgabenstellung} erwähnt, konnte aufgrund der Aufgabenstellung nicht alle Zeit in diesem Projekt in die Aufbereitung und Anwendung der Blockchain Technologie investiert werden. Trotzdem wurde ein Einblick in dieses Thema gewährt, der einen bleibenden Eindruck hinterliess.
+
+Ein grosser Aspekt der Blockchain ist Anonymität und Vertrauenslosigkeit. Wie Schächen zu Stärken werden können, kann dies auch umgekehrt der Fall sein: Genau diese beiden Punkte werden zum Verhängnis, wenn konkrete Dienste angeboten werden sollen. An dieser Stelle sind Organisationen wie Silk Road\footnote{https://en.wikipedia.org/wiki/Silk\_Road\_(marketplace)} zu erwähnen, die im Angesicht solcher Technologien auf den Plan gerufen werden. Auch aufgrund des mangelnden Vertrauensverhältnisses zwischen Dienstleister und dem, der den Dienst bezieht, muss auf Vorsicht beharrt werden, falls Dienste in der realen Welt oder physische Produkte auf Bezahlung mit Kryptowährungen ausgetauscht werden.
+
+\subsection{Fazit Ethereum}
+Durch die Mitarbeit an dem Open Source Projekt go-ethereum wurde klar, dass das Ethereum Protokoll und auch die Umsetzung in geth trotz mehrjähriger Entwicklung noch lange keinen finalen Stand erreicht hat. Grundlegende Diskussion zum Design des Protokolls und dessen Implementation werden in den Kommunikationskanälen rege vorangetrieben.\cite[Gitter]{go-ethereum}
+
+\section{Fazit Blockchain und IoT}
+Das Konzept der Rentables wurde bewusst so abstrakt gewählt, um die Ausdehnung zu ermöglichen. Ein Rentable kann dabei grundsätzlich alles sein: Ein elektrisches Fahrrad, eine Ferienwohnung oder ein Schliessfach. Es muss jedoch möglich sein, einen Kontrollmechanismus anzubringen, der an eine Blockchain Node angebunden werden kann. Bei einem elektrischen Fahrrad wäre es z.B. möglich einen Minicomputer im Fahrgestellt zu montieren, welcher den Akku aktiviert oder deaktiviert und über eine Sim-Karte mit der Blockchain synchronisiert. Möchte ein Benutzer das Fahrrad verwenden, so müsste er dieses zuerst über die Blockchain mieten und erst dann kann er den Akku aktivieren. Die Mietkosten würden über den Smart Contract dem Anbieter des Fahrrades überwiesen werden.
 
 \section{Ausblick}
-\label{sec:Ausblick}
-\begin{itemize}
-    \item \textbf{Ist es denkbar den Demonstrator produktive einzusetzen? Ist es ein reales Produkt, dass eine Firma einsetzen wollen wuerde?}
-    \item \textbf{Was wird sich von der Technologie her noch aendern?}
-    \item \textbf{Was sind die Challenges fuer die Zukunft?}
-\end{itemize}
-Blockchain für realtime Anwendungen wahrscheinlich nicht geeignet?
-\par
-Anonymität kann auf gefährlich sein, da man nicht weiss, von wem man eine Dienstleistung kauft. -> Wie im Darknet kann es sein, dass eine Dienstleistung bezahlt wird, aber nicht erhalten wird.
-Gibt bei zentralisierten Angeboten (wie bspw. isoliert an einem Bahnhof oder in einer Hochschule) keinen ersichtlichen Mehrwert gegenüber einer ebenfalls zentralisierten Anwendung. Einige Nachteile wie bspw. Latenz, Verfügbarkeit oder Vertrauenswürdigkeit des Angebots sind sogar ersichtlich.
-
-\subsection{Weitere Gedanken}
-Bei Recherche gefundene Konzepte beinhalten auch bspw. Elektroautos an einem Lichtsignal zu tanken. Ist nicht wirklich machbar, da 12 Sekunden Blockcycle zu lange sind, um zu garantieren, dass eine Leistung bezogen werden kann (Transaktion ist erst sicher, sobald der block gemined ist...)
-
-
+Aufbauend auf diesem Demonstrator, dieser Arbeit und den Erkenntnissen daraus, könnte vom Auftraggeber Nutzen gezogen werden. Die weitere Verfolgung dieses Konzeptes könnte, unter Beachtung der weiteren Überlegungen im Bereich der Smart Contracts (vgl. \ref{para:Rentable_weitergehend}), verfeinert werden, und an Firmen demonstriert werden, um das noch vorhandene Mysterium um diese Smart Contracts in der Blockchain zu lüften.
 
 \section{Lessons Learned}
 \label{sec:Lessons_Learned}
+Hier schreiben die Diplomanden ihre abschliessenden Worte zur Bachelorarbeit.
 
 \subsection{Dominik Hirzel}
-Das war das interessanteste und lehrreichste Projekt, an dem ich im schulischen und professionellen Umfeld je gearbeitet habe. Nie wollte ich mit einem meiner Kommilitonen tauschen. Diese Aussage dient nicht dazu, eine bessere Note ergaunern zu wollen, sondern soll vielmehr meine Euphorie, meinen Arbeits- und Lernwillen in diesem Projekt ausdrücken. Einen grossen Teil dieser Motivation und Ausdauer verdanke ich auch meinem technisch wie sozial ausserordentlich versierten Partner: Andreas Schmid.
+Das war das interessanteste und lehrreichste Projekt, an dem ich im schulischen und professionellen Umfeld je gearbeitet habe. Nie wollte ich mit einem meiner Kommilitonen tauschen. Diese Aussage dient nicht dazu, eine bessere Note ergaunern zu wollen, sondern soll vielmehr dazu meine Euphorie sowie meinen Arbeits- und Lernwillen in diesem Projekt auszudrücken. Einen grossen Teil dieser Motivation und Ausdauer verdanke ich auch meinem technisch wie sozial ausserordentlich versierten Partner: Andreas Schmid.
 
-Die cutting edge Technologie der Blockchain interdisziplinär mit dem IoT Aspekt zu verbinden hat mir nicht nur schlaflose Nächte und eine Bekanntschaft mit dem Nachtwächter der HSLU beschert, sondern auch viel Freudensprünge erlaubt. Dieses Projekt hat mich in meiner Entscheidung bekräftigt, die richtige Ausbildung und das richtige Studium gewählt zu haben.
+Die cutting edge Technologie der Blockchain interdisziplinär mit dem IoT Aspekt zu verbinden hat mir nicht nur schlaflose Nächte und eine Bekanntschaft mit dem Nachtwächter der HSLU beschert, sondern auch viele Freudensprünge erlaubt. Dieses Projekt hat mich in meiner Entscheidung bekräftigt, nach wie vor die passende Ausbildung und das passende Studium gewählt zu haben.
 
-Speziell die Zusammenarbeit mit den open source Projekten Ethereum und Status-IM hat mir gefallen. Die Tatsache, dass wir ihnen in ihrem Design und der Implementation Fehler gefunden haben und diese mitteilen konnten (vgl. \ref{subsec:Open_Source}) bestätigt auch die Intensivität und unser Engagement in dieser Arbeit.
+Speziell die Zusammenarbeit mit den Open Source Projekten Ethereum und Status-IM hat mir gefallen. Die Tatsache, dass wir ihnen in ihrem Design und der Implementation Fehler gefunden haben und diese mitteilen konnten (vgl. \ref{subsec:Open_Source}) bestätigt auch die Intensivität und unser Engagement in dieser Arbeit.
 
-Die unterschiedlichen entworfenen Softwarekomponenten und das Zusammenspiel dieser, sowie das Design der Real-Time Kommunikationsschnittstelle und Berücksichtigung der Sicherheitsrelevanten Aspekte waren natürlich auch aus technischer Sicht ein Higlight dieser Arbeit. Allgemein lässt sich die Komplexität dieses Systems betonen, das wir mit klar abgegrenzten Verantwortungsbereichen entworfen und umgesetzt haben.
+Die unterschiedlichen entworfenen Softwarekomponenten und das Zusammenspiel dieser, sowie das Design der Real-Time Kommunikationsschnittstelle und Berücksichtigung der Sicherheitsrelevanten Aspekte, waren aus technischer Sicht ein Highlight dieser Arbeit. Allgemein lässt sich die Komplexität dieses Systems betonen, das wir mit klar abgegrenzten Verantwortungsbereichen entworfen und umgesetzt haben.
 
 \subsection{Andreas Schmid}
 Ich bin de Andi. Zum glück hani mich für s Studium ade HSLU entschiede, susch hätti mir no müsse müe gä...
