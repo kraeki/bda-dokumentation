@@ -1,63 +1,31 @@
 \section{Recherche}
 \label{sec:Recherche}
-\begin{itemize}
-    \item \textbf{Informationssuche zu Beginn}
-    \item \textbf{Was mit Blockchain alles gemacht werden kann}
-    \item \textbf{Was wir mit Blockchain machen möchten}
-    \item \textbf{technische Entscheidungen beschreiben}
-    \item \textbf{Machbarkeitsanalyse lokkit}
-    \item \textbf{Konzept verweist hierher für generelle infos und limitationen und Gründe für Entscheidungen}
-\end{itemize}
-
-referenz, verweise
+Die Informationen, die das Projektteam
 
 \subsection{Verwendete Blockchain Implementation}
-Dieses Projekt verwendet die open-source Blockchain-Implementation Ethereum als Plattform für die Datenhaltung, die Business Logik in Form von Smart Contracts (vgl. \ref{subsec:Smart_Contracts}) und einzige Interaktionsmöglichkeit für Benutzer mit dem System.
+Dieses Projekt verwendet die open-source Blockchain-Implementation Ethereum als Plattform für die Datenhaltung, die Business Logik in Form von Smart Contracts (vgl. \ref{subsec:Recherche_Smart_Contracts}) und einzige Interaktionsmöglichkeit für Benutzer mit dem System.
 
-Ethereum ist die einzige Implementation einer Blockchain, die zum Start dieses Projektes eine funktionsfähige Plattform für eine Kryptowährung und Smart Contracts zur Verfügung stellt. Weitere Technologien, die in der Evaluationsphase analysiert wurden, sind Hyperledger, Bitcoin, Tendermint (nur ein consensus algo?), Nxt.\cite{ethereum.org, hyperledger.org}
-
-ethereum.org, hyperledger.org, bitcoin.com, tendermint.com, nxt.com
-
-\subsubsection{Ethereum}
-Die Finanzierung der Entwicklung der Ethereum Plattform durch ein Crowdfunding Projekt im Sommer 2014 ermöglicht. Der erste Release war ein Jahr später am 30. Juli 2015. Die Implementation des lokkit Demonstrators wurde zu Beginn basierend auf der Version 1.5.9 von geth erstellt. Um neue Features wie Whisper v5 oder Mobile-Integration zu ermöglichen wurde die verwendete Version laufend an den aktuellen Entwicklungsstand der Ethereum Platform angepasst.\cite{ethereum.org}
-
-\#todo: upgrade 1.6.1 erwähnen + open source status-im
+Ethereum ist die einzige Implementation einer Blockchain, die zum Start dieses Projektes eine funktionsfähige Plattform für eine Kryptowährung und Smart Contracts zur Verfügung stellt. Weitere Blockchain Technologien, die in der Evaluationsphase analysiert wurden, sind Hyperledger und Bitcoin. Diese beiden unterstützen jedoch (noch) keine Smart Contracts.\cite{ethereum.org}\cite[welcome]{wiki.hyperledger.org}
 
 \paragraph{Konsensus}
 Alle bisherigen Versionen des Ethereum Protokolls (Olympic, Frontier, Homestead) verwenden den \emph{Proof of Work} Algorithmus Ethash, um Konsensus zu erreichen. Dies bedeutet, dass für jede Transaktion eine rechenintensive Operation, genannt \emph{proof}, durchgeführt werden muss, bevor die Transaktion offiziell in die Blockchain eingetragen werden kann.\cite{Ethash}
 
-Für zukünftige Implementationen des Ethereum Protokolls ist ein \emph{Proof of Authority} Algorithmus vorgesehen.\cite{github.com/ethereum_poa} Grund dafür ist, dass die Kosten eine Blockchain anzugreifen\footnote{Bspw. um gewisse Blöcke neu zu schreiben durch erneute Berechnung der Hashes und zugehörigen Nonces}, die einen Proof of Work Konsensus betreibt zusammen mit den Betriebskosten wachsen.\cite{coinmanual.com/pos, bitcoin.it/pos} Folglich kann ein Hochsicherheitssystem, wie es für Finanzdienste wie Banken oder Treuhänder benötigt würde, nur durch entsprechend hohe Betriebskosten realisiert werden. Ein wiederkehrendes Argument ist auch die Energie-Ineffizienz dieser Algorithmen. Aufgrund der benötigten hohen Rechenleistung sind Miner dazu geneigt ihre Rechenleistung zu konsolidieren und zu zentralisieren. Ursprünglich war ein \emph{Proof of Stake} Algorithmus angedacht\cite[{Frequently Asked Questions/What’s the future of Ethereum?}]{ethereum-homestead.readthedocs.io}, der jedoch aufgrund gravierender Sicherheitslücken verworfen werden musste.\cite{cost_nothing_kill_pos}
+Für zukünftige Implementationen des Ethereum Protokolls ist ein \emph{Proof of Authority} Algorithmus vorgesehen. Grund dafür ist, dass die Kosten eine Blockchain anzugreifen, die einen Proof of Work Konsensus benutzt, zusammen mit den Betriebskosten wachsen. Folglich kann ein Hochsicherheitssystem, wie es für Finanzdienstleistungen wie Banken oder Treuhänder benötigt würde, nur durch entsprechend hohe Betriebskosten realisiert werden. Ein wiederkehrendes Argument ist auch die Energie-Ineffizienz dieser Algorithmen. Aufgrund der benötigten hohen Rechenleistung sind Miner dazu geneigt ihre Rechenleistung zu konsolidieren und zu zentralisieren. Ursprünglich war ein \emph{Proof of Stake} Algorithmus angedacht, der jedoch aufgrund gravierender Sicherheitslücken verworfen werden musste.\cite{github.com/ethereum_poa,coinmanual.com/pos,bitcoin.it/pos,cost_nothing_kill_pos,tendermint.com/intro}\cite[{Frequently Asked Questions/What’s the future of Ethereum?}]{ethereum-homestead.readthedocs.io}
 
+\paragraph{Light Node}
+\label{para:Light_Node}
+
+Als Light Node wird eine Ethereum Blockchain Node bezeichnet, die nicht eine komplette Kopie der verteilten Datenbank lokal hält, sondern lediglich die Headerinformationen der Transaktionen. Sie bietet aber ein Interface zu der Blockchain über das \emph{les} Protokoll. Benötigte Daten können so von den verbundenen peers abgefragt werden. Diese Konfiguration ist speziell für Geräte mit weniger Speicherplatz oder keiner Breitband Internetverbindung angedacht.\cite[]{go-ethereum}
 \paragraph{Solidity}
-Solidity ist eine Programmiersprache, die auf der \acrfull{EVM} läuft, um Smart Contracts zu verfassen. Mehrere Sprachen konkurrieren mit Solidity, namentlich LLL und Serpent. Hierbei ist zu beachten, dass Solidity auf anderen Platformen wie Hyperledger Burrow durch eine Implementation der Ethereum VM ebenfalls lauffähig ist.\cite{github.com/hyperledger/burrow}
+Solidity ist eine Programmiersprache, die auf der \acrfull{EVM} läuft, um Smart Contracts zu verfassen. Mehrere Sprachen konkurrieren mit Solidity, namentlich LLL und Serpent. Hierbei ist zu beachten, dass Solidity auf anderen Platformen wie Hyperledger Burrow durch eine Implementation der Ethereum VM ebenfalls lauffähig sein wird.\cite{github.com/hyperledger/burrow}
 
 \paragraph{Whisper}
 \label{para:Whisper}
 Whisper v5, auch analog zu der öffentlichen API \emph{shh} genannt, ist ein Kommunikationsprotokoll für \acrfull{DAPPs}. Nachrichten, die über das Whisper Protokoll verschickt werden, benutzen zur Übermittlung ebenfalls Ethereum Nodes, auf welchen das \emph{shh} Protokoll aktiviert wurde. Diese Nachrichten lösen keine Transaktionen auf der Blockchain aus. Wie auch die Transaktionen werden die Whisper Messages an alle Teilnehmer gesendet (broadcast), können aber mit einem \emph{topic} versehen werden, das es vereinfacht, erhaltene Nachrichten zu filtern. Jede Nachricht kann mit einer \acrfull{ttl} versehen werden, die angibt, wie lange die Nachricht verfügbar sein soll. Wenn diese Zeitspanne abläuft wird die Nachricht von den Ethereum Nodes nicht mehr weitergeleitet (Stale Message) und steht auf den Nodes, die die Nachricht bereits erhalten haben, nicht mehr zur Verfügung. So bietet das Whisper Protokoll eine einfache, leichtgewichtige Möglichkeit zur Echtzeit-Kommunikation für \acrshort{DAPPs}.
 
-\#TODO: gehört das zu Konzeption? oder ganz streichen? Um das Whisper Protokoll auf einer Ethereum node zu aktivieren, muss geth mit dem \emph{-shh} Argument gestartet werden. Dies ermöglicht der jedoch Node erst, erhaltene Whisper Nachrichten von anderen Nodes weiterzuleiten. Damit die Whisper API über web3 zugänglich wird, ist zusätzlich der Eintrag \emph{shh}, in der mittels \emph{--rpcapi} angegebenen Liste der aktiven APIs, notwendig.
-\begin{lstlisting}[language=bash,caption=Beispiel für die Aktivierung des shh Protokolls auf der Ethereum Node]
-geth --shh
-\end{lstlisting}
-\begin{lstlisting}[language=bash,caption={Beispiel für die Aktivierung der web3, eth und shh API}]
-geth --rpcapi "web3,eth,shh"
-\end{lstlisting}
-\begin{lstlisting}[language=bash,caption={Beispiel für die Aktivierung des shh Protokolls und der web3, eth und shh API}]
-geth --rpcapi "web3,eth,shh"
-\end{lstlisting}
-
-\subsubsection{Hyperledger}
-\#todo: in den anhang verschieben
-Hyperledger ist ein Unterfangen mehrerer internationaler Firmen (\#TODOLinux Foundation, IBM, Intel etc), das zum Ziel hat, wichtige Funktionalität im Bereich von Blockchains zu erforschen und zu definieren, um schlussendlich einen industrieweiten offenen Standard für verteilte Ledgertechnologien zu erschaffen.\cite{wiki.hyperledger.org/welcome}
-
-Zum Zeitpunkt des Starts dieses Projekts waren die Projekte 
-\paragraph{Fabric}
-\paragraph{Chaintool}
-\paragraph{Burrow}
-
 \subsection{Öffentliche Ethereum Testchain}
 \label{subsec:oeffentliche_testchain}
-Die Ethereum Implementation stellt hart-kodiert zwei öffentliche Netzwerke zur Verfügung. Zum einen die produktiv verwendete Chain \emph{Homestead}, auf der mit physischer Währung Ether gehandelt wird\cite[{Kapitel Ether}]{ethereum-homestead.readthedocs.io}. Zum anderen das \emph{Ropsten} Netzwerk, das als aktuelle Testchain dient. Obwohl das Mining auf der Testchain ebenfalls mit erheblicher Rechenleistung verbunden ist, kann Ether auf der Testchain nicht gegen \emph{echte} Währung eingetauscht werden.
+Die Ethereum Implementation stellt hart-kodiert zwei öffentliche Netzwerke zur Verfügung. Zum einen die produktiv verwendete Chain \emph{Homestead}, auf der mit physischer Währung Ether gehandelt wird\cite[{Ether}]{ethereum-homestead.readthedocs.io}. Zum anderen das \emph{Ropsten} Netzwerk, das als aktuelle Testchain dient. Obwohl das Mining auf der Testchain ebenfalls mit erheblicher Rechenleistung verbunden ist, kann Ether auf der Testchain nicht gegen \emph{echte} Währung eingetauscht werden.
 
 \paragraph{Faucet Request}
 \label{para:Faucet_Request}
@@ -68,19 +36,18 @@ Auf allen Testchains können sogenannte \emph{Faucet Requests} gemacht werden, w
 Durch Wunsch des Auftraggebers wurde eine Anbindung an die öffentliche \emph{Ropsten} Testchain (vgl. \ref{subsec:oeffentliche_testchain}) ausgeschlossen, da die ständige Verfügbarkeit des Internets auf den IoT devices oder die Disponibilität von Ether nicht gewährleistet sein kann. Folglich wurde eine private Blockchain auf der zur Verfügung gestellten Infrastruktur installiert (vgl. \ref{sys_sec:Demonstrator_Aufbau}). Um eine private Blockchain aufzusetzen wird ein Genesis Block benötigt und es müssen bestehende Nodes bekannt sein, die als peers hinzugefügt werden können.
 
 \paragraph{Genesis Block}
-In einer Blockchain wird der erste Block Genesis Block genannt. Hier werden initiale Kontostände (oft für die Entwickler oder Contributer) angelegt und unterschiedliche Konfigurationen bezüglich.
+In einer Blockchain wird der erste Block Genesis Block genannt. Hier werden initiale Kontostände (oft für die Entwickler oder Contributors) angelegt und unterschiedliche Konfigurationen bezüglich der Chain vorgenommen.
 Um eine Verbindung zu einem Peer aufzubauen muss der Genesis Block auf beiden Nodes übereinstimmen. Wenn dies der Fall ist, kann der Synchronisierungsprozess beginnen.
 
 \subsection{Konzept der Smart Contracts}
 \label{subsec:Recherche_Smart_Contracts}
-''A computerized transaction protocol that executes the terms of a contract.``\cite{BlockchainRevolution}
+``A computerized transaction protocol that executes the terms of a contract.''\cite{BlockchainRevolution}
 
-Mit diesem Zitat kann grob das Ziel von Smart Contracts beschrieben werden. Verträge, die in einem maschinenlesbaren Format verfasst sind, können unmissverständlich und ohne Interpretationsspielraum deterministisch definiert werden. So ist es möglich, einen in jedem Fall vorhersehbaren, digitalen Vertrag zu verfassen.
+Mit diesem Zitat kann grob das Ziel von Smart Contracts beschrieben werden. Dies sind Verträge, die in einem maschinenlesbaren Format verfasst sind und können unmissverständlich und ohne Interpretationsspielraum deterministisch definiert werden. So ist es möglich, einen in jedem Fall vorhersehbaren digitalen Vertrag zu aufzusetzen.
 
-In einer unüblichen Situation, bei der die Ausnahme nicht im Vertrag festgehalten wurde, kann nicht berücksichtigt werden, ohne dass eine Hintertür eingebaut wird - was seinerseits den Nutzen der deterministischen Natur der Smart Contracts nichtig machen würde.
-
-\subsubsection{Fallbeispiel}
-Wenn ein Smart Contract beispielsweise die Vermietung einer Wohnung abbilden soll, muss der Beschädigungs- oder Verschmutzunggrad des Objektes meist von Menschen geschätzt werden und kann selten durh Sensoren bestimmt und in der Blockchain eingetragen werden. Auch wenn dies möglich wäre, müsste man sich auf die korrekte Funktionsweise der Sensoren verlassen können. Auch bei sportlichen oder künstlerischen Veranstaltungen, wo das subjektive Urteil eines Menschen im Vordergrund steht, haben Smart Contracts keinen offensichtlichen Nutzen.\cite{ibtimes.co.uk/abiguity}
+\subsubsection{Ausnahmesituationen}
+Eine Ausnahmesituation, bei der die Ausnahme nicht im Vertrag festgehalten wurde, kann nicht berücksichtigt werden, ohne dass eine Hintertür eingebaut wird. Was seinerseits den Nutzen der deterministischen Natur der Smart Contracts nichtig machen würde.
+Wenn ein Smart Contract beispielsweise die Vermietung einer Wohnung abbilden soll, muss der Beschädigungs- oder Verschmutzunggrad des Objektes meist von Menschen geschätzt werden und kann selten durch Sensoren bestimmt und in der Blockchain eingetragen werden. Auch wenn dies möglich wäre, müsste man sich auf die korrekte Funktionsweise der Sensoren verlassen können.\cite{ibtimes.co.uk/abiguity}
 
 \subsubsection{Neuerstellung}
 \label{subsubsec:Neuerstellung}
@@ -104,10 +71,10 @@ Einige Funktionen von Smart Contracts benötigen Ether, den man dem Aufruf hinzu
 
 \subsubsection{Solidity}
 \label{subsubsec:Solidity}
-Solidity ist eine Programmiersprache zur Erstellung von Smart Contracts auf der \acrfull{EVM}, die syntaktisch stark an JavaScript angelehnt ist. Sie kann auch auf anderen Blockchain Platoformen verwendet werden.\cite{cryptocoinnews.com/smart-contract-bitcoin,github.com/hyperledger/burrow}
+Solidity ist eine Programmiersprache zur Erstellung von Smart Contracts auf der \acrfull{EVM}. Sie kann auch auf anderen Blockchain Platoformen verwendet werden.\cite{cryptocoinnews.com/smart-contract-bitcoin,github.com/hyperledger/burrow}
 
 Solidity wird, in Anlehnung auf den Ausdruck object-oriented, als contract-oriented bezeichnet, da die erstellenden Konstrukte in der Sprache \emph{contract} und nicht \emph{object} genannt werden. Konzeptionell beziehen sich die beiden Ausdrücke auf dasselbe Konzept.
 
 \paragraph{Vererbung}
 \label{para:Vererbung}
-Wie Objektorientierte Sprachen kennt auch Solidity das Konzept der Vererbung. Einerseits bedeutet das, dass Funktionalität bei der Entwicklung wiederverwendet werden kann. Andererseits, dass zur Laufzeit eine Instanz eines Smart Contracts auf einen weniger spezifischen Typ abgebildet werden kann, um bspw. nur gemeinsame Funktionalität von unterschiedlichen Smart Contract Typen anzusprechen.
+Wie Objektorientierte Sprachen kennt auch Solidity das Konzept der Vererbung\footnote{Mehrfachvererbung wird unterstützt}. Einerseits bedeutet das, dass Funktionalität bei der Entwicklung wiederverwendet werden kann. Andererseits, dass zur Laufzeit eine Instanz eines Smart Contracts auf einen weniger spezifischen Typ abgebildet werden kann, um bspw. nur gemeinsame Funktionalität von unterschiedlichen abgeleiteten Smart Contract Typen anzusprechen.

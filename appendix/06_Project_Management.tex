@@ -30,6 +30,15 @@ Schmidlin Diego        & Experte                         & Ruag \\\bottomrule
 Im diesem Projekte wurden die vier klassischen Phasen aus SoDa\footnote{https://www.hslu.ch/de-ch/informatik/forschung/themen/software-engineering/soda, 2017} übernommen, jedoch wird in diesem Projektmanagementplan eine andere Terminologie für die Phasen verwendet, um die explorative Methodologie dieses Projektes zu betonen.
 
 \subsection{Projektplanung}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=.95\textwidth]{Zeitachse}
+\caption{Zeitachse mit Projektphasen und Meilensteine}
+\label{fig:Zeitachse mit Projektphasen und Meilensteine}
+\end{figure}
+
+
 \#todo: plan inkl. meilensteine einfügen (aus mid term präsi, evtl updaten)
 
 \paragraph{Initialisierung 24. März}
@@ -89,14 +98,15 @@ bspw. bei Rückstand im Projektplan o.Ä.
 \subsection{Verantwortlichkeiten}
 Dominik Hirzel
 \begin{itemize}
-    \item Blockchain
     \item Smart Contracts
     \item Android App
     \item Dokumentation
 \end{itemize}
 
+\noindent 
 Andreas Schmid
 \begin{itemize}
+    \item Blockchain
     \item IoT
     \item Webapp
     \item Doorman
@@ -162,7 +172,7 @@ Präventierende Massnahmen können hier nicht getroffen werden, da die Anforderu
 Sollte aufgrund mangelnder Funktionalität der Blockchain Implementationen ein Demonstrator nicht mit angebrachter Funktionalität spezifizierbar sein, werden die Anforderungen an den Demonstrator vereinfacht. Ebenfalls wird mit dem Auftraggeber und Betreuer Kontakt aufgenommen, um die Limitationen in der selbst definierten Aufgabenstellung zu kommunizieren und Alternativen dazu zu suchen.
 
 \subsection{Risiken Prototypphase}
-Während der Prototypphase waren die hauptsächlichen Risiken, dass die laufende Entwicklung an geth die zu implementierende Funktionalität für den Demonstrator einschränken kann.
+Während der Prototypphase waren die hauptsächlichen Risiken, dass die laufende Entwicklung an \emph{geth} die zu implementierende Funktionalität für den Demonstrator einschränken kann.
 
 \begin{table}[H]
 \centering
@@ -171,10 +181,10 @@ Während der Prototypphase waren die hauptsächlichen Risiken, dass die laufende
 \begin{tabular}{lL{8cm}lll}
 \toprule
 Nr. & Risiko & A & W & Status \\ \midrule
-1  & Keine Blockchain Implementation unterstützt Funktionalität für den Demonstrator & 0 & 0 & eliminiert \\\midrule
+1  & \sout{Keine Blockchain Implementation unterstützt Funktionalität für den Demonstrator} & 0 & 0 & eliminiert \\\midrule
 2  & Höhere Belastung des Projektteams durch Berufstätigkeit & 2 & 2 & erkannt    \\\midrule
 3  & Stabilität von geth & 5 & 4 & Neu    \\\midrule
-4  & Mangelnde Dokumentation und Hilfestellung zu geth & 4 & 4 & neu    \\\midrule
+4  & Mangelnde Dokumentation und Hilfestellung zu geth & 4 & 4 & Neu    \\\midrule
 \end{tabular}
 \end{table}
 
@@ -194,21 +204,21 @@ Nr. & Risiko & A & W & Status \\ \midrule
 \end{table}
 
 \paragraph{Risiko 1}
-Die Implementation geth unterstützt das Ethereum Protokoll, private Netzwerke, light nodes (experimentell) und Smart Contracts und kann somit für einen Demonstrator verwendet werden.
+Die Implementation geth unterstützt das Ethereum Protokoll, private Netzwerke, Light Nodes (vgl. \ref{para:Light_Node}) (experimentell) und Smart Contracts und kann somit für einen Demonstrator verwendet werden.
 
 \paragraph{Risiko 3}
 Da an geth stark entwickelt wird und auch das Ethereum Protokoll Änderungen unterzogen wird, muss damit gerechnet werden, dass die Implementation und auch die Spezifikation geändert werden können. Auch sind kritische Fehler, die die Verwendung von geth oder einzelnen Funktionalitäten verhindern, zu beachten.\cite[EIPs]{github.com/ethereum}
 \subparagraph{Mitigation}
 Durch ständiges Updaten der Abhängigkeiten kann sichergestellt werden, dass stets eine unterstützte Version des Ethereum Protokolls benutzen wird.
 \subparagraph{Sofortmassnahmen}
-Das Projektteam integriert sich aktiv in der ethereum Entwicklercommunity durch Teilnahme am gitter chat und Rückmeldung von Fehlern in geht.
+Das Projektteam integriert sich aktiv in der ethereum Entwicklercommunity durch Teilnahme am gitter chat und Rückmeldung von Fehlern in \emph{geth}.
 
 \paragraph{Risiko 4}
 Während der Recherchephase wurde festgestellt, dass die Dokumentation von geth und Teilfunktionen davon nicht immer dem aktuellsten Entwicklungsstand entsprachen. Da an geth stark entwickelt wird und auch das Ethereum Protokoll Änderungen unterzogen wird, muss damit gerechnet werden, dass die Implementation und auch die Spezifikation geändert werden können.
 \subparagraph{Mitigation}
 Durch ständiges Updaten der Abhängigkeiten kann sichergestellt werden, dass stets eine unterstützte Version des Ethereum Protokolls benutzen wird. Das Projektteam integriert sich auch aktiv in der ethereum Entwicklercommunity durch Teilnahme am gitter chat und Rückmeldung von Fehlern in geht.
 \subparagraph{Sofortmassnahmen}
-Das Projektteam integriert sich aktiv in der Ethereum Entwicklercommunity durch Teilnahme am gitter chat und Rückmeldung von Fehlern in geht.
+Das Projektteam integriert sich aktiv in der Ethereum Entwicklercommunity durch Teilnahme am gitter chat und Rückmeldung von Fehlern in geth.
 
 
 \subsection{Risiken Realisierungsphase}
@@ -221,7 +231,7 @@ Während der Realisierungsphase waren die hauptsächlichen Risiken, dass die lau
 \begin{tabular}{lL{8cm}lll}
 \toprule
 Nr. & Risiko & A & W & Status \\ \midrule
-1  & Keine Blockchain Implementation unterstützt Funktionalität für den Demonstrator & 0 & 0 & eliminiert \\\midrule
+1  & \sout{Keine Blockchain Implementation unterstützt Funktionalität für den Demonstrator} & 0 & 0 & eliminiert \\\midrule
 2  & Höhere Belastung des Projektteams durch Berufstätigkeit & 4 & 3 & erkannt    \\\midrule
 3  & Stabilität von geth & 5 & 4 & erkannt    \\\midrule
 4  & Mangelnde Dokumentation und Hilfestellung zu geth & 4 & 4 & erkannt    \\\midrule
@@ -237,8 +247,8 @@ Nr. & Risiko & A & W & Status \\ \midrule
 \label{tbl:Risikomatrix_Realisierung}
 \begin{tabular}{@{}ccccccc@{}}
  & 5 & \cellcolor[HTML]{DF8181} & \cellcolor[HTML]{DF8181}\emph{6} & \cellcolor[HTML]{DF8181}\emph{3} & \cellcolor[HTML]{DF8181} & \cellcolor[HTML]{DF8181} \\
- & 4 & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{FFFA8F}\emph{2} & \cellcolor[HTML]{DF8181}\emph{4} & \cellcolor[HTML]{DF8181} \\
- & 3 & \cellcolor[HTML]{92D050} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{FFFA8F}3,\emph{5} & \cellcolor[HTML]{FFFA8F}\emph{7} & \cellcolor[HTML]{DF8181} \\
+ & 4 & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{FFFA8F}\emph{2},\emph{7} & \cellcolor[HTML]{DF8181}\emph{4} & \cellcolor[HTML]{DF8181} \\
+ & 3 & \cellcolor[HTML]{92D050} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{FFFA8F}3,\emph{5} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{DF8181} \\
  & 2 & \cellcolor[HTML]{92D050} & \cellcolor[HTML]{92D050}2,5 & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{FFFA8F}4 & \cellcolor[HTML]{DF8181} \\
 \multirow{-5}{*}{\rotatebox[origin=c]{90}{Auswirkung}} & 1 & \cellcolor[HTML]{92D050}6 & \cellcolor[HTML]{92D050} & \cellcolor[HTML]{92D050} & \cellcolor[HTML]{FFFA8F} & \cellcolor[HTML]{DF8181} \\
                              &   & 1                        & 2                        & 3                        & 4                        & 5                        \\
@@ -265,12 +275,12 @@ Während der Recherchephase wurde festgestellt, dass die Dokumentation von geth 
 \subparagraph{Mitigation}
 Durch ständiges Updaten der Abhängigkeiten kann sichergestellt werden, dass stets eine unterstützte Version des Ethereum Protokolls benutzen wird. Das Projektteam integriert sich auch aktiv in der ethereum Entwicklercommunity durch Teilnahme am gitter chat und Rückmeldung von Fehlern in geht.
 \subparagraph{Sofortmassnahmen}
-Das Projektteam integriert sich aktiv in der Ethereum Entwicklercommunity durch Teilnahme am gitter chat und Rückmeldung von Fehlern in geht.
+Das Projektteam integriert sich aktiv in der Ethereum Entwicklercommunity durch Teilnahme am gitter chat und Rückmeldung von Fehlern in geth.
 
 \paragraph{Risiko 5}
 Das Projektteam besteht aus Studierenden im Bereich Informatik. Daher kann nicht ausgeschlossen werden, dass für die Implementation des IoT Demonstrators Fachwissen im Bereich Elektronik und Maschinenbau fehlt.
 \subparagraph{Mitigation}
-Durch vergangene Arbeit in privaten Projekten mit elektronischen Elementen hat das Projektteam begrenzte Erfahrung. Basierend auf diesen bestehenden Kenntnissen kann weiteres Wissen erworben werden. Auch steht der Fokus dieses Projektes nicht auf dem IoT Aspekt.
+Durch vergangene Arbeit in privaten Projekten mit elektronischen Elementen hat das Projektteam begrenzte Erfahrung. Basierend auf diesen bestehenden Kenntnissen kann weiteres Wissen erworben werden. 
 \subparagraph{Sofortmassnahmen}
 Sollte das benötigte Fachwissen nicht vorhanden sein und nicht in akzeptablem Rahmen aufgebaut werden können, werden Kommilitonen aus den Studienbereich Elektronik und/oder Maschinenbau um Hilfe gebeten, die aus den Fächern PREN1 und PREN2 bekannt sind.
 
@@ -299,13 +309,13 @@ In der Projektabschlussphase wird vermehrt ein Augenmerk auf die formellen Dokum
 \begin{tabular}{lL{8cm}lll}
 \toprule
 Nr. & Risiko & A & W & Status \\ \midrule
-1  & Keine Blockchain Implementation unterstützt Funktionalität für den Demonstrator & 0 & 0 & eliminiert \\\midrule
+1  & \sout{Keine Blockchain Implementation unterstützt Funktionalität für den Demonstrator} & 0 & 0 & eliminiert \\\midrule
 2  & Höhere Belastung des Projektteams durch Berufstätigkeit & 4 & 3 & erkannt    \\\midrule
-3  & Stabilität von geth & 5 & 4 & eliminiert    \\\midrule
-4  & Mangelnde Dokumentation und Hilfestellung zu geth & 4 & 4 & eliminiert    \\\midrule
-5  & Mangelndes Wissen im Bereich Hardware \& Elektronik & 3 & 3 & eliminiert    \\\midrule
-6  & Schliessmechanismen können nicht reverse engineered werden & 5 & 2 & eliminiert    \\\midrule
-7  & Einzelteile für den Demonstrator können nicht rechtzeitig geliefert werden & 3 & 4 & eliminiert    \\\midrule
+3  & \sout{Stabilität von geth} & 0 & 0 & eliminiert    \\\midrule
+4  & \sout{Mangelnde Dokumentation und Hilfestellung zu geth} & 0 & 0 & eliminiert    \\\midrule
+5  & \sout{Mangelndes Wissen im Bereich Hardware \& Elektronik} & 0 & 0 & eliminiert    \\\midrule
+6  & \sout{Schliessmechanismen können nicht reverse engineered werden} & 0 & 0 & eliminiert    \\\midrule
+7  & \sout{Einzelteile für den Demonstrator können nicht rechtzeitig geliefert werden} & 0 & 0 & eliminiert    \\\midrule
 \end{tabular}
 \end{table}
 

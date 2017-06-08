@@ -1,98 +1,108 @@
 \chapter{Aufgabenstellung}
 \label{cha:Aufgabenstellung}
-\begin{itemize}
-    \item \textbf{Grob beschreiben, was erreicht werden soll. Wünsche von Auftraggeber}
-    \item \textbf{Eigene Idee und Wünsche erklären. Brainstorming für Ideen auflisten (evtl. Anhang)}
-    \item \textbf{lokkit. Konkrete Aufgabenstellung mit use cases, szenarien, business überlegungen (für Hüsler, bspw. möglichen Missbrauch und "kriminelle Energie" erläutern) und requirements. KEINE technischen details, diese folgen im Kapitel Implementation} \ref{sec:Implementation}
-    \item \textbf{Erkären warum Wunsch von Auftraggeber erfüllt}
-\end{itemize}
-
-Hier folgt die Aufgabenstellung, die ebenfalls im Rahmen dieser Projektarbeit erarbeitet wurde. Einzig die Schlagworte \emph{Blockchain}, \emph{\acrfull{IoT}} und der Bau eines Demonstrators waren vom Auftraggeber im Kick-Off Meeting vorgegeben worden. Im Rahmen dieser Bachelorarbeit sollte ein System definiert, konzipiert und entwickelt werden, das den Blockchain und IoT Aspekt verbindet und einen praktischen Anwendungszweck demonstriert. Der entwickelte Demonstrator sollte nach Abschluss dieses Projektes noch weiter vom Auftraggeber als solcher verwendet werden können.
+Einzig die Schlagworte \emph{Blockchain} und \emph{\acrfull{IoT}} sowie der Bau eines Demonstrators waren vom Auftraggeber am Kick-Off Meeting vorgegeben worden. Im Rahmen dieser Bachelorarbeit sollte ein System definiert, konzipiert und entwickelt werden, das den Blockchain und IoT Aspekt verbindet und einen praktischen Anwendungszweck demonstriert. Der entwickelte Demonstrator sollte nach Abschluss dieses Projektes noch weiter vom Auftraggeber als solcher verwendet werden können.
 
 \section{Ziele}
 \label{sec:Ziele}
-"Der zentrale Aspekt dieses Projektes war der Wissenserwerb im Bereich Blockchain und die konkrete Anwendung dieses neu erworbenen Wissens durch die Konzeption und Implementation eines IoT Demonstrators. Dieser sollte durch sorgfältige und gründliche Arbeit dem Auftraggeber in einem eigenständig verwendbaren Zustand übergeben werden können. Die konkrete Aufgabenstellung für den Demonstrator wurde ebenfalls im Rahmen dieses Projektes vom Projektteam entwickelt und mit dem Auftraggeber besprochen", \ref{pm_subsec:Projektziele}.
+Der zentrale Aspekt dieses Projektes war der Wissenserwerb im Bereich Blockchain und die konkrete Anwendung dieses neu erworbenen Wissens durch die Konzeption und Implementation eines IoT Demonstrators. Dieser sollte durch sorgfältige und gründliche Arbeit dem Auftraggeber in einem eigenständig verwendbaren Zustand übergeben werden können. Die konkrete Aufgabenstellung für den Demonstrator wurde ebenfalls im Rahmen dieses Projektes vom Projektteam entwickelt und mit dem Auftraggeber besprochen.
+
 
 \section{Konkrete Aufgabenstellung}
 \label{sec:Konkrete_Aufgabenstellung}
-\emph{Da die konkrete Aufgabenstellung in dieser Bachelorarbeit ebenfalls erarbeitet werden musste, ist diese ein Produkt der Recherchephase (vgl. \ref{pm_subsubsec:Recherchephase}). Bei fehlendem Wissen um Blockchain, Ethereum oder den entwickelten Demonstrator wird empfohlen, die einleitenden Kapitel der Lösungsfindung \ref{sec:Arbeitsmethodik} und \ref{sec:Recherche} vorzugreifen.}
+\emph{Da die konkrete Aufgabenstellung in dieser Bachelorarbeit ebenfalls erarbeitet werden musste, ist diese ein Produkt der Recherchephase (vgl. \ref{pm_subsubsec:Recherchephase}). Bei fehlendem Wissen um Blockchain, Ethereum oder den entwickelten Demonstrator wird empfohlen, das einleitenden Kapitel \ref{sec:Recherche} \nameref{sec:Recherche} der Lösungsfindung vorzugreifen.}
 
 Es soll ein System entwickelt werden, um Schliessfächer zu (ver-)mieten. Dabei sollen die Verträge in Form von Smart Contracts (vgl. \ref{subsec:Recherche_Smart_Contracts}) in einer privaten Ethereum Blockchain (vgl. \ref{subsec:private_chain}) definiert werden. Ein Benutzer soll über eine grafische Benutzeroberfläche ein freies Schliessfach reservieren können. Während der Benutzer der aktuelle Mieter eines Faches ist, kann er das Schloss per Knopfdruck ver- und entriegeln.
 
+
+
+\subsection{ANDI SIS SUPER KAPITEL}
+Warum ist Blockchain besser als keine Blockchain? Welchen Sachverhalt der realen Welt soll mit der Blockchain erleichtert werden?
+
+Die Wirtschaft von heute besteht aus unzähligen Verträgen. Ohne sie würde Zusammenarbeit, Handel und auch das Zusammenleben auf der Erde nicht funktionieren. Ein Vertrag bindet zwei oder mehrere Parteien an die im Vertrag definierten Bedingungen. Geht eine Partei einen Vertrag ein, so entstehen Pflichten, aber auch Rechte, die der Partei zustehen. Zum Beispiel ist der Mieter beim Eingehen eines Mietvertrages verpflichtet, jeden Monat die Mietkosten dem Vermieter zu überweisen. Er erhält jedoch auch das exklusive Nutzungsrecht am Mietobjekt. Ebenso entstehen für den Vermieter Pflichten und Rechte die im Vertrag definiert wurden.
+
+Solange sich alle beteiligten Parteien an den Vertrag halten und ihre Pflichten erfüllen, funktioniert dies einwandfrei. Wenn beispielsweise der Mieter sich dazu entscheidet, keine Miete mehr zu bezahlen, verweigert er so seine Pflicht gegenüber der anderen Partei. Und ohne dass sich nun die Gegenpartei einsetzt und ihre Rechte durchsetzt, wird sich am Sachverhalt nichts ändern. An dieser Stelle erinnert man sich an das Sprichwort "Wo kein Kläger, da kein Richter". Damit richterlich Vorgegangen werden kann muss ausserdem eine Drittperson, der Richter, herbeigezogen werden, um über den Fall zu urteilen.
+
+Die Frage, die sich nun stellt, ist, ob sich die Verfolgung von Verstössen gegen Verträge mit einem geeigneten, vertrauenswürdigen und durchsichtigen System automatisieren lässt.
+
+Hier kommt die \emph{Blockchain Technologie} ins Spiel, die durch \emph{Smart Contracts} (vgl. \ref{subsec:Recherche_Smart_Contracts}) jenes Problem zu lösen versucht. Ein Mietgegenstand wird durch \emph{IoT} zum Gegenstand der Blockchain. Zum Beispiel kann das Mietobjekt über ein intelligentes Schloss verfügen, dass mit der Blockchain kommuniziert, um einer Person den Zutritt zu gestatten oder zu verweigern. Der Mietvertrag wird als \emph{Smart Contract} in der Blockchain abgebildet, der die Pflichten und die Rechte des Mieters und Vermieters beinhaltet. Die Parteien können als einfache \emph{Benutzer Accounts} in der Blockchain definiert sein.
+
+Der Zahlungsverkehr muss ebenfalls über die Blockchain abgewickelt werden, damit der \emph{Smart Contract} die Bedingungen überprüfen kann.
+Würde der Mieter die monatliche Miete nicht mehr einhalten, so könnte der Vermieter das Sperren des Mietobjekts über die Blockchain veranlassen. Dabei wird dem Vertrauensverhältnis zwischen den Parteien keine Bedeutung zugesprochen und es wird keine vertrauenswürdige Drittperson benötigt, die den Sachverhalt klärt. Die Ereignisse sind in der Blockchain selbst protokolliert und öffentlich einsehbar. Jeder kann den Sachverhalt nachbilden und bestätigen. Einzig das Vertrauen gegenüber der \emph{Blockchain Technologie} muss da sein.
+
+\paragraph{Abgrenzung der Blockchain zu anderen Systemen}
+Der Vorteil der Blockchain gegenüber Legacy-System liegt darin, dass es kein einseitiges Vertrauensverhältnis zwischen den Vertragsparteien sein muss. Jeder kann Teil der Blockchain sein und jegliche Transaktionen überprüfen und validieren. Die Blockchain gehört nicht einer Organisation an, sondern wird von der Welt getragen.
+
+\paragraph{Ausnahmefälle}
+Wenn ein Vertrag nicht rechtsgültig ist, beispielsweise wenn er unter Zwang unterzeichnet wurde oder wenn eine Partei eine Minderjährige oder bevormundete Personen ist, kann diese Unterzeichnung nicht rückgängig gemacht werden. In einem Rechtsstaat kann so ein Vertrag als nichtig erklärt werden und der Status quo ante kann meist wiederhergestellt werden. Sollte so ein Vertrag in der Blockchain existieren, wäre dies nicht möglich.
+
+Technische Massnahme zur Erklärung eines Vertrages als nichtig wären schwer umsetzbar. Sollte ein schuldig gesprochener Benutzer nicht kooperieren und von einer dritten Entität, beispielsweise der Judikative eines Rechtsstaats, die Blockchain im Namen eines anderen verändern, um Verträge rückgängig zu machen, würde die Integrität des Benutzers verletzt. Durch diese Tatsache muss das vertrauenslose Design der Blockchain infrage gestellt würden. Wenn in einem Vertrag die Möglichkeit besteht diesen als nichtig zu erklären, könnte diese Funktion für Betrugszwecke ausgenutzt werden, indem gültige Verträge als nichtig erklärt werden, falls für eine Partei eine nachteilige Situation entsteht.
+
+Die einzige Möglichkeit, eine Transaktion, und somit einen Eintrag in der Blockchain, rückgängig zu machen, ist, wenn der Konsensus die Transaktion ausschliesst. Also müssten de Grossteil der Blockchainnodes eine bestimmte Transaktion ausschliessen und die Blockchain ab diesem Zeitpunkt neu berechnen. \cite{BlockchainRevolution}
+
+
 \section{Anforderungen an den Demonstrator}
 \label{sec:Anforderungen_Demonstrator}
+Basierend auf der konkreten Aufgabenstellung wurden zu implementierende Anforderungen festgehalten. Hier werden diese thematisch gruppiert, um eine Trennung der Gültigkeitsbereiche zu erreichen. Übergreifende Anforderungen wurden als solche gekennzeichnet und müssen von allen Bereichen berücksichtigt werden, sofern diese anwendbar sind. Diese Anforderungen werden im Kapitel \ref{sec:Konzeption} \nameref{sec:Konzeption} zu implementierenden Komponenten zugewiesen.
 
-\subsection{Smart Contracts}
-Die Businesslogik und Datenhaltung ist mittels Smart Contracts zu lösen. Diese bilden das zentrale Objekt in diesem System.
+\subsection{Bereiche}
+Folgende Bereiche werden bei der Anforderungsfindung unterschieden:
+\begin{itemize}
+    \item Smart Contracts
+    \item grafische Benutzeroberfläche
+    \item Mobile App
+    \item IoT Controller
+    \item übergreifende Anforderungen
+\end{itemize}
 
-X. Die Smart Contracts sollen eine Funktion bieten, neue Schliessfächer erfassen zu können.
+\begin{table}[H]
+\centering
+\caption{Anforderungen}
+\label{tbl:Anforderungen}
+\begin{tabular}{@{}L{3cm}L{10cm}@{}}
+\toprule
+Bereich & Beschreibung \\ \midrule
+Smart Contracts & Die Smart Contracts sollen eine Funktion bieten, neue Schliessfächer erfassen zu
+können. \\ \midrule
+ & Die Smart Contracts sollen eine Funktion zum Eingehen eines zeitlich begrenzten
+Mietvertrags anbieten. \\ \midrule
+ & Die Smart Contracts soll Kosten für die Dauer des Mietvertrags definieren, die durch die Überweisung von Ether beglichen werden.\\ \midrule
+grafische Benutzeroberfläche & Die grafische Benutzeroberfläche soll eine Liste von verfügbaren Schliessfächer anzeigen \\ \midrule
+ & Die grafische Benutzeroberfläche soll das einfache Hinzufügen von Schliessfächern zu der Liste der verfügbaren Schliessfächern ermöglichen. \\ \midrule
+ & Die grafische Benutzeroberfläche soll das Mieten von Schliessfächern mit einer einfach zu bedienenden Benutzeroberfläche ermöglichen. \\ \midrule
+ & Die grafische Benutzeroberfläche soll dem Benutzer in allen Fällen Rückmeldung über ausgeführte Funktionen geben. \\ \midrule
+ & Die grafische Benutzeroberfläche soll auf der zur Verfügung gestellten Hardware gehostet werden können \\ \midrule
+Mobile App & Die Mobile App soll eine Ethereum Node starten, die mit dem definierten privaten Netzwerk verbindet und die verwendet werden, um die Webapp lokal mit der Node zu verbinden. \\ \midrule
+ & Die Mobile App soll die Erstellung von einem Benutzerkonto auf der lokalen Ethereum Node ermöglichen. \\ \midrule
+IoT Controller & Der Controller soll auf gültige Anfragen das Schliessfach öffnen oder schliessen. \\ \midrule
+ & Der Demonstrator soll ohne externe Abhängigkeiten funktionsfähig sein. \\ \midrule
+Übergreifend & Ver-und Entriegeln eines Schliessfachs kann nur von einem durch einen Smart Contract berechtigten Benutzer erfolgen. \\
+ & Alle Implementationen mit grafischer Benutzeroberfläche sollen in einem einheitlichen Erscheinungsbild erstellt werden. \\ \bottomrule
+\end{tabular}
+\end{table}
 
-X. Die Smart Contracts sollen eine Funktion zum Eingehen eines zeitlich begrenzten Mietvertrags anbieten.
-
-X. Die Smart Contracts soll Kosten für die Dauer des Mietvertrags definieren, die durch die Überweisung von Ether beglichen werden.
-
-//X. Der Benutzer soll ein Depot für die Mietdauer an die Smart Contracts entrichten, das dem Besitzer eines Schliessfaches als Sicherheit dient, falls das Schliessfach nicht freigegeben wird.
-
-\subsection{Webapp}
-Die Interaktion von Benutzern mit Smart Contracts in der Blockchain wird durch eine Webapp umgesetzt. Folgende Anforderungen beziehen sich auf zu entwickelnde Webapp.\cite[Wiki/DAPP-Developer-Resources, Wiki/Useful-Dapp-Patterns]{github.com/ethereum}
-
-X. Die Webapp soll eine Liste von verfügbaren Schliessfächer anzeigen.
-
-X. Die Webapp soll das einfache Hinzufügen von Schliessfächern zu der Liste der verfügbaren Schliessfächern ermöglichen.
-
-X. Die Webapp soll das Mieten von Schliessfächern mit einer einfach zu bedienenden Benutzeroberfläche ermöglichen.
-
-//X. Die Webapp soll dem Benutzer in allen Fällen Rückmeldung über ausgeführte Funktionen geben.
-
-X. Die Webapp soll auf der zur Verfügung gestellten Hardware gehostet werden können (namentlich: Raspi)
-
-\subsection{Mobile App}
-Folgende Anforderungen beschränken sich auf die Mobile App für Android (später: Android App).
-
-X. Die Mobile App soll eine Ethereum Node starten, die mit dem definierten privaten Netzwerk verbindet und die verwendet werden, um die Webapp lokal mit der Node zu verbinden.
-
-X. Die Mobile App soll die Erstellung von einem Benutzerkonto auf der lokalen Ethereum Node ermöglichen.
-
-X. Die Mobile App soll...
-
-\subsection{IoT Controller}
-Damit die Schliessfächer angesprochen werden können, müssen auf den IoT Geräten Controller implementiert werden, die die Hardware ansteuern. Folgende Anforderungen gelten für alle Controller unterschiedlicher Hardware.
-
-X. Der Controller soll auf gültige Anfragen das Schliessfach öffnen oder schliessen.
-
-\subsection{Demonstrator Hardware}
-
-
-X. Der Demonstrator soll ohne externe Abhängigkeiten funktionsfähig sein.
-
-X. Der Demonstrator soll...
-
-\subsection{Übergreifend}
-Diese Anforderungen sind funktionsübergreifend gültig und müssen von allen betroffenen Komponenten berücksichtigt werden.
-
-X. Ver- und Entriegeln eines Schliessfachs kann nur von einem durch einen Smart Contract berechtigten Benutzer erfolgen.
-
-X. Alle Implementationen mit grafischer Benutzeroberfläche sollen in einem einheitlichen Erscheinungsbild erstellt werden.
 
 \subsection{Scopeabgrenzung}
-X. Das Hinzufügen von neuen mietbaren Objekten ist nicht Teil dieser Arbeit. Der Demonstrator wird mit den mitgelieferten Schliessfächern vorkonfigurierten.
+Das Hinzufügen von neuen mietbaren Objekten ist nicht Teil dieser Arbeit. Der Demonstrator wird mit den mitgelieferten Schliessfächern vorkonfigurierten.
 
-X. Die Verwendung von Oracles ist nicht Teil dieses Projekts. Als Oracle wird die Möglichkeit bezeichnet, Berechnungen eines Smart Contracts, durch Verteilung auf mehrere externe Systeme, von der Blockchain zu lösen. Dies ist noch immer ein low-trust Szenario, da keinem externen System alleine die Möglichkeit zur Veränderung der Blockchain gegeben wird, sondern auch der Konsens dieser Systeme in die Blockchain geschrieben wird.\cite{blog.ethereum.org/oracles}
-
-aus einem Smart Conract heraus Systeme anzusprechen, die nicht auf der Blockchain funktionieren. Beispielsweise existieren 
+Auch die Verwendung von Oracles ist nicht Teil dieses Projekts. Als Oracle wird die Möglichkeit bezeichnet, Berechnungen eines Smart Contracts, durch Verteilung auf mehrere externe Systeme, von der Blockchain zu lösen. Dies ist noch immer ein low-trust Szenario, da keinem externen System alleine die Möglichkeit zur Veränderung der Blockchain gegeben wird, sondern auch der Konsens dieser Systeme in die Blockchain geschrieben wird. Ein mögliches Anwendungsszenario für Oracles können beispielsweise Wechselkurse für physische Währungen sein. \cite{blog.ethereum.org/oracles}
 
 \section{Erwartete Resultate}
 \label{sec:Erwartete_Resultate}
 
 \subsection{Software}
-\begin{itemize}
-    \item Smart Contracts in Solidity
-    \item Webapp (Plattformunabhängig)
-    \item Mobile App (Android exkl.)
-    \item IoT Controllers
-\end{itemize}
+Folgend werden die zu liefernden Softwarekomponenten beschrieben. Alle Komponenten sollen als Source Code inklusive einer Anleitung zur Installation geliefert werden, damit das System repliziert oder erweitert werden kann.
+
+\subparagraph{Smart Contracts}
+Die Smart Contracts sollen als Source Code geliefert werden. Zusätzlich zu den Grundlieferobjekten werden Designentscheide und verschiedene Sichtweisen auf diese Smart Contracts in diesem Bericht mitgeliefert.
+
+\subparagraph{grafische Benutzeroberfläche}
+Die grafische Benutzeroberfläche ist das Interaktionsportal von Benutzern mit den Smart Contracts und dem Demonstrator
+
+\subparagraph{Mobile App}
+Die Mobile App soll zusätzlich als fertig als installierbares Paket geliefert werden.
+
+\subparagraph{Controllers}
+Für alle implementierten Schliessmechanismen ist die Ansteuerung der Hardware mitzuliefern.
 
 \subsection{Hardware}
-\begin{itemize}
-    \item Ein lauffähiger Demonstrator für das Schliessfachsystem.
-\end{itemize}
+Der IoT Demonstrator soll vorkonfiguriert werden, damit dieser ohni zusätzlichen Aufwand lauffähig ist. Deployments sollen dokumentiert werden, um die Replikation oder Erweiterung des Systems zu ermöglichen.

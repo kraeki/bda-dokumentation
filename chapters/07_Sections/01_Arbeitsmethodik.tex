@@ -1,42 +1,74 @@
 \section{Arbeitsmethodik}
 \label{sec:Arbeitsmethodik}
-\begin{itemize}
-    \item \textbf{Wie sind wir vorgegangen}
-    \item \textbf{Folgende Kapitel auf derselben Stufe erklären (Recherche, Konzeption, Implementation)}
-    \item \textbf{Verwendete Tools}
-    \item \textbf{Open Source erwähnen (zeigt Engagement :D)}
-\end{itemize}
 Da in diesem Projekt eine konkrete Aufgabenstellung selbst zu erarbeiten war, und keine konkreten, lieferbaren Objekte vorgesehen waren, wurde zu Beginn eine explorative ad-hoc Methodik verfolgt. Dabei wurde im Projektteam wöchentlich der bisherige Fortschritt analysiert und weitergehende Schritte besprochen. So wurde gewährleistet, dass in der Anfangsphase eine geeignete Aufgabenstellung gefunden werden kann (vgl. \ref{pm_cha:Projektmanagement}).
 
 Sobald die Aufgabenstellung definiert wurde, wurde in ein iteratives Modell gewechselt. Die wöchentlichen Besprechungen im Projektteam wurden beibehalten, um den Fortschritt des Produkts zu verfolgen. Es wurde ein Anforderungskatalog geführt, der nach jeder wöchentlichen Besprechung überarbeitet wurde. Die Zeitplanung wurde anhand der definierten Meilensteine gemacht.
 
-Die Anforderungen wurden vom Projektteam selbst erstellt und beinhalten grundlegende Funktionalität, die der Demonstrator umsetzen muss. Die Priorisierung der Anforderung hat keine Bedeutung, da der Demonstrator nur bei Umsetzung aller Anforderungen einsatzfähig ist. Daher rechtfertigt der Nutzen von detaillierten User Stories und Repriorisierung dieser, sowie Durchführung von Sprintplanung, Retrospektive und \dots den zusätzlichen Aufwand nicht.
+Die Anforderungen wurden vom Projektteam selbst erstellt und beinhalten grundlegende Funktionalität, die der Demonstrator umsetzen muss. Die Priorisierung der Anforderung hat keine Bedeutung, da der Demonstrator nur bei Umsetzung aller Anforderungen einsatzfähig ist. Daher rechtfertigt der Nutzen von detaillierten User Stories und Repriorisierung dieser, sowie Durchführung von Sprintplanung und Retrospektive den zusätzlichen Aufwand nicht.
 
-\subsection{Verwendete Tools}
-\paragraph{Koordination}
-todo...
+\subsection{Verwendete Software}
 
-\paragraph{Entwicklung}
-VIM, VS Code etc?
+\begin{table}[H]
+\centering
+\caption{Platformen und Sprachen}
+\label{tbl:Platformen_Sprachen}
+\begin{tabular}{@{}L{3cm}R{1cm}L{10cm}@{}}
+\toprule
+Name & Version & Komponente \\\midrule
+Bash & 4.3 & Controller des Schliessmechanismus \\ \midrule
+EcmaScript & 6 & Webapp \\ \midrule
+html & 5 & Webapp \\ \midrule
+Java & 1.6 & Android App \\ \midrule
+\latex & - & Dokumenterstellung \\\midrule
+Python & 2.7 & Doorman \\ \midrule
+Solidity & 0.4.8 & Smart Contracts \\ \midrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Entwicklungstools}
+\label{tbl:Entwicklungstools}
+\begin{tabular}{@{}L{3cm}R{1cm}L{10cm}@{}}
+\toprule
+Name & Version & Verwendungszweck \\\midrule
+Android Studio & 2.3.2 & IDE für Android Apps\\ \midrule
+git & 2.9.0 & Versionskontrolle \\ \midrule
+github.com & - & Versionskontrolle und Zusammenarbeit (vgl. \ref{para:Versionskontrolle}) \\ \midrule
+sharelatex.com & - & Erstellung und Kollaboration der formellem Dokumente\\ \midrule
+VIM & 7.5 & Source Code Editor \\ \midrule
+Visual Sudio Code & 1.12.2 & Source Code Editor \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Versionskontrolle}
+\label{para:Versionskontrolle}
+Aller entwickelte Programmcode ist unter der Organisation github.com/lokkit verfügbar. Das Projektteam benutzt folgende Pseudonyme auf github.com:
+
+Hirzel Dominik: nnicksize
+
+Schmid Andreas: kraeki
 
 
 \subsection{Open Source}
+\label{subsec:Open_Source}
 Da die Ethereum Implementation \emph{geth}, die verwendete mobile Library für geth, \emph{status-go}, und auch ein Grossteil weiterer verwendeter Libraries\footnote{ethjsonrpc, web3js (teil von eth)} Open Source sind, wurde bei diesem Projekt viel auf die Zusammenarbeit mit Open Source Projekten gelegt. Beide Hauptprojekte wurden von github.com geforked, um Fehler einfacher nachvollziehen zu können. Dabei wurden auch Fehler gefunden, die an die ursprünglichen Entiwckler mitgeteilt wurden.
 
+\subsubsection{geth}
+\emph{https://github.com/ethereum/go-ethereum}
 
-\subsubsection{https://github.com/ethereum/go-ethereum}
-geth ist supi
+Die Referenzimplementation geth wurde in diesem Projekt ursprünglich in Version 1.5.9 verwendet und basierend darauf wurden erste Gehversuche mit einer private Chain und Smart Contracts gemacht. 
 
 \paragraph{Abonnieren von Whispers}
-https://github.com/ethereum/go-ethereum/issues/14450
-https://github.com/ethereum/go-ethereum/pull/14470
+In der Konzipierung stellte sich heraus, dass Whisper v5 unterstützt werden musste (vgl. \ref{subsec:Real_Time_Kommunikationsschnittstelle}). Daher wurde die zwischenzeitlich veröffentlichte Version 1.6.2 von geth verwendet, da diese als erste Whisper v5 unterstützt. Dabei wurde eine Inkonsistenz im design der Subprotokolle von Ethereum und deren Implementation in geth festgestellt, worauf ein öffentliches Issue erstellt\footnote{https://github.com/ethereum/go-ethereum/issues/14450} und ein Pullrequest zur Behebung dieses Problemes gestellt\footnote{https://github.com/ethereum/go-ethereum/pull/14470} wurden.
 
-\subsubsection{https://github.com/status-im/status-go}
-status-go wurde geforkt, da die Config für die mainnet und testchains statisch eingebunden wurde. ohne diese Änderung wäre es nicht möglich gewesen eine node auf einem mobilen gerät auf eine private Blockchain zu connecten.
+\subsubsection{status-go}
+\emph{https://github.com/status-im/status-go}
+ 
+status-go wurde geforkt, da die Konfiguration für das Mainnet (Homestead) und Testnet (Ropsten) statisch darin definiert wurden. Ohne diese Änderung wäre es nicht möglich gewesen, eine Ethereum Node auf einem mobilen Gerät auf die private Lokkit Blockchain zu verbinden.
 
 \paragraph{Propagation von Transactions}
-https://github.com/status-im/status-go/issues/169
+Bei der Verwendung von status-go wurde erkannt, dass die erstellte Node auf einem Androidgerät erstellte Transaktionen nicht an andere Nodes weitergeleitet wird. Da dies ein essenzieller Bestandteil der Funktionalität von Lokkit ist, wurde ein öffentliches Issue dafür erfasst, das vom Entiwcklungsteam aufgenommen wurde\footnote{https://github.com/status-im/status-go/issues/169}.
 
 \paragraph{Senden von Whispers}
-https://github.com/status-im/status-go/issues/164
-https://github.com/status-im/status-go/pull/163
+In diesem Fall waren die Senden- und Empfangsfunktionen für Whisper v5 Nachrichten in der Version 1.6.2 von geth nicht kompatibel mit denselbigen aus status-go, wofür ein öffentliches Issue erfasst wurde\footnote{https://github.com/status-im/status-go/issues/164}. Als der Fehler vom Projektteam eruiert wurde, konnte ein pull request gestellt werden, der den Fehler behebt\footnote{https://github.com/status-im/status-go/pull/163}.

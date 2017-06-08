@@ -4,10 +4,37 @@ Folgend werden alle im Lokkit System vorhandenen Komponenten, deren Abhängigkei
 
 \subsection{Geth}
 \label{sys_subsec:Geth}
-\begin{itemize}
-    \item Konfiguration von Geth
-    \item Funktionsweise blockchain KURZ
-\end{itemize}
+Geth ist die Referenzimplementation des Ethereum Protokoll. Sie wurde als Node für die Raspberry Pis verwendet.\cite{go-ethereum}
+
+\subsubsection{Konfiguration}
+Damit die vom Doorman oder Webapp benötigten Einstellungen in Geth richtig vorgenommen wurden, wird folgend das benutzte Kommando zum Starten von Geth gelistet und einzelne Teile davon erklärt.
+\begin{lstlisting}[language=bash,caption={Beispielkommando für das Starten einer Node für Doorman oder Webapp}]
+geth --datadir data --nodekeyhex=091bd6067cb4612df85d9c1ff85cc47f259ced4d4cd99816b14f35650f59c322 --rpc --rpcport 8545 --rpcaddr "127.0.0.1" --verbosity 4 -shh --rpcapi "ws,eth,net,web3,admin,personal,shh" --networkid 42 --ipcpath lokkit  --port "30303" --lightserv 50 --vmodule p2p=4 --rpccorsdomain "*"
+\end{lstlisting}
+
+\begin{table}[H]
+\centering
+\caption{Kommandozeilenbefehle für Geth\cite[Wiki/Management APIs]{go-ethereum}}
+\label{tbl:geth cli}
+\begin{tabular}{@{}L{4cm}L{10cm}@{}}
+\toprule
+geth & Die ausführbare Datei \\ \midrule
+--datadir data & der Pfad für alle Daten \\ \midrule
+--nodekeyhex=X & Wenn die Node las bootnode verwendet wird, muss ein beliebiger nodekeyhex angegeben werden \\ \midrule
+--bootnodes=enode://X & Die bootnode, die zur Entdeckung weiterer Nodes angefragt werden soll \\ \midrule
+--rpc & jsonrpc Schnittstelle aktivieren \\ \midrule
+--rpcport 8545 & Port für die rpcjson Schnittstelle \\ \midrule
+--rpcaddr "127.0.0.1" & Adresse für die jsonrpc Schnittstelle \\ \midrule
+-shh & Whisper Nachrichten werden von dieser Node empfangen und weitergeleitet \\ \midrule
+--rpcapi "ws,eth,net,web3, admin,personal,shh" & Die möglichen APIs, die über die jsonrpc Schnittstelle zur Verfügung gestellt werden \\ \midrule
+--networkid 42 & Dient dazu, gleiche Nodes zu finden \\ \midrule
+--ipcpath lokkit & Der Name des IPC Sockets, um die Verbindung von Geth als JavaScript cli zu starten (vgl. \emph{geth attach}) \\ \midrule
+--port "30303" & port, der für das Ethereum Protokoll verwendet wird \\ \midrule
+--lightserv 50 & Prozent der Rechenleistung, die für light nodes aufgewendet werden darf \\ \midrule
+--rpccorsdomain "*" & CORS requests die erlaubt werden sollen. Wichtig für die Verwendung der Webapp. \\ \midrule
+ \\ \bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Smart Contracts}
 Die Datenhaltung und Businesslogik des Lokkit Systems liegt auf der Blockchain in Form von Smart Contracts.
@@ -90,8 +117,8 @@ Die Webapp für Lokkit stellt eine Gerätunabhängige Benutzeroberfläche für d
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=.95\textwidth]{Aufbau_Webapp}
-\caption{Aufbau der Webapp}
+\includegraphics[width=.75\textwidth]{Aufbau_Webapp}
+\caption{Interner Aufbau der Webapp}
 \label{fig:Aufbau der Webapp}
 \end{figure}
 
@@ -203,20 +230,19 @@ Netzwerkinformationen (c), Details eines Rentables (d).}
 
 \subsection{Android App}
 \label{sys_subsec:Android_App}
-\begin{figure}[H]
-\centering\small
-\setlength{\tabcolsep}{0mm}	% alle Spaltenränder auf 0mm
-\begin{tabular}{c@{\hspace{12mm}}c} % mittlerer Abstand = 12mm
-  \includegraphics[width=.48\textwidth]{} &
-  \includegraphics[width=.42\textwidth]{android_sequence_start_existing} \\
-  (a) & (b)
-\end{tabular}
-\caption{erster Start (a), spätere Starts (b)}
-\label{fig:android_sequence_start}
-\end{figure}
-
 Die Android App startet und administriert eine Ethereum Node mit dem Lokkit Genesis Block, um die Verwendung vom Lokkit Webapp (vgl. \ref{sys_subsec:Webapp}) auf einem Androidgerät zu ermöglichen.
 
+\subsubsection{Architektur}
+Die Android App besteht aus einer Activity zur Benutzerinteraktion und aus einem Service, der an die Activity gebunden wird. Durch die Verwendung eines Service kann die Ethereum Node im Hintergrund weiter laufen, auch wenn die Activity minimiert wurde. Die Node selbst wird von der Statusgo (vgl. \ref{sys_subsubsec:Statusgo}) Library erstellt und ausgeführt. Die Webapp (vgl. \ref{sys_subsec:Webapp}) greift dabei auf die RPC Schnittstelle auf Port 8545 zu, um mit der lokalen Node zu interagieren.
+
+\begin{figure}[H]
+\centering\small
+  \includegraphics[width=.75\textwidth]{Aufbau_AndroidApp}
+\caption{Interner Aufbau der AndroidApp}
+\label{fig:Aufbau_AndroidApp}
+\end{figure}
+
+\subsubsection{Ablauf}
 Wenn die Android App das erste mal gestartet wird, wird der Lokkit Service gebunden und die Activity nach einem Passwort für den Account gefragt (vgl. \ref{fig:android_sequence_start}). Bei nachfolgenden Starts wird der erstellte Account geladen und die Activity nach dessen Password gefragt. Wenn die Verbindung erfolgreich hergestellt werden konnte, wird das Webapp geladen.
 
 \begin{figure}[H]
@@ -233,7 +259,8 @@ Wenn die Android App das erste mal gestartet wird, wird der Lokkit Service gebun
 \end{figure}
 
 \subsubsection{Statusgo}
-Diese Subkomponente implementiert das Ethereum Protokoll und weitere Funktionalität von status-im. Die API kann über die statische Klasse \emph{Statusgo}\footnote{Im Paket com.github.status\_im.status\_go.cmd zu finden} in Java verwendet werden. Diese Library implementiert das gesamte Ethereum Protokoll und die light node.\cite[wiki/Build-Process-Explained]{github.com/status-im/status-go}
+\label{sys_subsubsec:Statusgo}
+Diese Subkomponente implementiert das Ethereum Protokoll und weitere Funktionalität von status-im. Die API kann über die statische Klasse \emph{Statusgo}\footnote{Im Paket com.github.status\_im.status\_go.cmd zu finden} in Java verwendet werden. Diese Library implementiert das gesamte Ethereum Protokoll und ermöglicht das starten einer Ethereum Node als Light Node (vgl. \ref{para:Light_Node}).\cite[wiki/Build-Process-Explained]{github.com/status-im/status-go}
 
 \subsubsection{Lokkit Service}
 Der Lokkit Service konsumiert das statusgo-android Modul. Der Service wird bei Start der Applikation gestartet und bei Beenden der Applikation gestoppt. Der Service sendet und empfängt Intents (vgl. \ref{tbl:LokktService_SendIntents}, \ref{tbl:LokktService_ListenIntents}) für die Interaktion mit der Lokkit Activity (vgl. \ref{sys_subsubsec:Lokkit_Activity}).\cite[Bound Services]{developer.android.com}
