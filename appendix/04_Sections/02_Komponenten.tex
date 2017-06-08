@@ -21,7 +21,7 @@ geth --datadir data --nodekeyhex 091bd6067cb4612df85d9c1ff85cc47f259ced4d4cd9981
 geth & Die ausführbare Datei \\ \midrule
 --datadir data & der Pfad für alle Daten \\ \midrule
 --nodekeyhex X & Wenn die Node las bootnode verwendet wird, muss ein beliebiger nodekeyhex angegeben werden \\ \midrule
---bootnodes enode://X & Die bootnode, die zur Entdeckung weiterer Nodes angefragt werden soll \\ \midrule
+--bootnodes X & X ist die enode der bootnode, die zur Entdeckung weiterer Nodes angefragt werden soll \\ \midrule
 --rpc & jsonrpc Schnittstelle aktivieren \\ \midrule
 --rpcport 8545 & Port für die rpcjson Schnittstelle \\ \midrule
 --rpcaddr "127.0.0.1" & Adresse für die jsonrpc Schnittstelle \\ \midrule
@@ -40,11 +40,11 @@ geth & Die ausführbare Datei \\ \midrule
 Die Datenhaltung und Businesslogik des Lokkit Systems liegt auf der Blockchain in Form von Smart Contracts.
 \subsubsection{Rentable}
 \label{sys_subsubsec:Rentable}
-Eine Instanz dieses Contracts spiegelt ein mietbares Objekt wieder.
+Eine Instanz dieses Contracts spiegelt ein mietbares Objekt wieder. Nachfolgend werden Einzelheiten zur Implementation und Verwendung aufgeführt.
 
 \paragraph{Attribute}
 \label{sys_para:Rentable_Attribute}
-Attribute eines Rentable können gelesen und gesetzt werden. Lesen wird durch die automatische Lesefunktion von Solidity gemacht, gesetzt werden die Attribute durch eine entsprechende Funktion, die den prefix \emph{set} hat und den neuen Wert als einzigen Parameter annimmt. Wichtig zu beachten ist, dass die Funktion zum Ändern des Owners nicht setOwner sondern \emph{transferOwnership} heisst. Dieser Name widerspiegelt die Tatsache, dass der Besitz transferiert wird und sollte nicht leichtfertig mit einer \emph{set} Funktion verwechselt werden. Wenn eine Eigenschaft mittels einer \emph{set} Funktion verändert wird, wird das OnUpdate\emph{X} Event ausgelöst, wobei X für die veränderte Eigenschaft steht. 
+Attribute eines Rentable können gelesen und gesetzt werden. Lesen wird durch die automatische Lesefunktion von Solidity gemacht, gesetzt werden die Attribute durch eine entsprechende Funktion, die den prefix \emph{set} hat und den neuen Wert als einzigen Parameter annimmt. Wichtig zu beachten ist, dass die Funktion zum Ändern des Owners nicht setOwner sondern \emph{transferOwnership} heisst. Dieser Name widerspiegelt die Tatsache, dass der Besitz übertragen wird und sollte nicht leichtfertig mit einer \emph{set} Funktion verwechselt werden. Wenn eine Eigenschaft mittels einer \emph{set} Funktion verändert wird, wird das OnUpdate\emph{X} Event ausgelöst, wobei X für die veränderte Eigenschaft steht. 
 
 \begin{longtable}{@{}llL{9cm}@{}}
 \caption{Rentable Eigenschaften}\label{tbl:Rentable_Eigenschaften}\\
@@ -52,31 +52,27 @@ Attribute eines Rentable können gelesen und gesetzt werden. Lesen wird durch di
 Name & Typ & Beschreibung \\ \midrule
 owner & address   & Besitzer des Rentable Objektes. Kann Eigenschaften verändern und privilegierte Funktionen ausführen.\\
 description & string   & Beschreibung des Rentable Objektes.\\
-location & string   & Besitzer des Rentable Objektes. Kann Eigenschaften verändern und privilegierte Funktionen ausführen.\\
-costPerSecond & uint   & Kosten des Rentables in Wei pro Sekunde.\\
-deposit & uint   & Menge Wei, die hinterlegt werden muss. Wird zurückerstattet, wenn \emph{unclaim} oder \emph{forceUnclaim} aufgerufen werden (vgl. \ref{sys_para:claim_unclaim}).\\
+location & string   & Standort des Rentables.\\
+costPerSecond & uint   & Kosten des Rentables in Wei\footnote{$1 Ether = 10^{18}
+Wei$} pro Sekunde.\\
+deposit & uint & Menge Wei, die hinterlegt werden muss. Wird zurückerstattet, wenn \emph{unclaim} oder \emph{forceUnclaim} aufgerufen werden (vgl. \ref{sys_para:claim_unclaim}).\\
 \end{longtable}
 
 \paragraph{Berechnung der Kosten}
-Die totalen Kosten eines Rentable für einen Zeitraum werden durch zwei Faktoren bestimmt: die Kosten in wei pro Sekunde (vgl. \ref{sys_para:Rentable_Attribute}) und das zu hinterlegende Depot (vgl \ref{math:Rentable_Cost}). Sollte die überwiesene Menge Ether zu gross sein, wird der Überschuss in die \emph{pendingRefunds} (vgl. XX) der sendenden Adresse gutgeschrieben.
-
-\begin{equation}
-\label{math:Rentable_Cost}
-totalCost = (rentDuration * costPerSecond) + deposit
-\end{equation}
 
 \paragraph{unclaim und forceUnclaim}
 \label{sys_para:claim_unclaim}
 Um die regelkonforme Rückgabe eines Rentables festzustellen, muss vom Mieter die Funktion \emph{unclaim} aufgerufen werden (vgl. \ref{tbl:Rentable_Funktionsuebersicht}). Damit bestätigt der Mieter, dass das Rentable nicht länger verwendet wird. Sollte der Mieter nicht unclaim aufrufen, kann der \emph{owner} zu einem Zeitpunkt nach der Reservation die Funktion \emph{forceUnclaim} aufrufen (vgl. \ref{tbl:Rentable_Funktionsuebersicht}), um das Depot seinen \emph{pendingRefunds} gutzuschreiben.
 
 \paragraph{pendingRefunds}
-Falls zu viel Ether an den Contract überwiesen wird oder eine Rückerstattung des \emph{deposit} erwirkt wurde, werden die Beträge in die \emph{pendungRefunds} des Rentables eingetragen. Diese können explizit aus deom Smart Contract abgehoben werden.\cite[Miscellaneous/Introduction to Smart Contracts]{solidity.readthedocs.io}
+\label{sys_para:pendingRefunds}
+Falls zu viel Ether an den Contract überwiesen wird oder eine Rückerstattung des \emph{deposit} erwirkt wurde, werden die Beträge in die \emph{pendungRefunds} des Rentables eingetragen. Auch der die Gutschriften, die der Owner bekommt werden in dieser Form gespeichert. Die \emph{pendingRefunds} können explizit aus dem Smart Contract abgehoben werden.\cite[Miscellaneous/Introduction to Smart Contracts]{solidity.readthedocs.io}
 
 \paragraph{Funktionsübersicht}
 
 L: Lesefunktion, S: Schreibfunktion, C: Konstruktor, E: Event
 
-Alle Funktionen, die einen Zeitpunkt als Parameter (\emph{start} oder \emph{end}) annehmen, setzen ein Unix timestamp Format voraus.
+Alle Funktionen, die einen Zeitpunkt als Parameter (\emph{start} oder \emph{end}) annehmen, erwarten diesen im Unix Epoch Format.
 
 \begin{longtable}{@{}lcL{9cm}@{}}
 \caption{Rentable Lesefunktionen}\label{tbl:Rentable_Funktionsuebersicht}\\
@@ -88,7 +84,7 @@ reservedAt          & L   & Gibt zurück, ob das Rentable am gegebenen Zeitpunkt
 reservedBetween     & L   & Gibt zurück, ob das Rentable zwischen den gegebenen Zeitpunkten \emph{start} und \emph{end} reserviert ist.\\ & & Parameter: \emph{start}, \emph{end} \\\midrule
 currentRenter       & L   & Gibt die Adresse des momentanen Mieters zurück. Wenn das Rentable momentan nicht vermietet ist, wird 0 zurückgegeben.\\ & & Parameter: keine \\\midrule
 costInWei           & L   & Gibt die Kosten in Wei für die Zeit zwischen \emph{start} und \emph{end} zurück.\\ & & Parameter: \emph{start}, \emph{end} \\\midrule
-myPendingRefund     & L   & Gibt zurück, wie viel Ether die aufrufende Adresse noch zur Verfügung hat.\\ & & Parameter: keine \\ \midrule
+myPendingRefund     & L   & Gibt zurück, wie viel Ether die aufrufende Adresse noch abheben kann.\\ & & Parameter: keine \\ \midrule
 currentReservation  & L   & Gibt die momentane Reservation zurück als Array mit drei Einträgen: Startzeit, Endzeit, Ob die aufrufende Adresse der Mieter ist.\\ & & Parameter: keine \\\midrule
 transferOwnership   & S   & Setzt den \emph{owner} des Rentables auf die angegebene Adresse \emph{newOwner}.\\ & & Parameter: \emph{newOwner} \\\midrule
 setDescription   & S   & Setzt \emph{description} des Rentables auf den angegebenen Text \emph{newDescription}.\\ & & Parameter: \emph{newDescription} \\\midrule
@@ -101,14 +97,13 @@ forceUnclaim         & S   & Retourniert alle Reservations, die in der Vergangen
 withdrawRefunds     & S   & Hebt alle bestehenden Rückerstattungen einer Adresse vom Rentable ab und überweist sie auf das Konto der sendenden Adresse\\ & & Parameter: keine \\\midrule
 Rentable            & C   & Erstellt ein neues Rentable mit den angegebenen Parametern und der sendenden Adresse als \emph{owner}.\\ & & Parameter: \emph{pdescription}, \emph{plocation}, \emph{pcostPerSecond}, \emph{pdeposit} \\ \midrule
 OnRent              & E   & Wird ausgelöst, wenn versucht wird, das Rentable zu mieten (vgl. Funktion \emph{rent}). \emph{success} gibt an, ob die Reservation erfolgreich war. \emph{msg} beinhaltet eine Statusmeldung zum Funktionsaufruf (Fehlerbeschreibung im Fehlerfall).\\ & & Parameter: \emph{success}, \emph{renter}, \emph{start}, \emph{end}, \emph{msg} \\ \midrule
-OnUpdateOwner              & E   & Wird ausgelöst, wenn \emph{owner} durch die \emph{transferOwnership} Funktion verändert wird.\\ & & Parameter: \emph{oldOwner}, \emph{newOwner} \\ \midrule
+OnTransferOwnership              & E   & Wird ausgelöst, wenn \emph{owner} durch die \emph{transferOwnership} Funktion verändert wird.\\ & & Parameter: \emph{oldOwner}, \emph{newOwner} \\ \midrule
 OnUpdateDescription              & E   & Wird ausgelöst, wenn \emph{description} durch die \emph{setDescription} Funktion verändert wird.\\ & & Parameter: \emph{oldDescription}, \emph{newDescription} \\ \midrule
 OnUpdateLocation              & E   & Wird ausgelöst, wenn \emph{location} durch die \emph{setLocation} Funktion verändert wird.\\ & & Parameter: \emph{oldLocation}, \emph{newLocation} \\ \midrule
 OnUpdateCostPerSecond              & E   & Wird ausgelöst, wenn \emph{costPerSecond} durch die \emph{setCostPerSecond} Funktion verändert wird.\\ & & Parameter: \emph{oldCostPerSecond}, \emph{newCostPerSecond} \\ \midrule
 OnUpdateDeposit              & E   & Wird ausgelöst, wenn \emph{deposit} durch die \emph{setDeposit} Funktion verändert wird.\\ & & Parameter: \emph{oldDeposit}, \emph{newDeposit} \\
 \bottomrule
 \end{longtable}
-
 
 \subsection{Webapp}
 \label{sys_subsec:Webapp}
@@ -123,7 +118,7 @@ Die Webapp für Lokkit stellt eine Gerätunabhängige Benutzeroberfläche für d
 \end{figure}
 
 \paragraph{}
-Die Webapp ist eine Single Page Aplication (SPA), basiert auf \emph{NodeJS} und benutzt \emph{VueJS}\footnote{\url{https://vuejs.org/}} mit Material Design für die Benutzeroberfläche. Um mit der Blockchain zu interagieren wird die \emph{Web3.js} Library verwendet, welche die \emph{RPC/8545} Schnittstelle des \emph{Geth Nodes} implementiert. 
+Die Webapp ist eine Single Page Aplication (SPA), basiert auf NodeJS und benutzt VueJS\footnote{\url{https://vuejs.org/}} mit Material Design für die Benutzeroberfläche. Um mit der Blockchain zu interagieren wird die Web3.js Library verwendet, welche die \emph{RPC/8545} Schnittstelle des Geth Nodes implementiert. 
 Die Schnittstelle gegen Aussen ist \emph{HTTP/80}. Diese ist ungeschützt und wird bei der Installation der Webapp durch einen Webserver geschützt. Die Abbildung \ref{fig:Aufbau der Webapp} zeigt eine grobe Übersicht über die verschiedenen Elemente.
 
 
@@ -198,7 +193,7 @@ Ebenfalls bietet die Webapp die Möglickeit an sich mit einem beliebigen Node zu
 
 \paragraph{QrCode Leser}
 \label{sys_para:QrCode Leser}
-Die Webapp benötigt für das Dekodieren des QrCode Zugriff auf eine Kamera. Dieses Feature basiert rein auf dem HTML5 Standard. Es sind keine Browserplugins nötig. Dekodiert wird mit der Library "qrcode-reader". Der Ablauf ist wie folgt:
+Die Webapp benötigt für das Dekodieren des QrCode Zugriff auf eine Kamera. Dieses Feature basiert rein auf dem HTML5 Standard. Es sind keine Browserplugins nötig. Dekodiert wird mit der Library ``qrcode-reader''. Der Ablauf ist wie folgt:
 
 \begin{enumerate}
     \item Die Webseite öffnet einen Live-Stream der Webcam
@@ -206,10 +201,10 @@ Die Webapp benötigt für das Dekodieren des QrCode Zugriff auf eine Kamera. Die
     \item Anschliessend kann die qrcode-reader Library das Bild im Canvas dekodieren
 \end{enumerate}
 
-Der QrCode muss eine gültige Rentable Adresse (z.B. 0xde93b2965af6a49161f597604c600af9ea07883a) enthalten. Ist dies nicht der Fall wird eine Fehlermeldung angezeigt.
+Der QrCode muss eine gültige Rentable Adresse (z.B. 0xde93b2965af6a49161f597604c600af9ea07883a) enthalten. Ist dies nicht der Fall, wird eine Fehlermeldung angezeigt.
 
 
-\begin{figure}
+\begin{figure}[H]
 \centering\small
 \setlength{\tabcolsep}{0mm}	% alle Spaltenränder auf 0mm
 \begin{tabular}{c@{\hspace{12mm}}c} % mittlerer Abstand = 12mm
@@ -314,11 +309,12 @@ Wenn die Lokkit App gestartet wird, wird die Lokkit Activity geöffnet. Diese Ac
 
 
 \subsection{Doorman}
-Doorman verbindet auf eine ethereum node, die die shh und eth Protokolle enabled hat und hört auf Whisper v5 Nachrichten für die in der Konfiguration definierten Rentables. Wenn die payload der Nachrichten der Definition in der Real-Time Kommunikationsschnitstelle (vgl. \ref{sys_subsec:Real_Time_Kommunikationsschnittstelle}) entsprechen, wird ein Script ausgeführt, das als Parameter die Adresse des Rentables, sowie das command (vgl. \ref{sys_subpara:Command}) erhält.
+\label{sys_subsec:Doorman}
+Doorman verbindet auf eine Ethereum Node, die die shh und eth Protokolle aktiviert hat und hört auf Whisper v5 Nachrichten für die in der Konfiguration definierten Rentables. Wenn die payload der Nachrichten der Definition in der Real-Time Kommunikationsschnitstelle (vgl. \ref{sys_subsec:Real_Time_Kommunikationsschnittstelle}) entsprechen und der Absender validiert werden konnte, wird ein Script ausgeführt, das als Parameter die Adresse des Rentables, sowie das command (vgl. \ref{sys_subpara:Command}) erhält.
 
 \subsubsection{Konfiguration}
 \label{sys_subsec:Doorman_Konfiguration}
-Die Konfiguration des Doorman wird aus einer yml Datei\footnote{https://fdik.org/yml/} gelesen. Die Datei besitzt einen root mit Namen \emph{doorman} und Attribute für die Ethereum Node, verwendete Rentable Smart Contract Adressen und auszuführendes Script bei Erhalt einer validen Nachricht.
+Die Konfiguration des Doorman wird aus einer yml Datei\footnote{\url{https://fdik.org/yml/}} gelesen. Die Datei besitzt einen root mit Namen \emph{doorman} und Attribute für die Ethereum Node, verwendete Rentable Smart Contract Adressen und auszuführendes Script bei Erhalt einer validen Nachricht.
 \begin{lstlisting}[language=yml,caption={Beispielkonfiguration für Doorman}]
 doorman:
     node_ip: 127.0.0.1
@@ -337,7 +333,3 @@ Der Port, auf dem Doorman zu der Ethereum Node verbinden soll. Der Standardport 
 Die Adressen der Smart Contracts vom typ Rentable (vgl. \ref{sys_subsubsec:Rentable}), auf deren Nachrichten gehört werden sollen. Wird eine ungültige Rentable Adresse angegeben, werden die Befehle nicht ausgeführt.
 \paragraph{script}
 Das script, das ausgeführt werden soll.
-
-\subsection{Controllers}
-\subsubsection{Nuki}
-\subsubsection{Schloss Marke Eigenbau}
