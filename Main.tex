@@ -21,7 +21,15 @@
   literate=
   {├}{{\smash{\raisebox{-1ex}{\rule{1pt}{\baselineskip}}}\raisebox{0.5ex}{\rule{1ex}{1pt}}}}1 
   {─}{{\raisebox{0.5ex}{\rule{1.5ex}{1pt}}}}1 
-  {└}{{\smash{\raisebox{0.5ex}{\rule{1pt}{\dimexpr\baselineskip-1.5ex}}}\raisebox{0.5ex}{\rule{1ex}{1pt}}}}1 
+  {└}{{\smash{\raisebox{0.5ex}{\rule{1pt}{\dimexpr\baselineskip-1.5ex}}}\raisebox{0.5ex}{\rule{1ex}{1pt}}}}1
+    {Ö}{{\"O}}1
+    {Ä}{{\"A}}1
+    {Ü}{{\"U}}1
+    {ß}{{\ss}}1
+    {ü}{{\"u}}1
+    {ä}{{\"a}}1
+    {ö}{{\"o}}1
+    {~}{{\textasciitilde}}1
 }
 
 %%%----------------------------------------------------------
@@ -43,11 +51,14 @@
 
 \maketitle
 
-\tableofcontents
-%%%----------------------------------------------------------		
-
-% \include{chapters/02_Selbststaendigkeitserklaerung} wird durch \maketitle bereits gemacht.
 \include{chapters/03_Abstract}
+
+\tableofcontents
+
+\listoftables
+
+\listoffigures
+
 \include{chapters/05_Abkuerzungen_und_Definitionen}
 
 %%%----------------------------------------------------------
@@ -68,11 +79,6 @@
 \include{appendix/07_Testplan}
 \include{appendix/05_Installation_Deployment}
 %\include{appendix/01_CD_Content}
-
-
-\listoffigures
-
-\listoftables
 
 %%%----------------------------------------------------------
 \MakeBibliography
